@@ -203,7 +203,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Transactional
-    public String enableAppUser(Long userId) {
+    public String enableAppUserById(Long userId) {
         AppUser appUser = findUserById(userId);
         appUser.setEnabled(true);
         appUserRepository.save(appUser);
@@ -212,7 +212,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Transactional
-    public String enableAppUser(String email) {
+    public String enableAppUserByEmail(String email) {
         AppUser appUser = findUserByEmail(email);
         appUser.setEnabled(true);
         appUserRepository.save(appUser);
@@ -221,7 +221,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Transactional
-    public String disableAppUser(Long userId) {
+    public String disableAppUserById(Long userId) {
         AppUser appUser = findUserById(userId);
         appUser.setEnabled(false);
         appUserRepository.save(appUser);
@@ -229,7 +229,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Transactional
-    public String disableAppUser(String email) {
+    public String disableAppUserById(String email) {
         AppUser appUser = findUserByEmail(email);
         appUser.setEnabled(false);
         appUserRepository.save(appUser);
@@ -237,7 +237,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Transactional
-    public String unLockAppUser(Long userId) {
+    public String unLockAppUserById(Long userId) {
         AppUser appUser = findUserById(userId);
         appUser.setLocked(false);
         appUserRepository.save(appUser);
@@ -246,7 +246,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Transactional
-    public String lockAppUser(Long userId) {
+    public String lockAppUserById(Long userId) {
         AppUser appUser = findUserById(userId);
         appUser.setLocked(true);
         appUserRepository.save(appUser);
@@ -265,7 +265,7 @@ public class AppUserService implements UserDetailsService {
     }
 
     @Transactional
-    public String deleteUser(Long userId) {
+    public String deleteUserById(Long userId) {
         AppUser appUser = findUserById(userId);
         appUser.setEnabled(false);
         appUser.setLocked(true);

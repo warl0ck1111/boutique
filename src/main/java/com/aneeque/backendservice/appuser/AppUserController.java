@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * @author Okala III
@@ -67,14 +66,14 @@ public class AppUserController {
 
     @PutMapping(path = ENABLE_USER_ACCOUNT)
     public ResponseEntity<ApiResponse> enableUserAccount(@PathVariable Long userId) {
-        String response = appUserService.enableAppUser(userId);
+        String response = appUserService.enableAppUserById(userId);
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, response));
 
     }
 
     @PutMapping(path = DISABLE_USER_ACCOUNT)
     public ResponseEntity<ApiResponse> disableUserAccount(@PathVariable Long userId) {
-        String response = appUserService.disableAppUser(userId);
+        String response = appUserService.disableAppUserById(userId);
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, response));
 
     }
@@ -82,14 +81,14 @@ public class AppUserController {
 
     @PutMapping(path = UNLOCK_USER_ACCOUNT)
     public ResponseEntity<ApiResponse> unlockUserAccount(@PathVariable Long userId) {
-        String response = appUserService.unLockAppUser(userId);
+        String response = appUserService.unLockAppUserById(userId);
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, response));
 
     }
 
     @PutMapping(path = LOCK_USER_ACCOUNT)
     public ResponseEntity<ApiResponse> lockUserAccount(@PathVariable Long userId) {
-        String response = appUserService.lockAppUser(userId);
+        String response = appUserService.lockAppUserById(userId);
         return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, response));
 
     }
@@ -106,7 +105,7 @@ public class AppUserController {
 
     @DeleteMapping(path = DELETE_USER)
     public ResponseEntity<?> deleteUserAccount(@PathVariable Long roleId, @RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(new ApiResponse(appUserService.deleteUser(roleId)));
+        return ResponseEntity.ok(new ApiResponse(appUserService.deleteUserById(roleId)));
     }
 
     @PostMapping(path = ASSIGN_PRIVILEGE_TO_USER)

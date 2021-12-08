@@ -129,7 +129,7 @@ class AppUserControllerTest {
     void testLoginUser() throws Exception {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setPassword("password");
-        loginRequest.setEmailAddress("42 Main St");
+        loginRequest.setEmailAddress("john.doe@aneeque.com");
         String content = (new ObjectMapper()).writeValueAsString(loginRequest);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -148,7 +148,7 @@ class AppUserControllerTest {
         registrationRequest.setMobileNumber("42");
         registrationRequest.setConfirmPassword("password");
         registrationRequest.setFirstName("John");
-        registrationRequest.setEmailAddress("42 Main St");
+        registrationRequest.setEmailAddress("john.doe@aneeque.com");
         String content = (new ObjectMapper()).writeValueAsString(registrationRequest);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -167,7 +167,7 @@ class AppUserControllerTest {
         registrationRequest.setMobileNumber("42");
         registrationRequest.setConfirmPassword("password");
         registrationRequest.setFirstName("John");
-        registrationRequest.setEmailAddress("42 Main St");
+        registrationRequest.setEmailAddress("john.doe@aneeque.com");
         String content = (new ObjectMapper()).writeValueAsString(registrationRequest);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
