@@ -1,0 +1,48 @@
+server:
+  port: 8789
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  datasource:
+    password:
+    url: jdbc:mysql://localhost:3306/aneeque
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      generate-ddl: true
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL55Dialect
+        format_sql: true
+
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    show-sql: true
+  profiles:
+    active: local
+
+
+
+user-mgnt:
+  account:
+    activation-email:
+      template: "Your account activation Token %s . The token expires at %s"
+    activation-token:
+      lifetime:
+        minutes: 10
+
+  jwt:
+    secret-key: "secret"
+    lifetime:
+      hours: 12
+      minutes: 60
+      seconds: 60
+      milli-seconds: 0
+  trusted-origins: "*"
