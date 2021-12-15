@@ -29,7 +29,7 @@ public class CategoryDto {
 
 
     private Long parentId;
-    private Long left;
-    private Long right;
+    private Long lft;
+    private Long rgt;
 
 }
