@@ -1,4 +1,4 @@
-package com.aneeque.backendservice.category.department;
+package com.aneeque.backendservice.department;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,14 +1,9 @@
-package com.aneeque.backendservice.category.department;
+package com.aneeque.backendservice.department;
 
 import com.aneeque.backendservice.response.ApiResponse;
-import com.aneeque.backendservice.role.Role;
-import com.aneeque.backendservice.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author Okala III
