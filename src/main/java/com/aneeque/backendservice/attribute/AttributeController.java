@@ -23,12 +23,12 @@ public class AttributeController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> createAttribute(@RequestBody AttributeDto attributeDto) {
-        return ResponseEntity.ok(new ApiResponse(attributeService.save(attributeDto)));
+        return ResponseEntity.ok(new ApiResponse("Attribute created successfully",attributeService.save(attributeDto)));
     }
 
     @PutMapping("{attributeId}")
     public ResponseEntity<ApiResponse> updateAttribute(@PathVariable Long attributeId, @RequestBody AttributeDto attributeDto) {
-        return ResponseEntity.ok(new ApiResponse(attributeService.update(attributeId,attributeDto)));
+        return ResponseEntity.ok(new ApiResponse("Attribute updated successfully",attributeService.update(attributeId,attributeDto)));
     }
 
 }

@@ -95,7 +95,6 @@ class AttributeServiceImplTest {
 
 
 
-
     @Test
     void testGetAllAttributes() {
         when(this.attributeRepository.findAll()).thenReturn(new ArrayList<Attribute>());

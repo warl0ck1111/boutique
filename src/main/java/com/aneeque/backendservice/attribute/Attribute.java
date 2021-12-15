@@ -1,6 +1,7 @@
 package com.aneeque.backendservice.category.department.attribute;
 
 import com.aneeque.backendservice.category.department.Department;
+import com.aneeque.backendservice.category.property.Property;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 /**
  * @author Okala III
@@ -31,6 +33,14 @@ public class Attribute {
     @JoinColumn(name = "DEPARTMENT_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Department department;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "ATTRIBUTE_PROPERTIES",
+            joinColumns = @JoinColumn(name = "attribute_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "property_id", referencedColumnName = "id")
+    )
+    private Collection<Property> properties;
 
 
     @Column(updatable = false, nullable = false)
