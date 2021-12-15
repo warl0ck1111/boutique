@@ -1,4 +1,4 @@
-package com.aneeque.backendservice.category.department;
+package com.aneeque.backendservice.department;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
