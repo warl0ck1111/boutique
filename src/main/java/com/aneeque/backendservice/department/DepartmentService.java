@@ -1,7 +1,4 @@
-package com.aneeque.backendservice.category.department;
-
-import lombok.Getter;
-import org.springframework.stereotype.Service;
+package com.aneeque.backendservice.department;
 
 import java.util.List;
 

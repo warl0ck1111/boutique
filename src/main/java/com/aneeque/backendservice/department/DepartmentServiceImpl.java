@@ -1,4 +1,4 @@
-package com.aneeque.backendservice.category.department;
+package com.aneeque.backendservice.department;
 
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
