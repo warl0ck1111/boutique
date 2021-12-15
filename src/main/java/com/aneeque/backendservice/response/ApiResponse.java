@@ -60,12 +60,15 @@ public class ApiResponse implements Serializable {
 
     public ApiResponse(String message) {
         this.message = message;
+        this.httpStatus = HttpStatus.OK;
+        this.statusCode = httpStatus.value();
+        this.success = String.valueOf(!httpStatus.isError());
     }
         
     public ApiResponse(Object data) {
         this.data = data;
         this.httpStatus = HttpStatus.OK;
-        this.message = "";
+        this.message = "Success";
         this.statusCode = httpStatus.value();
         this.success = String.valueOf(!httpStatus.isError());
     }

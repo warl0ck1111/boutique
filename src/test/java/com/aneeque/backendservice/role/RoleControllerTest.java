@@ -57,7 +57,7 @@ class RoleControllerTest {
         assertTrue(actualPrivilegesAssignedToRole.getHeaders().isEmpty());
         assertEquals(HttpStatus.OK, actualPrivilegesAssignedToRole.getStatusCode());
         assertEquals(200, ((ApiResponse) actualPrivilegesAssignedToRole.getBody()).getStatusCode());
-        assertEquals("", ((ApiResponse) actualPrivilegesAssignedToRole.getBody()).getMessage());
+        assertEquals("Success", ((ApiResponse) actualPrivilegesAssignedToRole.getBody()).getMessage());
         assertEquals(HttpStatus.OK, ((ApiResponse) actualPrivilegesAssignedToRole.getBody()).getHttpStatus());
         assertTrue(((Collection<Object>) ((ApiResponse) actualPrivilegesAssignedToRole.getBody()).getData()).isEmpty());
         String expectedSuccess = Boolean.TRUE.toString();
@@ -75,7 +75,7 @@ class RoleControllerTest {
         assertTrue(actualPrivilegesAssignedToRole.getHeaders().isEmpty());
         assertEquals(HttpStatus.OK, actualPrivilegesAssignedToRole.getStatusCode());
         assertEquals(200, ((ApiResponse) actualPrivilegesAssignedToRole.getBody()).getStatusCode());
-        assertEquals("", ((ApiResponse) actualPrivilegesAssignedToRole.getBody()).getMessage());
+        assertEquals("Success", ((ApiResponse) actualPrivilegesAssignedToRole.getBody()).getMessage());
         assertEquals(HttpStatus.OK, ((ApiResponse) actualPrivilegesAssignedToRole.getBody()).getHttpStatus());
         assertTrue(((Collection<Object>) ((ApiResponse) actualPrivilegesAssignedToRole.getBody()).getData()).isEmpty());
         String expectedSuccess = Boolean.TRUE.toString();
@@ -106,7 +106,7 @@ class RoleControllerTest {
         assertTrue(actualAssignPermissionsToRoleResult.getHeaders().isEmpty());
         assertEquals(HttpStatus.OK, actualAssignPermissionsToRoleResult.getStatusCode());
         assertEquals(200, ((ApiResponse) actualAssignPermissionsToRoleResult.getBody()).getStatusCode());
-        assertEquals("", ((ApiResponse) actualAssignPermissionsToRoleResult.getBody()).getMessage());
+        assertEquals("Success", ((ApiResponse) actualAssignPermissionsToRoleResult.getBody()).getMessage());
         assertEquals(HttpStatus.OK, ((ApiResponse) actualAssignPermissionsToRoleResult.getBody()).getHttpStatus());
         assertSame(role, ((ApiResponse) actualAssignPermissionsToRoleResult.getBody()).getData());
         String expectedSuccess = Boolean.TRUE.toString();
@@ -137,7 +137,7 @@ class RoleControllerTest {
         assertTrue(actualAssignPermissionsToRoleResult.getHeaders().isEmpty());
         assertEquals(HttpStatus.OK, actualAssignPermissionsToRoleResult.getStatusCode());
         assertEquals(200, ((ApiResponse) actualAssignPermissionsToRoleResult.getBody()).getStatusCode());
-        assertEquals("", ((ApiResponse) actualAssignPermissionsToRoleResult.getBody()).getMessage());
+        assertEquals("Success", ((ApiResponse) actualAssignPermissionsToRoleResult.getBody()).getMessage());
         assertEquals(HttpStatus.OK, ((ApiResponse) actualAssignPermissionsToRoleResult.getBody()).getHttpStatus());
         assertSame(role, ((ApiResponse) actualAssignPermissionsToRoleResult.getBody()).getData());
         String expectedSuccess = Boolean.TRUE.toString();
