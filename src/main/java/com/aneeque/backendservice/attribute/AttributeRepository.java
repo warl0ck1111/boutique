@@ -1,6 +1,6 @@
-package com.aneeque.backendservice.category.department.attribute;
+package com.aneeque.backendservice.attribute;
 
-import com.aneeque.backendservice.category.department.Department;
+import com.aneeque.backendservice.department.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

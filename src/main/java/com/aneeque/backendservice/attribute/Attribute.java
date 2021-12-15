@@ -1,9 +1,10 @@
-package com.aneeque.backendservice.category.department.attribute;
+package com.aneeque.backendservice.attribute;
 
-import com.aneeque.backendservice.category.department.Department;
-import com.aneeque.backendservice.category.property.Property;
+import com.aneeque.backendservice.department.Department;
+import com.aneeque.backendservice.property.Property;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -17,6 +18,7 @@ import java.util.Collection;
  * @author Okala III
  */
 
+@Data
 @Entity
 @NoArgsConstructor
 public class Attribute {

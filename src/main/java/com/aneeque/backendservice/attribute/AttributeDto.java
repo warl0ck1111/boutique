@@ -1,4 +1,4 @@
-package com.aneeque.backendservice.category.department.attribute;
+package com.aneeque.backendservice.attribute;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
