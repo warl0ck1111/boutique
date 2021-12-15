@@ -34,11 +34,11 @@ public class Category {
     @Column(nullable = true)
     private Long parentId;
 
-//    @Column(nullable = true)
-//    private String left;
+    @Column(nullable = true)
+    private Long lft;
 
-//    @Column(nullable = true)
-//    private String right;
+    @Column(nullable = true)
+    private Long rgt;
 
     @OneToMany
     private List<Property> properties = new ArrayList<>();
