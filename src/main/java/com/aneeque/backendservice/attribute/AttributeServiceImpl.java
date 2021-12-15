@@ -1,7 +1,10 @@
-package com.aneeque.backendservice.category.department.attribute;
+package com.aneeque.backendservice.attribute;
 
-import com.aneeque.backendservice.category.department.Department;
-import com.aneeque.backendservice.category.department.DepartmentServiceImpl;
+import com.aneeque.backendservice.department.Department;
+import com.aneeque.backendservice.department.DepartmentServiceImpl;
+import com.aneeque.backendservice.property.Property;
+import com.aneeque.backendservice.property.PropertyDto;
+import com.aneeque.backendservice.property.PropertyService;
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Autowired
     private AttributeRepository attributeRepository;
+
+    @Autowired
+    private PropertyService propertyService;
 
     @Override
     public AttributeDto save(AttributeDto attributeDto) {
@@ -84,5 +90,31 @@ public class AttributeServiceImpl implements AttributeService {
             attributeDtoList.add(attributeDto);
         });
         return attributeDtoList;
+    }
+
+    public AttributeDto assignPropertiesToAttribute(Long attributeId, List<Long> propertyIds) {
+
+        Attribute attribute = attributeRepository.findById(attributeId).orElseThrow(() -> new NoSuchElementException("no attribute found"));
+
+        List<Property> properties = propertyService.getPropertyRepository().findAllById(propertyIds);
+        attribute.setProperties(properties);
+        Attribute updatedAttribute = attributeRepository.save(attribute);
+
+        AttributeDto attributeDto = new AttributeDto();
+        BeanUtils.copyProperties(updatedAttribute, attributeDto);
+
+        return attributeDto;
+    }
+
+    public List<PropertyDto> getAssignedPropertiesToAttribute(Long attributeId){
+        List<PropertyDto> propertyDtoList = new ArrayList<>();
+
+        Attribute attribute = attributeRepository.findById(attributeId).orElseThrow(() -> new NoSuchElementException("no attribute found"));
+        attribute.getProperties().forEach(property -> {
+            PropertyDto propertyDto = new PropertyDto();
+            BeanUtils.copyProperties(property, propertyDto);
+            propertyDtoList.add(propertyDto);
+        });
+        return propertyDtoList;
     }
 }

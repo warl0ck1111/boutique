@@ -1,4 +1,4 @@
-package com.aneeque.backendservice.category.department.attribute;
+package com.aneeque.backendservice.attribute;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -9,9 +9,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.aneeque.backendservice.category.department.Department;
-import com.aneeque.backendservice.category.department.DepartmentRepository;
-import com.aneeque.backendservice.category.department.DepartmentServiceImpl;
+import com.aneeque.backendservice.department.Department;
+import com.aneeque.backendservice.department.DepartmentRepository;
+import com.aneeque.backendservice.department.DepartmentServiceImpl;
 
 import java.time.LocalDateTime;
 
@@ -92,7 +92,6 @@ class AttributeServiceImplTest {
         assertTrue(actualMessage.contains(expectedMessage));
         verify(this.attributeRepository).findById((Long) any());
     }
-
 
 
 

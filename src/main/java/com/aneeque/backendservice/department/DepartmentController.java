@@ -28,13 +28,12 @@ public class DepartmentController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> createDepartment(@RequestBody DepartmentDto departmentDto) {
-        return ResponseEntity.ok(new ApiResponse(departmentService.save(departmentDto)));
+        return ResponseEntity.ok(new ApiResponse("Department created successfully",departmentService.save(departmentDto)));
     }
 
     @PutMapping("{departmentId}")
     public ResponseEntity<ApiResponse> updateDepartment(@PathVariable String departmentId, @RequestBody DepartmentDto departmentDto) {
-        System.out.println("the department Id is "+departmentId);
-        return ResponseEntity.ok(new ApiResponse(departmentService.update( Long.valueOf(departmentId), departmentDto)));
+        return ResponseEntity.ok(new ApiResponse("Department updated successfully",departmentService.update( Long.valueOf(departmentId), departmentDto)));
     }
 
 
