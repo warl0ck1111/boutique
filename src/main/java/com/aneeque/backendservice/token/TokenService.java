@@ -72,7 +72,7 @@ public class TokenService {
             throw new ApiRequestException("token expired", HttpStatus.BAD_REQUEST);
 
         Token confirmedToken = setConfirmedAt(token);
-        String response = appUserService.enableAppUser(confirmedToken.getEmailAddress());
+        String response = appUserService.enableAppUserByEmail(confirmedToken.getEmailAddress());
         log.info(response);
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(confirmedToken.getEmailAddress());
