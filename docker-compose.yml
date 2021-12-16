@@ -8,12 +8,27 @@ services:
 #      - "8089:8089"
     network_mode: host
     depends_on:
-      - mysql
-  mysql:
-    image: mysql
+      - db
+  db:
+    image: mariadb
+    restart: always
     ports:
-      - "3306:3306"
+      - 3306:3306
     environment:
-      - MYSQL_PASSWORD=
-      - MYSQL_USER=root
-      - MYSQL_DB=aneeque
+      - MYSQL_ROOT_PASSWORD=password12
+      - MYSQL_DATABASE=aneeque_dev
+    volumes:
+      - ./database:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+    restart: always
+    ports:
+      - 8787:80
+    volumes:
+      - /sessions
+    links:
+      - db

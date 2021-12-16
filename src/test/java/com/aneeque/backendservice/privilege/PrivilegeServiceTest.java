@@ -12,6 +12,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.aneeque.backendservice.data.entity.Privilege;
+import com.aneeque.backendservice.data.repository.PrivilegeRepository;
+import com.aneeque.backendservice.dto.request.PrivilegeRequest;
+import com.aneeque.backendservice.exception.PrivilegeNotFoundException;
+import com.aneeque.backendservice.service.PrivilegeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

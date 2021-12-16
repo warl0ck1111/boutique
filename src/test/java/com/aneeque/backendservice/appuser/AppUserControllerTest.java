@@ -1,7 +1,11 @@
 package com.aneeque.backendservice.appuser;
 
-import com.aneeque.backendservice.role.PrivilegeListRequest;
-import com.aneeque.backendservice.token.TokenService;
+import com.aneeque.backendservice.controller.AppUserController;
+import com.aneeque.backendservice.dto.request.LoginRequest;
+import com.aneeque.backendservice.dto.request.RegistrationRequest;
+import com.aneeque.backendservice.dto.request.PrivilegeListRequest;
+import com.aneeque.backendservice.service.AppUserService;
+import com.aneeque.backendservice.service.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;

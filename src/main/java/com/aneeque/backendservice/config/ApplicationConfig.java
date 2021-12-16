@@ -1,15 +1,14 @@
 package com.aneeque.backendservice.config;
 
 
-import com.aneeque.backendservice.appuser.AppUserRole;
-import com.aneeque.backendservice.appuser.AppUserService;
-import com.aneeque.backendservice.privilege.Privilege;
-import com.aneeque.backendservice.privilege.PrivilegeRepository;
-import com.aneeque.backendservice.privilege.PrivilegeService;
-import com.aneeque.backendservice.privilege.UserPrivilege;
-import com.aneeque.backendservice.role.Role;
-import com.aneeque.backendservice.role.RoleRepository;
-import com.aneeque.backendservice.role.RoleService;
+import com.aneeque.backendservice.enums.AppUserRole;
+import com.aneeque.backendservice.service.AppUserService;
+import com.aneeque.backendservice.data.entity.Privilege;
+import com.aneeque.backendservice.service.PrivilegeService;
+import com.aneeque.backendservice.enums.UserPrivilege;
+import com.aneeque.backendservice.data.entity.Role;
+import com.aneeque.backendservice.data.repository.RoleRepository;
+import com.aneeque.backendservice.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

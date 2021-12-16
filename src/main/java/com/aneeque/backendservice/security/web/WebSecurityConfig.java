@@ -1,6 +1,6 @@
 package com.aneeque.backendservice.security.web;
 
-import com.aneeque.backendservice.appuser.AppUserService;
+import com.aneeque.backendservice.service.AppUserService;
 import com.aneeque.backendservice.security.jwt.filter.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

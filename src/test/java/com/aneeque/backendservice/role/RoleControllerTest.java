@@ -8,14 +8,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.aneeque.backendservice.privilege.Privilege;
-import com.aneeque.backendservice.response.ApiResponse;
+import com.aneeque.backendservice.controller.RoleController;
+import com.aneeque.backendservice.data.entity.Privilege;
+import com.aneeque.backendservice.data.entity.Role;
+import com.aneeque.backendservice.data.repository.RoleRepository;
+import com.aneeque.backendservice.dto.request.PrivilegeListRequest;
+import com.aneeque.backendservice.dto.response.ApiResponse;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
+import com.aneeque.backendservice.service.RoleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
