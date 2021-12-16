@@ -1,6 +1,7 @@
-package com.aneeque.backendservice.product.image;
+package com.aneeque.backendservice.data.repository;
 
 import com.aneeque.backendservice.data.entity.Product;
+import com.aneeque.backendservice.data.entity.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

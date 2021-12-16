@@ -1,4 +1,4 @@
-package com.aneeque.backendservice.product.image;
+package com.aneeque.backendservice.dto.request;
 
 /**
  * @author Okala Bashir .O.
