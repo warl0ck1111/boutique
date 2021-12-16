@@ -45,3 +45,4 @@ user-mgnt:
       seconds: 60
       milli-seconds: 0
   trusted-origins: "*"
+

@@ -1,7 +1,9 @@
-package com.aneeque.backendservice.product.image;
+package com.aneeque.backendservice.service;
 
 import com.aneeque.backendservice.data.entity.Product;
-import com.aneeque.backendservice.service.ProductService;
+import com.aneeque.backendservice.data.entity.ProductImage;
+import com.aneeque.backendservice.data.repository.ProductImageRepository;
+import com.aneeque.backendservice.dto.request.ProductImageDto;
 import com.aneeque.backendservice.util.CrudService;
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;

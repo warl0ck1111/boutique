@@ -1,4 +1,4 @@
-package com.aneeque.backendservice.product.image;
+package com.aneeque.backendservice.dto.request;
 
 /**
  * @author Okala Bashir .O.
@@ -6,7 +6,6 @@ package com.aneeque.backendservice.product.image;
 public class ProductImageDto {
 
     private String fileName;
-
 
     private String imageUrl;
 

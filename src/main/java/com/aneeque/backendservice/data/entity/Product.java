@@ -1,10 +1,5 @@
 package com.aneeque.backendservice.data.entity;
 
-import com.aneeque.backendservice.data.entity.AppUser;
-import com.aneeque.backendservice.data.entity.Attribute;
-import com.aneeque.backendservice.data.entity.Category;
-import com.aneeque.backendservice.data.entity.Property;
-import com.aneeque.backendservice.product.image.ProductImage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;

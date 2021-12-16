@@ -1,4 +1,4 @@
-package com.aneeque.backendservice.product.image;
+package com.aneeque.backendservice.data.entity;
 
 import com.aneeque.backendservice.data.entity.Product;
 import com.fasterxml.jackson.annotation.JsonProperty;
