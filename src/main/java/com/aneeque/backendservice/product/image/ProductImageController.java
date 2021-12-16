@@ -1,6 +1,6 @@
 package com.aneeque.backendservice.product.image;
 
-import com.aneeque.backendservice.response.ApiResponse;
+import com.aneeque.backendservice.dto.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

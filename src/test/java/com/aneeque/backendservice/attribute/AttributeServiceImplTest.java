@@ -9,9 +9,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.aneeque.backendservice.department.Department;
-import com.aneeque.backendservice.department.DepartmentRepository;
-import com.aneeque.backendservice.department.DepartmentServiceImpl;
+import com.aneeque.backendservice.data.entity.Attribute;
+import com.aneeque.backendservice.data.repository.AttributeRepository;
+import com.aneeque.backendservice.data.entity.Department;
+import com.aneeque.backendservice.data.repository.DepartmentRepository;
+import com.aneeque.backendservice.service.PropertyService;
+import com.aneeque.backendservice.service.impl.DepartmentServiceImpl;
 
 import java.time.LocalDateTime;
 
@@ -20,14 +23,20 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.aneeque.backendservice.dto.request.AttributeDto;
+import com.aneeque.backendservice.service.impl.AttributeServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@ContextConfiguration(classes = {AttributeServiceImpl.class})
+
+@SpringBootTest(classes = {AttributeServiceImpl.class})
+//@ContextConfiguration(classes = {AttributeServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 class AttributeServiceImplTest {
     @MockBean
@@ -38,6 +47,9 @@ class AttributeServiceImplTest {
 
     @MockBean
     private DepartmentServiceImpl departmentServiceImpl;
+
+    @MockBean
+    PropertyService propertyService;
 
     @Test
     void testSave() {

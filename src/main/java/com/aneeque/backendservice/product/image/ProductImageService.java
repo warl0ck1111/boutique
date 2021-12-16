@@ -1,15 +1,13 @@
 package com.aneeque.backendservice.product.image;
 
-import com.aneeque.backendservice.product.Product;
-import com.aneeque.backendservice.product.ProductService;
+import com.aneeque.backendservice.data.entity.Product;
+import com.aneeque.backendservice.service.ProductService;
 import com.aneeque.backendservice.util.CrudService;
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;

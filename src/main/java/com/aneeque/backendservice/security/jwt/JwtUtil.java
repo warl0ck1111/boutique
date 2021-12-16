@@ -1,6 +1,6 @@
 package com.aneeque.backendservice.security.jwt;
 
-import com.aneeque.backendservice.appuser.AppUser;
+import com.aneeque.backendservice.data.entity.AppUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

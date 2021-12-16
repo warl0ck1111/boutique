@@ -10,12 +10,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.aneeque.backendservice.attribute.Attribute;
-import com.aneeque.backendservice.attribute.AttributeDto;
-import com.aneeque.backendservice.attribute.AttributeServiceImpl;
-import com.aneeque.backendservice.property.Property;
-import com.aneeque.backendservice.property.PropertyDto;
-import com.aneeque.backendservice.property.PropertyService;
+import com.aneeque.backendservice.data.entity.Attribute;
+import com.aneeque.backendservice.data.entity.Category;
+import com.aneeque.backendservice.data.repository.CategoryRepository;
+import com.aneeque.backendservice.dto.request.AttributeDto;
+import com.aneeque.backendservice.dto.request.CategoryDto;
+import com.aneeque.backendservice.service.CategoryService;
+import com.aneeque.backendservice.service.impl.AttributeServiceImpl;
+import com.aneeque.backendservice.data.entity.Property;
+import com.aneeque.backendservice.dto.request.PropertyDto;
+import com.aneeque.backendservice.service.PropertyService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

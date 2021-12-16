@@ -6,10 +6,9 @@ server:
 
 spring:
   datasource:
-    password:
-    url: jdbc:mysql://localhost:3306/aneeque
+    password: password12
+    url: jdbc:mysql://0.0.0.0:3306/aneeque_dev
     username: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:

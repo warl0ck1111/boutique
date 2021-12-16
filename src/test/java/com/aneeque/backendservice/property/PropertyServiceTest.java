@@ -5,13 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.aneeque.backendservice.attribute.Attribute;
+import com.aneeque.backendservice.data.entity.Attribute;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,6 +18,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.aneeque.backendservice.data.entity.Property;
+import com.aneeque.backendservice.data.repository.PropertyRepository;
+import com.aneeque.backendservice.dto.request.PropertyDto;
+import com.aneeque.backendservice.service.PropertyService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

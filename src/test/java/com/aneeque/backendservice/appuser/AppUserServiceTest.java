@@ -9,6 +9,9 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 
+import com.aneeque.backendservice.dto.request.RegistrationRequest;
+import com.aneeque.backendservice.dto.request.ResetPasswordRequest;
+import com.aneeque.backendservice.service.AppUserService;
 import org.junit.jupiter.api.Test;
 
 class AppUserServiceTest {
