@@ -3,9 +3,12 @@ services:
   app:
     container_name: aneeque_backend
     image: aneeque_backend
-    build: ./
+    build:
+      context: .                          #docker file path (. means root directory)
+      dockerfile: Dockerfile              #docker file name
     ports:
       - 8789:8789
+    restart: always
     network_mode: host
     depends_on:
       - db
