@@ -1,5 +1,6 @@
-FROM openjdk:8-jdk-alpine
-EXPOSE 8789
+FROM openjdk:oracle
+
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} aneeque-backend.jar
+EXPOSE 8789
 ENTRYPOINT ["java","-jar","/aneeque-backend.jar"]
