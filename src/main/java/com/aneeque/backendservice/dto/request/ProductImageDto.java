@@ -7,7 +7,6 @@ public class ProductImageDto {
 
     private String fileName;
 
-
     private String imageUrl;
 
 }
