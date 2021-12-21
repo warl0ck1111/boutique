@@ -1,6 +1,7 @@
 package com.aneeque.backendservice.controller;
 
 import com.aneeque.backendservice.dto.request.CategoryDto;
+import com.aneeque.backendservice.enums.CategoryType;
 import com.aneeque.backendservice.service.CategoryService;
 import com.aneeque.backendservice.dto.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,21 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllSuperLevel() {
+        return ResponseEntity.ok(new ApiResponse(categoryService.getAllParent()));
+    }
+
+    @PostMapping("create/parent")
+    public ResponseEntity<ApiResponse> createASuperParent(@RequestBody CategoryDto categoryDto) {
+        return ResponseEntity.ok(new ApiResponse(categoryService.save(categoryDto, CategoryType.PARENT_CATEGORY)));
+    }
+
+    @PostMapping("add-child/{parentId}")
+    public ResponseEntity<ApiResponse> addChildToParent(@PathVariable Long parentId, @RequestBody CategoryDto categoryDto) {
+        return ResponseEntity.ok(new ApiResponse(categoryService.addChild(parentId, categoryDto)));
+    }
+
     @GetMapping("{categoryId}")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long categoryId) {
         return ResponseEntity.ok(new ApiResponse(categoryService.getById(categoryId)));
@@ -33,10 +49,6 @@ public class CategoryController {
 
     }
 
-    @PostMapping()
-    public ResponseEntity<ApiResponse> CreateCategory(@Valid @RequestBody CategoryDto categoryDto) {
-        return ResponseEntity.ok(new ApiResponse("Category created successfully", categoryService.save(categoryDto)));
-    }
 
     @PutMapping("{categoryId}")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long categoryId,  @Valid @RequestBody CategoryDto categoryDto) {
