@@ -5,6 +5,7 @@ import com.aneeque.backendservice.data.entity.Category;
 import com.aneeque.backendservice.data.repository.CategoryRepository;
 import com.aneeque.backendservice.dto.request.AttributeDto;
 import com.aneeque.backendservice.dto.request.CategoryDto;
+import com.aneeque.backendservice.enums.CategoryType;
 import com.aneeque.backendservice.service.impl.AttributeServiceImpl;
 import com.aneeque.backendservice.data.entity.Property;
 import com.aneeque.backendservice.dto.request.PropertyDto;
@@ -14,9 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static com.aneeque.backendservice.util.Util.hasValue;
 
@@ -40,7 +39,22 @@ public class CategoryService implements CrudService<Category, CategoryDto> {
     @Override
     public CategoryDto save(CategoryDto categoryDto) {
         if (!hasValue(categoryDto.getName())) throw new IllegalArgumentException("category name can not be empty");
-        Category category = new Category(categoryDto.getName());
+        Category category = new Category();
+        Set<Category> categoryList = (Set<Category>)getCategoryRepository().findAllById(categoryDto.getLevelIds());
+        BeanUtils.copyProperties(categoryDto, category);
+        category.setSubCategories(categoryList);
+        category.setCategoryType(CategoryType.SUB_CATEGORY);
+        Category savedCategory = categoryRepository.save(category);
+        BeanUtils.copyProperties(savedCategory, categoryDto);
+        return categoryDto;
+    }
+    public CategoryDto save(CategoryDto categoryDto, CategoryType categoryType) {
+        if (!hasValue(categoryDto.getName())) throw new IllegalArgumentException("category name can not be empty");
+        Category category = new Category();
+        Set<Category> categoryList = (Set<Category>)getCategoryRepository().findAllById(categoryDto.getLevelIds());
+        BeanUtils.copyProperties(categoryDto, category);
+        category.setSubCategories(categoryList);
+        category.setCategoryType(categoryType);
         Category savedCategory = categoryRepository.save(category);
         BeanUtils.copyProperties(savedCategory, categoryDto);
         return categoryDto;
@@ -61,12 +75,34 @@ public class CategoryService implements CrudService<Category, CategoryDto> {
     public CategoryDto update(Long id, CategoryDto categoryDto) {
         if (!hasValue(categoryDto.getName())) throw new IllegalArgumentException("category name can not be empty");
         Category category = categoryRepository.findById(id).orElseThrow(() -> new NoSuchElementException("no Category found"));
+        Set<Category> categoryList = (Set<Category>) getCategoryRepository().findAllById(categoryDto.getLevelIds());
         BeanUtils.copyProperties(categoryDto, category);
+
+        category.setSubCategories(categoryList);
         Category updatedCategory = categoryRepository.save(category);
-
-
         BeanUtils.copyProperties(updatedCategory, categoryDto);
         return categoryDto;
+    }
+
+    public CategoryDto addChild(Long parentId, CategoryDto categoryDto) {
+        CategoryDto savedChild = save(categoryDto);
+        Category child = new Category();
+        BeanUtils.copyProperties(savedChild, child);
+        Category parent = categoryRepository.findById(parentId).get();
+        parent.getSubCategories().add(child);
+        Category updatedParent = categoryRepository.save(parent);
+        BeanUtils.copyProperties(updatedParent, categoryDto);
+        return categoryDto;
+    }
+
+    public Set<CategoryDto> getAllParent() {
+        Set<CategoryDto> categoryDtos = new HashSet<>();
+        categoryRepository.findAllByCategoryType(CategoryType.DEPARTMENT).forEach(category -> {
+            CategoryDto categoryDto = new CategoryDto();
+            BeanUtils.copyProperties(category, categoryDto);
+            categoryDtos.add(categoryDto);
+        });
+        return categoryDtos;
     }
 
     @Override
