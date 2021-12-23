@@ -43,12 +43,6 @@ public class CategoryController {
 
     }
 
-    @GetMapping()
-    public ResponseEntity<ApiResponse> getAllCategories() {
-        return ResponseEntity.ok(new ApiResponse(categoryService.getAll()));
-
-    }
-
 
     @PutMapping("{categoryId}")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long categoryId,  @Valid @RequestBody CategoryDto categoryDto) {
