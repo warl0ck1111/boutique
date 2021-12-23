@@ -28,6 +28,12 @@ spring:
     active: local
 
 
+payment-platform:
+  seerbit:
+    check-transaction-status-url: "https://seerbitapi.com/api/v2/payments/query/"
+    get-token-url: "https://seerbitapi.com/api/v2/encrypt/keys"
+    public-key: "SBTESTPUBK_qv5b1rVlVVmxFPiPmr5IHtQIvvYAZ1Yg"
+    private-key: "SBTESTSECK_HQuL3EJpMfOdAPQaASwdC3Y2aZxDD8fUhvHKLrKo"
 
 user-mgnt:
   account:
