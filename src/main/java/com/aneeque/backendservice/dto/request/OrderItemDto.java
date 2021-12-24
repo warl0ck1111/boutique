@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CartCreateRequestDto {
-    private Long productId;
-    private Long creatorId;
-    private Long quantity;
-    private String uniqueId;
+public class OrderItemDto {
+    private long productId;
+    private int quantity;
+    private long creatorId;
+    private String status;
+    private String orderId;
 }
