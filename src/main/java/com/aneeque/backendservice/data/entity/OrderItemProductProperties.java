@@ -14,23 +14,19 @@ import java.time.LocalDateTime;
  * @author Okala Bashir .O.
  */
 
+
 @Data
-@NoArgsConstructor
 @Entity
-public class OrderItem {
+@NoArgsConstructor
+public class OrderItemProductProperties {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private Long productId;
-    private int quantity;
-    private long creatorId;
-    private String status;
-    private String orderId;
-    private String vendorPaymentStatus;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
-    private LocalDateTime deliveredAt;
+    private Long propertyId;
+    private Long orderItemId;
 
     @JsonIgnore
     @Column(updatable = false, nullable = false)
@@ -41,9 +37,4 @@ public class OrderItem {
     @JsonIgnore
     @UpdateTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
-    private LocalDateTime modifiedAt;
-
-
-
-
-}
+    private LocalDateTime modifiedAt;}
