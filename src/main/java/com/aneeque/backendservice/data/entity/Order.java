@@ -17,15 +17,18 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @NoArgsConstructor
+@Table(name = "Orders")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long totalAmount;
+    private Double totalAmount;
     private String deliveryMethod;
     private String paymentMethod;
+    private String uniqueId;
+    private String emailAddress;
     private String transactionRef;
     private String status;
 

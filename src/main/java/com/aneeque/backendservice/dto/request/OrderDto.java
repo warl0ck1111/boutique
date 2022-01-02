@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class OrderDto {
 
-    private Long totalAmount;
+    private Double totalAmount;
     @NotNull(message = "delivery method Field can not be empty")
     @NotBlank(message = "delivery method Field can not be empty")
     private String deliveryMethod;
@@ -22,9 +22,18 @@ public class OrderDto {
     @NotBlank(message = "payment method Field can not be empty")
     private String paymentMethod;
 
+    @NotNull(message = "uniqueId Field can not be empty")
+    @NotBlank(message = "uniqueId Field can not be empty")
+    private String uniqueId;
+
+    @NotNull(message = "email Address Field can not be empty")
+    @NotBlank(message = "email Address Field can not be empty")
+    private String emailAddress;
+
 
     @NotNull(message = "transactionRef Field can not be empty")
     @NotBlank(message = "transactionRef Field can not be empty")
     private String transactionRef;
+
     private String status;
 }

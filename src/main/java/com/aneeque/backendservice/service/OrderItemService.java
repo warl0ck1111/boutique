@@ -3,10 +3,12 @@ package com.aneeque.backendservice.service;
 import com.aneeque.backendservice.data.entity.OrderItem;
 import com.aneeque.backendservice.data.repository.OrderItemRepository;
 import com.aneeque.backendservice.dto.request.OrderItemDto;
+import com.aneeque.backendservice.dto.response.OrderItemResponseDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -21,13 +23,18 @@ public class OrderItemService{
     private OrderItemRepository orderItemRepository;
 
     
-    public OrderItemDto save(OrderItemDto dto) {
-        return null;
+    public OrderItemDto save(OrderItemDto orderItemDto) {
+        OrderItem orderItem = new OrderItem();
+        BeanUtils.copyProperties(orderItemDto,orderItem);
+        OrderItem savedOrder = orderItemRepository.save(orderItem);
+        BeanUtils.copyProperties(savedOrder, orderItemDto);
+        return orderItemDto;
     }
 
     
-    public OrderItemDto getById(Long id) {
-        return null;
+    public List<OrderItemResponseDto> getByOrderItemsByOrderId(String orderId) {
+        List<OrderItemResponseDto> orderItems = orderItemRepository.findOrderItemsByOrderId(orderId);
+        return orderItems;
     }
 
     
@@ -42,7 +49,6 @@ public class OrderItemService{
     
     public void delete(Long orderItemId) {
         orderItemRepository.deleteById(orderItemId);
-
     }
 
     

@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author Okala Bashir .O.
  */
+
+
+@RestController
+@RequestMapping("/api/v1/order")
 public class OrderController {
 
     @Autowired
@@ -20,10 +24,16 @@ public class OrderController {
         return ResponseEntity.ok(new ApiResponse(orderService.getAllOrders()));
     }
 
-    @GetMapping("orderId")
-    public ResponseEntity<ApiResponse> getOrderById(@PathVariable Long orderId) {
-        return ResponseEntity.ok(new ApiResponse(orderService.getById(orderId)));
+    @GetMapping("{orderId}")
+    public ResponseEntity<ApiResponse> getOrderById(@PathVariable String orderId) {
+        return ResponseEntity.ok(new ApiResponse(orderService.getById(Long.valueOf(orderId))));
     }
+
+    @GetMapping("email/{emailAddress}")
+    public ResponseEntity<ApiResponse> getOrderByEmailAddress(@PathVariable String emailAddress) {
+        return ResponseEntity.ok(new ApiResponse(orderService.getByOrderByEmailAddress(emailAddress)));
+    }
+
 
     @PostMapping
     public ResponseEntity<ApiResponse> createOrder(@RequestBody OrderDto orderDto) {
@@ -31,13 +41,13 @@ public class OrderController {
     }
 
     @PutMapping("{orderId}")
-    public ResponseEntity<ApiResponse> updateStatus(@PathVariable Long orderId, @RequestParam String status) {
-        return ResponseEntity.ok(new ApiResponse("order status updated successfully", orderService.updateStatus(orderId, status)));
+    public ResponseEntity<ApiResponse> updateOrderStatus(@PathVariable String orderId, @RequestParam String status) {
+        return ResponseEntity.ok(new ApiResponse("order status updated successfully", orderService.updateStatus(Long.valueOf(orderId), status)));
     }
 
     @DeleteMapping("{orderId}")
-    public ResponseEntity<?> deleteOrder(@PathVariable Long orderId) {
-        orderService.delete(orderId);
+    public ResponseEntity<?> deleteOrder(@PathVariable String orderId) {
+        orderService.delete(Long.valueOf(orderId));
         return ResponseEntity.ok(new ApiResponse("order deleted successfully"));
     }
 
