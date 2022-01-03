@@ -29,7 +29,7 @@ public class ApiResponse implements Serializable {
     @JsonProperty("status")
     private String success;
         
-    @JsonProperty("payload")
+    @JsonProperty("data")
     private Object data;
     
     @JsonProperty("message")
