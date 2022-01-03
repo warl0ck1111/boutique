@@ -1,6 +1,5 @@
 package com.aneeque.backendservice.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,35 +13,31 @@ import java.time.LocalDateTime;
  * @author Okala Bashir .O.
  */
 
-@Data
 @Entity
+@Data
 @NoArgsConstructor
-@Table(name = "Orders")
-public class Order {
+public class ShippingAddress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Double totalAmount;
-    private String deliveryMethod;
-    private String paymentMethod;
-    private String uniqueId;
-    private String emailAddress;
-    private String transactionRef;
-    private String status;
 
-    @JsonIgnore
+    private String firstName;
+    private String lastName;
+    private String emailAddress;
+    private String mobileNumber;
+    private String city;
+    private String country;
+    private String landMark;
+
     @Column(updatable = false, nullable = false)
     @CreationTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
     private LocalDateTime createdAt;
 
-    @JsonIgnore
     @UpdateTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
     private LocalDateTime modifiedAt;
-
-
 
 }

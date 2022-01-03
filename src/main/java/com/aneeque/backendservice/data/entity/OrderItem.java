@@ -23,11 +23,14 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private long productId;
+    private Long productId;
     private int quantity;
     private long creatorId;
     private String status;
     private String orderId;
+    private String vendorPaymentStatus;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
+    private LocalDateTime deliveredAt;
 
     @JsonIgnore
     @Column(updatable = false, nullable = false)
