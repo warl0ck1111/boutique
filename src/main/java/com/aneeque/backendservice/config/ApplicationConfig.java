@@ -75,10 +75,19 @@ public class ApplicationConfig implements ApplicationListener<ContextRefreshedEv
             if(privileges.size() > 0) {
                 privilegeService.getPrivilegeRepository().saveAll(privileges);
             }
-            if(Objects.isNull(appUserService.findUserByEmail("superadmin@aneeque.com")))
-                appUserService.signUp(new RegistrationRequest("Super", "Admin", "superadmin@aneeque.com", "07068693731","password", "password", 1L));
-            if(Objects.isNull(appUserService.findUserByEmail("aneequeadmin@aneeque.com")))
-                appUserService.signUp(new RegistrationRequest("Aneeque", "Admin", "aneequeadmin@aneeque.com", "07068693731","password", "password", 2L));
+            if(Objects.isNull(appUserService.findUserByEmail("superadmin@aneeque.com"))){
+                Role roleInDb = roleService.findRoleByName(AppUserRole.SUPER_ADMIN.name());
+                if(Objects.nonNull(roleInDb)){
+                    appUserService.signUp(new RegistrationRequest("Super", "Admin", "superadmin@aneeque.com", "07068693731","password", "password", roleInDb.getId()));
+                }
+
+            }
+                 if(Objects.isNull(appUserService.findUserByEmail("aneequeadmin@aneeque.com"))){
+                     Role roleInDb = roleService.findRoleByName(AppUserRole.ANEEQUE_ADMIN.name());
+                     if(Objects.nonNull(roleInDb)){
+                         appUserService.signUp(new RegistrationRequest("Aneeque", "Admin", "aneequeadmin@aneeque.com", "07068693731","password", "password", roleInDb.getId()));
+                     }
+                 }
 
         } else
             log.info("database is configured");
