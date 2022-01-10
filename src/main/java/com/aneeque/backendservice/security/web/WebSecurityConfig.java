@@ -5,6 +5,7 @@ import com.aneeque.backendservice.security.jwt.filter.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,6 +17,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 
 /**
  * @author B.O Okala III
@@ -59,20 +65,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity web) throws Exception {
         // Disable CSRF (cross site request forgery)
-        web.cors().and().csrf().disable();
+        web.csrf().disable();
 
-        web.authorizeRequests().antMatchers("/**")
+        web.authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS,
+                        "/**")
+                .permitAll()
+                .antMatchers("/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
         web.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        web.cors().configurationSource(new CorsConfigurationSource() {
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setAllowedMethods(Collections.singletonList("*"));
+                config.addAllowedOrigin("*");
+                config.setAllowCredentials(true);
+                return config;
+            }
+        });
         web.addFilterAfter(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers(
                 AUTH_WHITELIST);
     }
