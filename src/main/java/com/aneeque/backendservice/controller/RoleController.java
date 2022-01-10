@@ -39,10 +39,15 @@ public class RoleController {
     }
 
     @PostMapping("{roleId}/assign-permission")
-    public ResponseEntity<?> assignPermissionsToRole(@PathVariable Long roleId, @RequestBody PrivilegeListRequest privilegeListRequest){
+    public ResponseEntity<?> assignPermissionsToRole(@PathVariable Long roleId, @RequestBody PrivilegeListRequest privilegeListRequest) {
         Role role = roleService.assignPermissionsToRole(roleId, privilegeListRequest.getPrivileges());
         return ResponseEntity.ok(new ApiResponse(role));
     }
 
+    @PostMapping("{roleName}")
+    public ResponseEntity<ApiResponse> createRole(@PathVariable String roleName) {
+        Role role = roleService.createRole(roleName);
+        return ResponseEntity.ok(new ApiResponse(role));
+    }
 
 }

@@ -138,9 +138,12 @@ public class AppUserService implements UserDetailsService {
 
         if (userPhoneNoExists) throw new ApiRequestException("mobile number already taken", HttpStatus.BAD_REQUEST);
 
+        Role role = roleService.findRoleById(request.getRoleId());
+
 
         AppUser appUser = new AppUser();
         BeanUtils.copyProperties(request, appUser);
+        appUser.setRole(role);
         return signUp(appUser);
     }
 
@@ -153,11 +156,8 @@ public class AppUserService implements UserDetailsService {
 
         String encodedPassword = bCryptPasswordEncoder.encode((appUser.getPassword()));
         appUser.setPassword(encodedPassword);
-        appUser.setRole(roleService.findRoleByName(AppUserRole.REGULAR_USER.name()));
-
         appUser.setLastLogin(LocalDateTime.now());
 
-        log.debug("user to be saved details \n" + appUser);
         appUser.setEnabled(true);
         AppUser newUser = appUserRepository.save(appUser);
 
@@ -271,12 +271,8 @@ public class AppUserService implements UserDetailsService {
 
     @Transactional
     public String deleteUserById(Long userId) {
-        AppUser appUser = findUserById(userId);
-        appUser.setEnabled(false);
-        appUser.setLocked(true);
-        appUser.setIsDeleted(true);
-        //should I unAssign roles and privileges too??
-        appUserRepository.save(appUser);
+
+        appUserRepository.deleteById(userId);
         return "user deleted successfully";
     }
 
@@ -356,4 +352,11 @@ public class AppUserService implements UserDetailsService {
         return Integer.parseInt(time.split(":")[0]) > 12 ? " PM" : " AM";
     }
 
+    public Object getUsersById(String userId) {
+        Optional<AppUser> appUser = appUserRepository.findById(Long.valueOf(userId));
+        if (appUser.isPresent()){
+            return appUser.get();
+        }
+        return "no user found";
+    }
 }

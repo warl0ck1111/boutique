@@ -179,13 +179,6 @@ class AppUserServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
-    @Test
-    void testDeleteUserShouldFailForInvalidUserId() {
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> (new AppUserService()).deleteUserById(0L));
-        String expectedMessage = "invalid user id";
-        String actualMessage = illegalArgumentException.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
 
     @Test
     void testFindUserByEmailShouldFailForEmptyEmail() {
