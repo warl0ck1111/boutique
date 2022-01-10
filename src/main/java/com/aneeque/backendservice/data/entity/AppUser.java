@@ -27,8 +27,7 @@ import java.util.*;
 public class AppUser implements UserDetails {
 
     @Id
-    @SequenceGenerator(name="user_sequence", sequenceName = "user_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("userId")
     private Long id;
 
@@ -54,7 +53,7 @@ public class AppUser implements UserDetails {
     @OneToOne
     private Role role;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private Collection<Privilege> userAssignedPrivileges = new ArrayList<>();
 
     private Boolean locked = false;

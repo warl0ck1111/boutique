@@ -22,9 +22,8 @@ import java.util.Collection;
 @AllArgsConstructor
 @Entity
 public class Role {
-    @SequenceGenerator(name = "app_user_role_sequence", sequenceName = "app_user_role_sequence", allocationSize = 1)
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_role_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
@@ -40,7 +39,7 @@ public class Role {
     private Boolean isDeleted = Boolean.FALSE;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Collection<Privilege> privileges = new ArrayList<>();
 
     @JsonIgnore

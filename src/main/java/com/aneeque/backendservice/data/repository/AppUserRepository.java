@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,8 +27,8 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     Page<AppUser> findAllByRole(Role role, Pageable pageable);
 
-    @Query(value = "select a.* from app_user a where a.email like '%:query%';", nativeQuery = true)
-    Page<AppUser> searchAppUserEmail(@Param(value = "query") String email, Pageable pageable);
+    @Query(value = "select a from AppUser a where a.emailAddress like '%:query%'")
+    Page<AppUser> searchAppUserByEmail(@Param(value = "query") String email, Pageable pageable);
 
     boolean existsByMobileNumber(String mobileNumber);
 

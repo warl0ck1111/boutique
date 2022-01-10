@@ -6,6 +6,7 @@ import com.aneeque.backendservice.dto.request.LoginRequest;
 import com.aneeque.backendservice.dto.request.RegistrationRequest;
 import com.aneeque.backendservice.dto.response.ApiResponse;
 import com.aneeque.backendservice.dto.request.PrivilegeListRequest;
+import com.aneeque.backendservice.service.PrivilegeService;
 import com.aneeque.backendservice.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,12 @@ public class AppUserController {
     public static final String UNLOCK_USER_ACCOUNT = "{userId}/unlock-account";
 
     public static final String GET_ALL_USERS = "get-all";
-    public static final String GET_ALL_USERS_BY_ROLE = "get-all/role/{roleId}";
-    public static final String DELETE_USER = "{userId}/delete";
+    public static final String GET_ALL_USERS_BY_ROLE = "";
+    public static final String DELETE_USER = "{userId}";
     public static final String ASSIGN_PRIVILEGE_TO_USER = "{userId}/assign-privilege";
     public static final String GET_ALL_PRIVILEGES_ASSIGNED_TO_USER = "{userId}/get-all/assigned-privileges";
     public static final String ACTIVATE_ACCOUNT = "auth/{token}/activate-account";
+    public static final String GET_ALL_PRIVILEGES = "auth/privileges";
 
 
     @Autowired
@@ -46,6 +48,11 @@ public class AppUserController {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private PrivilegeService privilegeService;
+
+
 
 
     @PostMapping(path = REGISTER_USER)
@@ -103,13 +110,14 @@ public class AppUserController {
     }
 
     @GetMapping(path = GET_ALL_USERS_BY_ROLE)
-    public ResponseEntity<?> getAllUsersByRole(@PathVariable Long roleId, @RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(new ApiResponse(appUserService.getAllUsersByRole(roleId, page, size)));
+    public ResponseEntity<?> getAllUsersByRole(@RequestParam String roleId, @RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(new ApiResponse(appUserService.getAllUsersByRole(Long.valueOf(roleId), page, size)));
     }
 
     @DeleteMapping(path = DELETE_USER)
-    public ResponseEntity<?> deleteUserAccount(@PathVariable Long roleId, @RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(new ApiResponse(appUserService.deleteUserById(roleId)));
+    public ResponseEntity<?> deleteUserAccount(@PathVariable String userId) {
+        System.out.println(userId);
+        return ResponseEntity.ok(new ApiResponse(appUserService.deleteUserById(Long.valueOf(userId))));
     }
 
     @PostMapping(path = ASSIGN_PRIVILEGE_TO_USER)
@@ -121,6 +129,12 @@ public class AppUserController {
     @GetMapping(path = GET_ALL_PRIVILEGES_ASSIGNED_TO_USER)
     public ResponseEntity<?> getPrivilegesAssignedToUser(@PathVariable Long userId) {
         return ResponseEntity.ok(new ApiResponse(appUserService.getPrivilegesAssignedToUser(userId)));
+    }
+
+
+ @GetMapping(path = GET_ALL_PRIVILEGES)
+    public ResponseEntity<?> getAllPrivileges() {
+        return ResponseEntity.ok(new ApiResponse(privilegeService.getAllPrivileges()));
     }
 
 

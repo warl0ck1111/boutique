@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.aneeque.backendservice.data.entity.Privilege;
@@ -114,12 +115,12 @@ class PrivilegeServiceTest {
 
     @Test
     void testGetAllPrivileges() {
-        PageImpl<Privilege> pageImpl = new PageImpl<Privilege>(new ArrayList<Privilege>());
-        when(this.privilegeRepository.findAll((org.springframework.data.domain.Pageable) any())).thenReturn(pageImpl);
-        Page<Privilege> actualAllPrivileges = this.privilegeService.getAllPrivileges(1, 3);
-        assertSame(pageImpl, actualAllPrivileges);
-        assertTrue(actualAllPrivileges.toList().isEmpty());
-        verify(this.privilegeRepository).findAll((org.springframework.data.domain.Pageable) any());
+        List<Privilege> privileges = new ArrayList<Privilege>();
+        when(this.privilegeRepository.findAll()).thenReturn(privileges);
+        List<Privilege> actualAllPrivileges = this.privilegeService.getAllPrivileges();
+        assertSame(privileges, actualAllPrivileges);
+        assertTrue(actualAllPrivileges.isEmpty());
+        verify(this.privilegeRepository).findAll();
     }
 
     @Test

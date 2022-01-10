@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author B.O Okala III
  */
@@ -48,8 +50,8 @@ public class PrivilegeService {
 
     }
 
-    public Page<Privilege> getAllPrivileges(int page, int pageSize){
-        return privilegeRepository.findAll(PageRequest.of(page, pageSize));
+    public List<Privilege> getAllPrivileges(){
+        return privilegeRepository.findAll();
     }
 
     public void delete(long id){

@@ -2,6 +2,7 @@ package com.aneeque.backendservice.dto.request;
 
 
 import com.aneeque.backendservice.util.validator.ConfirmPassword;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 @ConfirmPassword(passwordField="password", confirmPasswordField = "confirmPassword", message = "the password mismatch")
+@AllArgsConstructor
 public class RegistrationRequest {
 
     @NotBlank(message = "first name field can not be empty")
@@ -37,4 +39,9 @@ public class RegistrationRequest {
     @NotBlank(message = "confirm password field can not be empty")
     private String confirmPassword;
 
+    private Long roleId;
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress.toLowerCase();
+    }
 }
