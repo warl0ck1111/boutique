@@ -95,6 +95,7 @@ public class ApplicationConfig implements ApplicationListener<ContextRefreshedEv
 
     }
 
+
     public List<Role> getRoles() {
         return roleService.findAllRoles();
     }
