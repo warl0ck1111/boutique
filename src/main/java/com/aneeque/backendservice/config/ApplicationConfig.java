@@ -1,6 +1,7 @@
 package com.aneeque.backendservice.config;
 
 
+import com.aneeque.backendservice.dto.request.RegistrationRequest;
 import com.aneeque.backendservice.enums.AppUserRole;
 import com.aneeque.backendservice.service.AppUserService;
 import com.aneeque.backendservice.data.entity.Privilege;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Slf4j
 @Component
@@ -43,17 +45,17 @@ public class ApplicationConfig implements ApplicationListener<ContextRefreshedEv
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         log.info("onApplicationEvent");
         List<Role> roleList = getRoles();
-        for (Role r : roleList) {
-            System.out.println(r.getName());
-        }
-        if (roleList.size() != 0) databaseAlreadyConfigured = true;
+
+        if (roleList.size() >4) databaseAlreadyConfigured = true;
 
         if (!databaseAlreadyConfigured) {
 
 
             //create new role records
             log.info("database not configured");
-            log.info("setting up database");
+            log.info("setting up roles and privileges in the database");
+            privilegeService.getPrivilegeRepository().deleteAll();
+            roleRepository.deleteAll();
             List<Role> roles = new ArrayList<>();
             for (AppUserRole role : AppUserRole.values()) {
                 roles.add(new Role(role.name()));
@@ -62,9 +64,13 @@ public class ApplicationConfig implements ApplicationListener<ContextRefreshedEv
 
             List<Privilege> privileges = new ArrayList<>();
             for (UserPrivilege privilege : UserPrivilege.values()) {
-                privileges.add(new Privilege(privilege.name(), "Description", "USER_MGNT_MODULE"));
+                privileges.add(new Privilege(privilege.toString().toUpperCase().trim(), privilege.description, privilege.module));
             }
-            privilegeService.getPrivilegeRepository().saveAll(privileges);
+            List<Privilege> privilegeList = privilegeService.getPrivilegeRepository().saveAll(privileges);
+
+
+            appUserService.signUp(new RegistrationRequest("Super", "Admin", "superadmin@aneeque.com", "07068693731","password", "password", 1l));
+            appUserService.signUp(new RegistrationRequest("Aneeque", "Admin", "aneequeadmin@aneeque.com", "07068693731","password", "password", 2l));;
 
         } else
             log.info("database is configured");
