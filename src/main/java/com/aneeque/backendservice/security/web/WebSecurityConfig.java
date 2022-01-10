@@ -58,15 +58,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity web) throws Exception {
-        web
-                .cors().and()
-                .csrf().disable()
-                .authorizeRequests()
+        // Disable CSRF (cross site request forgery)
+        web.cors().and().csrf().disable();
 
-
-                .antMatchers(
-                        "**")
-                .permitAll().anyRequest().authenticated();
+        web.authorizeRequests().antMatchers("/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated();
         web.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         web.addFilterAfter(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
