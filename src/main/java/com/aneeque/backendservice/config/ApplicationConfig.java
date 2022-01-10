@@ -41,8 +41,8 @@ public class ApplicationConfig implements ApplicationListener<ContextRefreshedEv
     private boolean databaseAlreadyConfigured = false;
 
 
-    @Transactional
-    @Override
+//    @Transactional
+//    @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         log.info("onApplicationEvent");
         List<Role> roleList = getRoles();
@@ -94,6 +94,7 @@ public class ApplicationConfig implements ApplicationListener<ContextRefreshedEv
 
 
     }
+
 
     public List<Role> getRoles() {
         return roleService.findAllRoles();
