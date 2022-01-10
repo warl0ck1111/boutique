@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -46,7 +47,8 @@ public class ApplicationConfig implements ApplicationListener<ContextRefreshedEv
         log.info("onApplicationEvent");
         List<Role> roleList = getRoles();
 
-        if (roleList.size() >4) databaseAlreadyConfigured = true;
+        if (roleList.size() >4)
+            databaseAlreadyConfigured = true;
 
         if (!databaseAlreadyConfigured) {
 
@@ -58,19 +60,25 @@ public class ApplicationConfig implements ApplicationListener<ContextRefreshedEv
             roleRepository.deleteAll();
             List<Role> roles = new ArrayList<>();
             for (AppUserRole role : AppUserRole.values()) {
-                roles.add(new Role(role.name()));
+                Role roleInDb = roleService.findRoleByName(role.name());
+                if(Objects.isNull(roleInDb))
+                    roles.add(new Role(role.name()));
             }
-            roleService.getRoleRepository().saveAll(roles);
+            if(roles.size() > 0)
+                roleService.getRoleRepository().saveAll(roles);
 
             List<Privilege> privileges = new ArrayList<>();
             for (UserPrivilege privilege : UserPrivilege.values()) {
-                privileges.add(new Privilege(privilege.toString().toUpperCase().trim(), privilege.description, privilege.module));
+                if(privilegeService.getPrivilegeRepository().findByName(privilege.toString().toUpperCase().trim()).isEmpty())
+                    privileges.add(new Privilege(privilege.toString().toUpperCase().trim(), privilege.description, privilege.module));
             }
-            List<Privilege> privilegeList = privilegeService.getPrivilegeRepository().saveAll(privileges);
-
-
-            appUserService.signUp(new RegistrationRequest("Super", "Admin", "superadmin@aneeque.com", "07068693731","password", "password", 1l));
-            appUserService.signUp(new RegistrationRequest("Aneeque", "Admin", "aneequeadmin@aneeque.com", "07068693731","password", "password", 2l));;
+            if(privileges.size() > 0) {
+                privilegeService.getPrivilegeRepository().saveAll(privileges);
+            }
+            if(Objects.isNull(appUserService.findUserByEmail("superadmin@aneeque.com")))
+                appUserService.signUp(new RegistrationRequest("Super", "Admin", "superadmin@aneeque.com", "07068693731","password", "password", 1L));
+            if(Objects.isNull(appUserService.findUserByEmail("aneequeadmin@aneeque.com")))
+                appUserService.signUp(new RegistrationRequest("Aneeque", "Admin", "aneequeadmin@aneeque.com", "07068693731","password", "password", 2L));
 
         } else
             log.info("database is configured");
@@ -80,7 +88,6 @@ public class ApplicationConfig implements ApplicationListener<ContextRefreshedEv
 
     public List<Role> getRoles() {
         return roleService.findAllRoles();
-
     }
 
 
