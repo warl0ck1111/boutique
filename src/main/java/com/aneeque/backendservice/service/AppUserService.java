@@ -352,4 +352,11 @@ public class AppUserService implements UserDetailsService {
         return Integer.parseInt(time.split(":")[0]) > 12 ? " PM" : " AM";
     }
 
+    public Object getUsersById(String userId) {
+        Optional<AppUser> appUser = appUserRepository.findById(Long.valueOf(userId));
+        if (appUser.isPresent()){
+            return appUser.get();
+        }
+        return "no user found";
+    }
 }

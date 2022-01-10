@@ -26,7 +26,7 @@ import javax.validation.Valid;
 
 public class AppUserController {
 
-    public static final String REGISTER_USER = "auth/register";
+    public static final String REGISTER_USER = "auth/create";
     public static final String LOGIN_USER = "auth/login";
 
     public static final String ENABLE_USER_ACCOUNT = "{userId}/enable-account";
@@ -34,11 +34,12 @@ public class AppUserController {
     public static final String LOCK_USER_ACCOUNT = "{userId}/lock-account";
     public static final String UNLOCK_USER_ACCOUNT = "{userId}/unlock-account";
 
-    public static final String GET_ALL_USERS = "get-all";
-    public static final String GET_ALL_USERS_BY_ROLE = "";
+    public static final String GET_ALL_USERS = "";
+    public static final String GET_USERS_BY_ID = "{userId}";
+    public static final String GET_ALL_USERS_BY_ROLE = "role/{roleId}";
     public static final String DELETE_USER = "{userId}";
     public static final String ASSIGN_PRIVILEGE_TO_USER = "{userId}/assign-privilege";
-    public static final String GET_ALL_PRIVILEGES_ASSIGNED_TO_USER = "{userId}/get-all/assigned-privileges";
+    public static final String GET_ALL_PRIVILEGES_ASSIGNED_TO_USER = "{userId}/assigned-privileges";
     public static final String ACTIVATE_ACCOUNT = "auth/{token}/activate-account";
     public static final String GET_ALL_PRIVILEGES = "auth/privileges";
 
@@ -53,12 +54,10 @@ public class AppUserController {
     private PrivilegeService privilegeService;
 
 
-
-
     @PostMapping(path = REGISTER_USER)
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody RegistrationRequest registrationRequest) {
         AuthenticationResponse response = appUserService.signUp(registrationRequest);
-        return ResponseEntity.ok(new ApiResponse( "user registration successful", response));
+        return ResponseEntity.ok(new ApiResponse("user registration successful", response));
     }
 
     @PutMapping(path = ACTIVATE_ACCOUNT)
@@ -70,7 +69,7 @@ public class AppUserController {
     @PostMapping(path = LOGIN_USER)
     public ResponseEntity<ApiResponse> loginUser(@RequestBody LoginRequest loginRequest) {
         AuthenticationResponse response = appUserService.loginUser(loginRequest);
-        return ResponseEntity.ok(new ApiResponse( "login successful", response));
+        return ResponseEntity.ok(new ApiResponse("login successful", response));
 
     }
 
@@ -105,8 +104,13 @@ public class AppUserController {
     }
 
     @GetMapping(path = GET_ALL_USERS)
-    public ResponseEntity<?> getAll(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<?> getAllUsers(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(new ApiResponse(appUserService.getAllUsers(page, size)));
+    }
+
+    @GetMapping(path = GET_USERS_BY_ID)
+    public ResponseEntity<?> getUserById(@PathVariable String userId) {
+        return ResponseEntity.ok(new ApiResponse(appUserService.getUsersById(userId)));
     }
 
     @GetMapping(path = GET_ALL_USERS_BY_ROLE)
@@ -132,15 +136,10 @@ public class AppUserController {
     }
 
 
- @GetMapping(path = GET_ALL_PRIVILEGES)
+    @GetMapping(path = GET_ALL_PRIVILEGES)
     public ResponseEntity<?> getAllPrivileges() {
         return ResponseEntity.ok(new ApiResponse(privilegeService.getAllPrivileges()));
     }
-
-
-
-
-
 
 
 }
