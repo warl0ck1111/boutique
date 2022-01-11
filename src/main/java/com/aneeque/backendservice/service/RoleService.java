@@ -2,6 +2,7 @@ package com.aneeque.backendservice.service;
 
 import com.aneeque.backendservice.data.entity.Role;
 import com.aneeque.backendservice.data.repository.RoleRepository;
+import com.aneeque.backendservice.dto.request.RoleRequest;
 import com.aneeque.backendservice.exception.ApiRequestException;
 import com.aneeque.backendservice.data.entity.Privilege;
 import com.aneeque.backendservice.exception.RoleNotFoundException;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -41,15 +43,21 @@ public class RoleService {
     }
 
     @Transactional
-    public Role createRole(String roleName) {
-        boolean roleExist = roleRepository.existsByName(roleName);
+    public Role createRole(RoleRequest roleRequest) {
+        boolean roleExist = roleRepository.existsByName(roleRequest.getName());
         if (roleExist) {
             log.error("Role already exists");
             throw new ApiRequestException("Role already exists", HttpStatus.BAD_REQUEST);
         }
-        Role role = new Role(roleName);
+        Role role = new Role(roleRequest.getName());
         return roleRepository.save(role);
 
+    }
+
+    @Transactional
+    public String updateRole(Long roleId, RoleRequest req) {
+        roleRepository.updateRole(roleId, req.getName(), req.getEntity(), req.getDescription(), LocalDateTime.now().toString());
+        return "role update successful";
     }
 
     public List<Role> findAllRoles() {

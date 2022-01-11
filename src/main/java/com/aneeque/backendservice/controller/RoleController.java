@@ -50,5 +50,9 @@ public class RoleController {
         Role role = roleService.createRole(roleRequest);
         return ResponseEntity.ok(new ApiResponse(role));
     }
+ @PutMapping("{roleId}")
+    public ResponseEntity<ApiResponse> updateRole(@PathVariable String roleId ,@RequestBody RoleRequest roleRequest) {
+        return ResponseEntity.ok(new ApiResponse(roleService.updateRole( Long.valueOf(roleId),roleRequest)));
+    }
 
 }
