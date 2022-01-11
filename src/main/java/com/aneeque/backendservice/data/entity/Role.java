@@ -38,11 +38,9 @@ public class Role {
     @Column(name = "IS_DELETED")
     private Boolean isDeleted = Boolean.FALSE;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Privilege> privileges = new ArrayList<>();
 
-    @JsonIgnore
     @Column(updatable = false, nullable = false)
     @CreationTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
