@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 /**
@@ -39,6 +40,21 @@ public class AppUserDto {
 
     private Boolean enabled;
 
-    private Boolean isDeleted;
+
+    private String address;
+
+    private String city;
+
+    private String country;
+
+    private String dateOfBirth;
+
+    private String gender;
+
+    private String jobDescription;
+
+    private String jobTitle;
+
+    private String maritalStatus;
 
 }
