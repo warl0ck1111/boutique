@@ -50,10 +50,28 @@ public class AppUser implements UserDetails {
     @JsonIgnore
     private int failedLoginAttempt; //(MAX = 10, )
 
+
+    private String address;
+
+    private String city;
+
+    private String country;
+
+    private String dateOfBirth;
+
+    private String gender;
+
+    private String jobDescription;
+
+    private String jobTitle;
+
+    private String maritalStatus;
+
+
     @OneToOne
     private Role role;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     private Collection<Privilege> userAssignedPrivileges = new ArrayList<>();
 
     private Boolean locked = false;
