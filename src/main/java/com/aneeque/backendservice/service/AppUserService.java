@@ -170,33 +170,32 @@ public class AppUserService implements UserDetailsService {
     }
 
 
-//    @Transactional
-//    public String forgotPassword(String email) {
-//        AppUser appUser = appUserRepository.findByEmailAddress(email).orElseThrow(() -> new ApiRequestException("email does not exist", HttpStatus.NOT_FOUND));
-//
-//        String phoneNo = appUser.getUserPhoneNo();
-//        String token = tokenService.generateOTP(6);
-//
-//        Optional<Token> token1 = tokenService.getTokenRepository().findByEmailAndTokenType(email, TokenType.FORGOT_PASSWORD);
-//        if (token1.isPresent()) {
-//            token1.get().setToken(token);
-//            token1.get().setCreatedAt(LocalDateTime.now());
-//            token1.get().setExpiredAt(LocalDateTime.now().plusMinutes(TOKEN_LIFETIME_IN_MINUTES));
-//            tokenService.getTokenRepository().save(token1.get());
-//            smsService.send(phoneNo, String.format("your token is: %s", token));
-//
-//            log.info(String.format("your token is: %s", token));
-//            return String.format("OTP sent to %s successfully", hideChar(phoneNo));
-//        }
-//        Token confirmationOTP = new Token(token, TokenType.FORGOT_PASSWORD, email, appUser.getUserPhoneNo(), LocalDateTime.now(),
-//                LocalDateTime.now().plusMinutes(TOKEN_LIFETIME_IN_MINUTES));
-//
-//        tokenService.saveToken(confirmationOTP);
-//        smsService.send(phoneNo, String.format("your token is: %s", token));
-//        log.info(String.format("your token is: %s", token));
-//        return String.format("OTP sent to %s successfully", phoneNo);
-//
-//    }
+    @Transactional
+    public String forgotPassword(String email) {
+        AppUser appUser = appUserRepository.findByEmailAddress(email).orElseThrow(() -> new ApiRequestException("email does not exist", HttpStatus.NOT_FOUND));
+
+        String token = tokenService.generateToken(6);
+
+        Optional<Token> token1 = tokenService.getTokenRepository().findByEmailAddressAndTokenType(email, TokenType.FORGOT_PASSWORD);
+        if (token1.isPresent()) {
+            token1.get().setToken(token);
+            token1.get().setCreatedAt(LocalDateTime.now());
+            token1.get().setExpiredAt(LocalDateTime.now().plusMinutes(TOKEN_LIFETIME_IN_MINUTES));
+            tokenService.getTokenRepository().save(token1.get());
+//            emailService.send(email, String.format("your token is: %s", token));
+
+            log.info(String.format("your token is: %s", token));
+            return String.format("OTP sent to %s successfully", email);
+        }
+        Token confirmationOTP = new Token(token, TokenType.FORGOT_PASSWORD, email, LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(TOKEN_LIFETIME_IN_MINUTES));
+
+        tokenService.saveToken(confirmationOTP);
+//        emailService.send(email, String.format("your token is: %s", token));
+        log.info(String.format("your token is: %s", token));
+        return String.format("OTP sent to %s successfully", email);
+
+    }
 
 
     @Transactional
