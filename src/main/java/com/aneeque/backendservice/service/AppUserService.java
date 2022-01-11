@@ -114,7 +114,7 @@ public class AppUserService implements UserDetailsService {
 
 
     public AuthenticationResponse signUp(RegistrationRequest request) {
-
+        log.info("Validating create user details");
         if (!hasValue(request.getEmailAddress())) throw new IllegalArgumentException("email address can not be empty");
 
         if (!hasValue(request.getFirstName())) throw new IllegalArgumentException("first name can not be empty");
@@ -144,24 +144,25 @@ public class AppUserService implements UserDetailsService {
         AppUser appUser = new AppUser();
         BeanUtils.copyProperties(request, appUser);
         appUser.setRole(role);
-        return signUp(appUser);
+        return signUp(appUser, request.getPermissions());
     }
 
     @Transactional
-    public AuthenticationResponse signUp(AppUser appUser) {
-
-//        Optional<Token> token = tokenService.getTokenRepository().findByEmailAddressAndTokenType(appUser.getEmailAddress(), TokenType.NEW_ACCOUNT);
-//        boolean userRequestedToken = token.isPresent();
+    public AuthenticationResponse signUp(AppUser appUser, List<Long> userAssignedPrivileges) {
+        log.info("on-boarding user...");
+        Optional<Token> token = tokenService.getTokenRepository().findByEmailAddressAndTokenType(appUser.getEmailAddress(), TokenType.NEW_ACCOUNT);
+        boolean userRequestedToken = token.isPresent();
 
 
         String encodedPassword = bCryptPasswordEncoder.encode((appUser.getPassword()));
         appUser.setPassword(encodedPassword);
         appUser.setLastLogin(LocalDateTime.now());
 
-        appUser.setEnabled(true);
+        appUser.setEnabled(false);
         AppUser newUser = appUserRepository.save(appUser);
-
-//        sendActivateAccountEmail(newUser.getEmailAddress());
+        assignPrivilegesToUser(newUser.getId(), userAssignedPrivileges);
+        log.info("user created");
+        sendActivateAccountEmail(newUser.getEmailAddress());
 
         final String jwt = jwtTokenUtil.generateToken(appUser);
         return new AuthenticationResponse(jwt, newUser.getRole().getName(), newUser.getAllUserPrivileges(),
@@ -354,7 +355,7 @@ public class AppUserService implements UserDetailsService {
 
     public Object getUsersById(String userId) {
         Optional<AppUser> appUser = appUserRepository.findById(Long.valueOf(userId));
-        if (appUser.isPresent()){
+        if (appUser.isPresent()) {
             return appUser.get();
         }
         return "no user found";
