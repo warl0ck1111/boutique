@@ -1,4 +1,4 @@
-package com.aneeque.backendservice.security.config;
+package com.aneeque.backendservice.security.web;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
