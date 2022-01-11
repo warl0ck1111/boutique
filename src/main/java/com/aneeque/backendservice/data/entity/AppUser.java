@@ -71,7 +71,7 @@ public class AppUser implements UserDetails {
     @OneToOne
     private Role role;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany
     private Collection<Privilege> userAssignedPrivileges = new ArrayList<>();
 
     private Boolean locked = false;

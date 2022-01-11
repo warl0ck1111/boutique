@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author B.O Okala III
@@ -61,13 +62,9 @@ public class RoleService {
     }
 
     public List<Role> findAllRoles() {
-        List<Role> roleList = new ArrayList<>();
         List<Role> roles = roleRepository.findAll();
-        for (Role role : roles) {
-            String roleName = role.getName().replace("_", " ");
-            roleList.add(new Role(role.getId(), roleName));
-        }
-        return roleList;
+        return roles;
+
     }
 
 
