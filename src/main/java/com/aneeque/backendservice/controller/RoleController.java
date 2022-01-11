@@ -3,6 +3,7 @@ package com.aneeque.backendservice.controller;
 import com.aneeque.backendservice.data.entity.Privilege;
 import com.aneeque.backendservice.data.entity.Role;
 import com.aneeque.backendservice.dto.request.PrivilegeListRequest;
+import com.aneeque.backendservice.dto.request.RoleRequest;
 import com.aneeque.backendservice.dto.response.ApiResponse;
 import com.aneeque.backendservice.service.RoleService;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @GetMapping(path = "get-all")
+    @GetMapping(path = "")
     public ResponseEntity<?> getRoles() {
         List<Role> roles = roleService.findAllRoles();
         return new ResponseEntity<>(roles, HttpStatus.OK);
@@ -44,10 +45,14 @@ public class RoleController {
         return ResponseEntity.ok(new ApiResponse(role));
     }
 
-    @PostMapping("{roleName}")
-    public ResponseEntity<ApiResponse> createRole(@PathVariable String roleName) {
-        Role role = roleService.createRole(roleName);
+    @PostMapping("")
+    public ResponseEntity<ApiResponse> createRole(@RequestBody RoleRequest roleRequest) {
+        Role role = roleService.createRole(roleRequest);
         return ResponseEntity.ok(new ApiResponse(role));
+    }
+ @PutMapping("{roleId}")
+    public ResponseEntity<ApiResponse> updateRole(@PathVariable String roleId ,@RequestBody RoleRequest roleRequest) {
+        return ResponseEntity.ok(new ApiResponse(roleService.updateRole( Long.valueOf(roleId),roleRequest)));
     }
 
 }

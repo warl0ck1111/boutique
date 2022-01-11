@@ -153,7 +153,7 @@ class RoleControllerTest {
     @Test
     void testGetRoles() throws Exception {
         when(this.roleService.findAllRoles()).thenReturn(new ArrayList<Role>());
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/roles/get-all");
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/roles");
         MockMvcBuilders.standaloneSetup(this.roleController)
                 .build()
                 .perform(requestBuilder)
@@ -177,7 +177,7 @@ class RoleControllerTest {
         ArrayList<Role> roleList = new ArrayList<Role>();
         roleList.add(role);
         when(this.roleService.findAllRoles()).thenReturn(roleList);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/roles/get-all");
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/roles/");
         MockMvcBuilders.standaloneSetup(this.roleController)
                 .build()
                 .perform(requestBuilder)
