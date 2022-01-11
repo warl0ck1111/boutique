@@ -114,7 +114,7 @@ public class AppUserService implements UserDetailsService {
 
 
     public AuthenticationResponse signUp(RegistrationRequest request) {
-
+        log.info("Validating create user details");
         if (!hasValue(request.getEmailAddress())) throw new IllegalArgumentException("email address can not be empty");
 
         if (!hasValue(request.getFirstName())) throw new IllegalArgumentException("first name can not be empty");
@@ -144,24 +144,25 @@ public class AppUserService implements UserDetailsService {
         AppUser appUser = new AppUser();
         BeanUtils.copyProperties(request, appUser);
         appUser.setRole(role);
-        return signUp(appUser);
+        return signUp(appUser, request.getPermissions());
     }
 
     @Transactional
-    public AuthenticationResponse signUp(AppUser appUser) {
-
-//        Optional<Token> token = tokenService.getTokenRepository().findByEmailAddressAndTokenType(appUser.getEmailAddress(), TokenType.NEW_ACCOUNT);
-//        boolean userRequestedToken = token.isPresent();
+    public AuthenticationResponse signUp(AppUser appUser, List<Long> userAssignedPrivileges) {
+        log.info("on-boarding user...");
+        Optional<Token> token = tokenService.getTokenRepository().findByEmailAddressAndTokenType(appUser.getEmailAddress(), TokenType.NEW_ACCOUNT);
+        boolean userRequestedToken = token.isPresent();
 
 
         String encodedPassword = bCryptPasswordEncoder.encode((appUser.getPassword()));
         appUser.setPassword(encodedPassword);
         appUser.setLastLogin(LocalDateTime.now());
 
-        appUser.setEnabled(true);
+        appUser.setEnabled(false);
         AppUser newUser = appUserRepository.save(appUser);
-
-//        sendActivateAccountEmail(newUser.getEmailAddress());
+        assignPrivilegesToUser(newUser.getId(), userAssignedPrivileges);
+        log.info("user created");
+        sendActivateAccountEmail(newUser.getEmailAddress());
 
         final String jwt = jwtTokenUtil.generateToken(appUser);
         return new AuthenticationResponse(jwt, newUser.getRole().getName(), newUser.getAllUserPrivileges(),
@@ -169,33 +170,32 @@ public class AppUserService implements UserDetailsService {
     }
 
 
-//    @Transactional
-//    public String forgotPassword(String email) {
-//        AppUser appUser = appUserRepository.findByEmailAddress(email).orElseThrow(() -> new ApiRequestException("email does not exist", HttpStatus.NOT_FOUND));
-//
-//        String phoneNo = appUser.getUserPhoneNo();
-//        String token = tokenService.generateOTP(6);
-//
-//        Optional<Token> token1 = tokenService.getTokenRepository().findByEmailAndTokenType(email, TokenType.FORGOT_PASSWORD);
-//        if (token1.isPresent()) {
-//            token1.get().setToken(token);
-//            token1.get().setCreatedAt(LocalDateTime.now());
-//            token1.get().setExpiredAt(LocalDateTime.now().plusMinutes(TOKEN_LIFETIME_IN_MINUTES));
-//            tokenService.getTokenRepository().save(token1.get());
-//            smsService.send(phoneNo, String.format("your token is: %s", token));
-//
-//            log.info(String.format("your token is: %s", token));
-//            return String.format("OTP sent to %s successfully", hideChar(phoneNo));
-//        }
-//        Token confirmationOTP = new Token(token, TokenType.FORGOT_PASSWORD, email, appUser.getUserPhoneNo(), LocalDateTime.now(),
-//                LocalDateTime.now().plusMinutes(TOKEN_LIFETIME_IN_MINUTES));
-//
-//        tokenService.saveToken(confirmationOTP);
-//        smsService.send(phoneNo, String.format("your token is: %s", token));
-//        log.info(String.format("your token is: %s", token));
-//        return String.format("OTP sent to %s successfully", phoneNo);
-//
-//    }
+    @Transactional
+    public String forgotPassword(String email) {
+        AppUser appUser = appUserRepository.findByEmailAddress(email).orElseThrow(() -> new ApiRequestException("email does not exist", HttpStatus.NOT_FOUND));
+
+        String token = tokenService.generateToken(6);
+
+        Optional<Token> token1 = tokenService.getTokenRepository().findByEmailAddressAndTokenType(email, TokenType.FORGOT_PASSWORD);
+        if (token1.isPresent()) {
+            token1.get().setToken(token);
+            token1.get().setCreatedAt(LocalDateTime.now());
+            token1.get().setExpiredAt(LocalDateTime.now().plusMinutes(TOKEN_LIFETIME_IN_MINUTES));
+            tokenService.getTokenRepository().save(token1.get());
+//            emailService.send(email, String.format("your token is: %s", token));
+
+            log.info(String.format("your token is: %s", token));
+            return String.format("OTP sent to %s successfully", email);
+        }
+        Token confirmationOTP = new Token(token, TokenType.FORGOT_PASSWORD, email, LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(TOKEN_LIFETIME_IN_MINUTES));
+
+        tokenService.saveToken(confirmationOTP);
+//        emailService.send(email, String.format("your token is: %s", token));
+        log.info(String.format("your token is: %s", token));
+        return String.format("OTP sent to %s successfully", email);
+
+    }
 
 
     @Transactional
@@ -354,7 +354,7 @@ public class AppUserService implements UserDetailsService {
 
     public Object getUsersById(String userId) {
         Optional<AppUser> appUser = appUserRepository.findById(Long.valueOf(userId));
-        if (appUser.isPresent()){
+        if (appUser.isPresent()) {
             return appUser.get();
         }
         return "no user found";

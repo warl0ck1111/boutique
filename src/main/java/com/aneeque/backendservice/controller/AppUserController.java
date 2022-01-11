@@ -42,6 +42,7 @@ public class AppUserController {
     public static final String GET_ALL_PRIVILEGES_ASSIGNED_TO_USER = "{userId}/assigned-privileges";
     public static final String ACTIVATE_ACCOUNT = "auth/{token}/activate-account";
     public static final String GET_ALL_PRIVILEGES = "auth/privileges";
+    public static final String FORGOT_PWD = "{email}/forgot-pwd";
 
 
     @Autowired
@@ -106,6 +107,11 @@ public class AppUserController {
     @GetMapping(path = GET_ALL_USERS)
     public ResponseEntity<?> getAllUsers(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(new ApiResponse(appUserService.getAllUsers(page, size)));
+    }
+
+    @PostMapping(path = FORGOT_PWD)
+    public ResponseEntity<?> forgotPassword(@PathVariable String email ){
+        return ResponseEntity.ok(new ApiResponse(appUserService.forgotPassword(email)));
     }
 
     @GetMapping(path = GET_USERS_BY_ID)
