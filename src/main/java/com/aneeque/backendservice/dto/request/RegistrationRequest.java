@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class RegistrationRequest {
 
     private Long roleId;
 
-    private List<Long> permissions;
+    private List<Long> permissions = new ArrayList<>();
 
     private String address;
 
