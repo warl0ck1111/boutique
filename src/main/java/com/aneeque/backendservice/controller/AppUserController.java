@@ -1,5 +1,6 @@
 package com.aneeque.backendservice.controller;
 
+import com.aneeque.backendservice.dto.request.ResetPasswordRequest;
 import com.aneeque.backendservice.service.AppUserService;
 import com.aneeque.backendservice.dto.response.AuthenticationResponse;
 import com.aneeque.backendservice.dto.request.LoginRequest;
@@ -43,6 +44,7 @@ public class AppUserController {
     public static final String ACTIVATE_ACCOUNT = "auth/{token}/activate-account";
     public static final String GET_ALL_PRIVILEGES = "auth/privileges";
     public static final String FORGOT_PWD = "{email}/forgot-pwd";
+    public static final String RESET_PWD = "reset-pwd";
 
 
     @Autowired
@@ -114,13 +116,19 @@ public class AppUserController {
         return ResponseEntity.ok(new ApiResponse(appUserService.forgotPassword(email)));
     }
 
+    @PutMapping(path = RESET_PWD)
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest){
+        appUserService.resetUserPwd(resetPasswordRequest);
+        return ResponseEntity.ok(new ApiResponse("password reset successful"));
+    }
+
     @GetMapping(path = GET_USERS_BY_ID)
     public ResponseEntity<?> getUserById(@PathVariable String userId) {
         return ResponseEntity.ok(new ApiResponse(appUserService.getUsersById(userId)));
     }
 
     @GetMapping(path = GET_ALL_USERS_BY_ROLE)
-    public ResponseEntity<?> getAllUsersByRole(@RequestParam String roleId, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<?> getAllUsersByRole(@PathVariable String roleId, @RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(new ApiResponse(appUserService.getAllUsersByRole(Long.valueOf(roleId), page, size)));
     }
 

@@ -151,7 +151,7 @@ public class AppUserService implements UserDetailsService {
     public AuthenticationResponse signUp(AppUser appUser, List<Long> userAssignedPrivileges) {
         log.info("on-boarding user...");
         Optional<Token> token = tokenService.getTokenRepository().findByEmailAddressAndTokenType(appUser.getEmailAddress(), TokenType.NEW_ACCOUNT);
-        boolean userRequestedToken = token.isPresent();
+//        boolean userRequestedToken = token.isPresent();
 
 
         String encodedPassword = bCryptPasswordEncoder.encode((appUser.getPassword()));
@@ -162,7 +162,7 @@ public class AppUserService implements UserDetailsService {
         AppUser newUser = appUserRepository.save(appUser);
         assignPrivilegesToUser(newUser.getId(), userAssignedPrivileges);
         log.info("user created");
-        sendActivateAccountEmail(newUser.getEmailAddress());
+//        sendActivateAccountEmail(newUser.getEmailAddress());
 
         final String jwt = jwtTokenUtil.generateToken(appUser);
         return new AuthenticationResponse(jwt, newUser.getRole().getName(), newUser.getAllUserPrivileges(),
@@ -297,13 +297,16 @@ public class AppUserService implements UserDetailsService {
     @Transactional
     public AppUserDto assignPrivilegesToUser(Long userId, List<Long> privilegeIds) {
         AppUser appUser = findUserById(userId);
-        List<Privilege> privileges = privilegeService.getPrivilegeRepository().findAllById(privilegeIds);
-        appUser.setUserAssignedPrivileges(privileges);
-        appUserRepository.save(appUser);
+        if(!privilegeIds.isEmpty()) {
+            List<Privilege> privileges = privilegeService.getPrivilegeRepository().findAllById(privilegeIds);
+            appUser.setUserAssignedPrivileges(privileges);
+            appUserRepository.save(appUser);
 
-        AppUserDto appUserDto = new AppUserDto();
-        BeanUtils.copyProperties(appUser, appUserDto);
-        return appUserDto;
+            AppUserDto appUserDto = new AppUserDto();
+            BeanUtils.copyProperties(appUser, appUserDto);
+            return appUserDto;
+        }
+        else return null;
     }
 
     public Collection<Privilege> getPrivilegesAssignedToUser(Long userId) {
