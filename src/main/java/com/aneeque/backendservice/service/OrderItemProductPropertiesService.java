@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class OrderItemProductPropertiesService {
     @Autowired
     private OrderItemProductPropertiesRepository orderItemProductPropertiesRepository;
 
+    @Transactional
     public String create(OrderItemProductPropertiesDto orderItemProductPropertiesDto) {
         OrderItemProductProperties orderItemProductProperties = new OrderItemProductProperties();
         BeanUtils.copyProperties(orderItemProductPropertiesDto, orderItemProductProperties);

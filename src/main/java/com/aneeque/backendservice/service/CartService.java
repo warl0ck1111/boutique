@@ -46,7 +46,7 @@ public class CartService {
     }
 
 
-    
+    @Transactional
     public CartResponseDto updateQuantity(Long id,Long quantity) {
         Cart cart = cartRepository.findById(id).orElseThrow(()-> new NoSuchElementException("cart not found"));
         cart.setQuantity(quantity);

@@ -2,30 +2,36 @@ package com.aneeque.backendservice.service;
 
 import com.aneeque.backendservice.data.entity.*;
 import com.aneeque.backendservice.data.repository.ProductRepository;
-import com.aneeque.backendservice.dto.request.ProductDto;
+import com.aneeque.backendservice.dto.request.ProductPropertiesRequestDto;
+import com.aneeque.backendservice.dto.request.ProductRequestDto;
+import com.aneeque.backendservice.dto.response.ProductResponseDto;
+import com.aneeque.backendservice.data.entity.ProductTag;
+import com.aneeque.backendservice.data.repository.ProductTagRepository;
+import com.aneeque.backendservice.dto.request.ProductSizeInformationRequestDto;
 import com.aneeque.backendservice.service.impl.AttributeServiceImpl;
 import com.aneeque.backendservice.util.CrudService;
 import com.aneeque.backendservice.util.IAuthenticationFacade;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static com.aneeque.backendservice.util.Util.hasValue;
-
 /**
  * @author Okala Bashir .O.
  */
-
+@Slf4j
 @Getter
 @Service
-public class ProductService implements CrudService<Product, ProductDto> {
+public class ProductService {
 
     @Autowired
     private CategoryService categoryService;
@@ -40,72 +46,110 @@ public class ProductService implements CrudService<Product, ProductDto> {
     private PropertyService propertyService;
 
     @Autowired
+    private ProductTagRepository productTagRepository;
+
+    @Autowired
+    private ProductImageService productImageService;
+
+    @Autowired
     private IAuthenticationFacade authenticationFacade;
 
+    @Autowired
+    private ProductSizeInformationService productSizeInformationService;
 
-    @Override
-    public ProductDto save(ProductDto productDto) {
-        if (!hasValue(productDto.getName())) throw new IllegalArgumentException("product name can not be empty");
-        if (!hasValue(productDto.getDescription()))
-            throw new IllegalArgumentException("product description can not be empty");
 
-        Category category = categoryService.getCategoryRepository().findById(productDto.getCategory()).orElseThrow(() -> new NoSuchElementException("category not found"));
-        Authentication authentication = authenticationFacade.getAuthentication();
-        AppUser loggedInUser = (AppUser) authentication.getPrincipal();
+    @Transactional
+    public String createProduct(ProductRequestDto dto) {
+        log.info("creating product");
+        Integer createdProductId = productRepository.createProduct(dto.getBrandName(), dto.getCategoryId(),
+                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getName(),
+                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getQuantity(),
+                dto.getReorderPoint(), dto.getStockValue(), null, null);
 
-        Product product = new Product(productDto.getName(), productDto.getDescription(), category, productDto.getPrice(), loggedInUser);
-        Product savedProduct = productRepository.save(product);
+        System.out.println("this is the created product Id: " + createdProductId);
+        createProductTags(Long.valueOf(createdProductId), dto);
+        createProductSizeInformation(dto.getProductSizeInformation());
+        createProductProperties(createdProductId, dto.getProductProperties());
 
-        BeanUtils.copyProperties(savedProduct, productDto);
-
-        return productDto;
+        return "product created successfully";
     }
 
-    @Override
-    public ProductDto getById(Long id) {
+    private void createProductProperties(int productId, List<ProductPropertiesRequestDto> productProperties) {
+        log.info("creating product property");
+        productProperties.forEach(dto -> {
+            productRepository.addProductProperty((long) productId, dto.getPropertyId(), dto.getPrice());
+        });
+    }
+
+    private void createProductSizeInformation(List<ProductSizeInformationRequestDto> productSizeInformationRequestDtos) {
+        log.info("creating product size information");
+        productSizeInformationRequestDtos.forEach(prodSizeInfo -> {
+            productSizeInformationService.create(prodSizeInfo);
+        });
+    }
+
+    private void createProductTags(Long productId, ProductRequestDto dto) {
+        log.info("creating ProductTags");
+        dto.getTagIds().forEach(tagId -> {
+            ProductTag productTag = new ProductTag(productId, tagId);
+            productTagRepository.save(productTag);
+        });
+    }
+
+
+    public String deleteProductTag(Long productId, Long tagId) {
+        log.info("deleting product Tag");
+        productTagRepository.deleteProductTag(productId, tagId);
+        return "product tag removed successfully";
+    }
+
+    public String deleteProductProperty(Long productId, Long propertyId) {
+        log.info("deleting product property");
+        productRepository.removeProductProperty(productId, propertyId);
+        return "product property deleted successfully";
+    }
+
+
+    public ProductRequestDto getProductById(Long id) {
+        log.info("getting ProductById");
         if (id < 0) throw new IllegalArgumentException("invalid product id");
         Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("product not found"));
-        ProductDto productDto = new ProductDto();
+        ProductRequestDto productRequestDto = new ProductRequestDto();
 
-        BeanUtils.copyProperties(product, productDto);
-        return productDto;
+        BeanUtils.copyProperties(product, productRequestDto);
+        return productRequestDto;
     }
 
-    @Override
-    public ProductDto update(Long id, ProductDto productDto) {
-        if (!hasValue(productDto.getName())) throw new IllegalArgumentException("product name can not be empty");
-        if (!hasValue(productDto.getDescription()))
-            throw new IllegalArgumentException("product description can not be empty");
+    public String updateProduct(Long productId, ProductRequestDto dto) {
+        log.info("updating product");
+        productRepository.updateProduct(productId, dto.getBrandName(), dto.getCategoryId(),
+                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getName(),
+                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getQuantity(),
+                dto.getReorderPoint(), dto.getStockValue(), dto.getModifiedBy(), LocalDateTime.now().toString());
 
-        Category category = categoryService.getCategoryRepository().findById(productDto.getCategory()).orElseThrow(() -> new NoSuchElementException("category not found"));
-        Authentication authentication = authenticationFacade.getAuthentication();
-        AppUser loggedInUser = (AppUser) authentication.getPrincipal();
+        updateProductSizeInformation(productId, dto.getProductSizeInformation());
 
-        Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("product not found"));
-        BeanUtils.copyProperties(productDto, product);
-        product.setCategory(category);
-        product.setModifiedBy(loggedInUser);
-
-        Product updatedProduct = productRepository.save(product);
-
-        BeanUtils.copyProperties(updatedProduct, productDto);
-        return productDto;
+        return "product updated successfully";
     }
 
-    @Override
+    private void updateProductSizeInformation(long productId, List<ProductSizeInformationRequestDto> productSizeInformationRequestDtos) {
+        productSizeInformationRequestDtos.forEach(productSizeInformation -> {
+            productSizeInformationService.update(productId, productSizeInformation);
+        });
+    }
+
     public void delete(Long productId) {
-        productRepository.deleteById(productId);
-
+        productRepository.deleteProductById(productId);
     }
 
-    @Override
-    public List<ProductDto> getAll() {
 
-        List<Product> products = productRepository.findAll();
-        List<ProductDto> productDtoList = new ArrayList<>();
+    public List<ProductResponseDto> getAllProducts(int page, int size) {
+
+        List<Product> products = productRepository.findAllProducts(PageRequest.of(page, size));
+        List<ProductResponseDto> productDtoList = new ArrayList<>();
 
         products.forEach(product -> {
-            ProductDto productDto = new ProductDto();
+            ProductResponseDto productDto = new ProductResponseDto();
             BeanUtils.copyProperties(product, productDto);
             productDtoList.add(productDto);
 
@@ -115,45 +159,43 @@ public class ProductService implements CrudService<Product, ProductDto> {
     }
 
 
-    public List<ProductDto> getAllByProperties(Long propertyId) {
+    public List<ProductRequestDto> getAllByProperties(Long propertyId) {
+//
+//        List<Product> products = productRepository.findAllByPropertiesIn(Arrays.asList(propertyId));
+//        List<ProductRequestDto> productRequestDtoList = new ArrayList<>();
+//
+//        products.forEach(product -> {
+//            ProductRequestDto productRequestDto = new ProductRequestDto();
+//            BeanUtils.copyProperties(product, productRequestDto);
+//            productRequestDtoList.add(productRequestDto);
+//
+//        });
 
-        List<Product> products = productRepository.findAllByPropertiesIn(Arrays.asList(propertyId));
-        List<ProductDto> productDtoList = new ArrayList<>();
-
-        products.forEach(product -> {
-            ProductDto productDto = new ProductDto();
-            BeanUtils.copyProperties(product, productDto);
-            productDtoList.add(productDto);
-
-        });
-
-        return productDtoList;
+//        return productRequestDtoList;
+        return null;
     }
 
 
-
-
-    public ProductDto assignAttributesToProduct(Long productId, List<Long> attributeIds) {
+    public ProductRequestDto assignAttributesToProduct(Long productId, List<Long> attributeIds) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("product not found"));
         List<Attribute> attributes = attributeService.getAttributeRepository().findAllById(attributeIds);
-        product.setAttributes(attributes);
 
         Product updatedProduct = productRepository.save(product);
-        ProductDto productDto = new ProductDto();
-        BeanUtils.copyProperties(updatedProduct, productDto);
-        return productDto;
+        ProductRequestDto productRequestDto = new ProductRequestDto();
+        BeanUtils.copyProperties(updatedProduct, productRequestDto);
+        return productRequestDto;
 
     }
 
-    public ProductDto assignPropertiesToProduct(Long productId, List<Long> propertyId) {
+    public ProductRequestDto assignPropertiesToProduct(Long productId, List<Long> propertyId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("product not found"));
         List<Property> properties = propertyService.getPropertyRepository().findAllById(propertyId);
-        product.setProperties(properties);
+//        product.setProperties(properties);
 
         Product updatedProduct = productRepository.save(product);
-        ProductDto productDto = new ProductDto();
-        BeanUtils.copyProperties(updatedProduct, productDto);
-        return productDto;
+        ProductRequestDto productRequestDto = new ProductRequestDto();
+        BeanUtils.copyProperties(updatedProduct, productRequestDto);
+        return productRequestDto;
 
 
     }

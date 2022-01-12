@@ -19,6 +19,15 @@ import javax.validation.Valid;
 public class CartController {
 
 
+    public static final String CREATE_CART = "";
+    public static final String UPDATE_CART_QUANTITY = "{cartId}";
+    public static final String DELETE_CART = "{cartId}";
+    public static final String GET_ALL_CART_BY_UNIQUE_ID = "unique-id/{uniqueId}";
+    public static final String GET_CART_BY_ID = "{cartId}";
+    public static final String FIND_CART_BY_CREATOR_ID = "creator/{creatorId}";
+    public static final String GET_PROPERTY_BY_CART_ID = "{cartId}/property";
+    public static final String SAVE_PRODUCT_PROPERTY = "product-property";
+    public static final String SAVE_CART_PRODUCT_PROPERTY = "product-property";
     @Autowired
     private CartService cartService;
 
@@ -26,45 +35,45 @@ public class CartController {
     private CartProductPropertiesService cartProductPropertiesService;
 
 
-    @PostMapping()
-    public ResponseEntity<ApiResponse> saveCart(@Valid @RequestBody CartCreateRequestDto createRequestDto) {
+    @PostMapping(CREATE_CART)
+    public ResponseEntity<ApiResponse> createCart(@Valid @RequestBody CartCreateRequestDto createRequestDto) {
         return ResponseEntity.ok(new ApiResponse("cart created successfully", cartService.save(createRequestDto)));
     }
 
-    @PutMapping("{cartId}")
+    @PutMapping(UPDATE_CART_QUANTITY)
     public ResponseEntity<ApiResponse> updateQuantity(@PathVariable Long cartId, @RequestParam Long quantity) {
         return ResponseEntity.ok(new ApiResponse("cart updated successfully", cartService.updateQuantity(cartId, quantity)));
     }
 
-    @DeleteMapping("{cartId}")
+    @DeleteMapping(DELETE_CART)
     public ResponseEntity<ApiResponse> deleteCart(@PathVariable Long cartId) {
         cartService.delete(cartId);
         return ResponseEntity.ok(new ApiResponse("cart deleted successfully"));
     }
 
-    @GetMapping("unique-id/{uniqueId}")
+    @GetMapping(GET_ALL_CART_BY_UNIQUE_ID)
     public ResponseEntity<?> getAllCartByUniqueId(@PathVariable String uniqueId) {
         return ResponseEntity.ok(new ApiResponse(cartService.getByUniqueId(uniqueId)));
     }
 
-    @GetMapping("{cartId}")
+    @GetMapping(GET_CART_BY_ID)
     public ResponseEntity<?> findCartById(@PathVariable String cartId) {
         return ResponseEntity.ok(new ApiResponse(cartService.getById(Long.valueOf(cartId))));
     }
 
-    @GetMapping("creator/{creatorId}")
+    @GetMapping(FIND_CART_BY_CREATOR_ID)
     public ResponseEntity<?> findCartByCreatorId(@PathVariable String creatorId) {
         return ResponseEntity.ok(new ApiResponse(cartService.getByCreatorId(Long.valueOf(creatorId))));
     }
 
 
-    @GetMapping("{cartId}/property")
+    @GetMapping(GET_PROPERTY_BY_CART_ID)
     public ResponseEntity<?> getPropertiesByCartId(@PathVariable String cartId) {
         return ResponseEntity.ok(new ApiResponse(cartProductPropertiesService.getCartProductPropertyById(Long.valueOf(cartId))));
     }
 
 
-    @PostMapping("product-property")
+    @PostMapping(SAVE_CART_PRODUCT_PROPERTY)
     public ResponseEntity<?> saveCartProductProperty(@RequestBody CartProductPropertyDto cartProductPropertyDto){
         return ResponseEntity.ok(new ApiResponse(cartProductPropertiesService.save(cartProductPropertyDto)));
     }

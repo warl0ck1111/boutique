@@ -17,7 +17,8 @@ import java.util.List;
 public interface ProductSizeInformationRepository extends JpaRepository<ProductSizeInformation, Long> {
 
     @Modifying
-    @Query(value = "INSERT INTO product_size_information (category, name, unit, from_x, to_y, product_Id) VALUES (:category, :name, :unit, :fromX, :toY, :productId)", nativeQuery = true)
+    @Query(value = "INSERT INTO product_size_information (category, name, unit, from_x, to_y, product_Id) " +
+            "VALUES (:category, :name, :unit, :fromX, :toY, :productId)", nativeQuery = true)
     Integer createProductSizeInformation(@Param("category") String category, @Param("name") String name, @Param("unit")
             String unit, @Param("fromX") Double fromX, @Param("toY") Double toY, @Param("productId") Long productId);
 
@@ -26,8 +27,9 @@ public interface ProductSizeInformationRepository extends JpaRepository<ProductS
     List<ProductSizeInformation> getProductSizeInformationByProductId(@Param("productId") Long productId);
 
     @Modifying
-    @Query(value = "UPDATE product_size_information SET category = :category, name=:name, unit=:unit, from_x=:fromX, to_y = :toY, product_Id=:productId WHERE id = :id", nativeQuery = true)
-    void updateProductSizeInformation(@Param("id") Long prodSizeInfoId, @Param("category") String category,
+    @Query(value = "UPDATE product_size_information SET category = :category, name=:name, unit=:unit, " +
+            "from_x=:fromX, to_y = :toY, product_Id=:productId WHERE id = :prodSizeInfoId", nativeQuery = true)
+    void updateProductSizeInformation(@Param("prodSizeInfoId") Long prodSizeInfoId, @Param("category") String category,
                                      @Param("name") String name, @Param("unit") String unit,
                                      @Param("fromX") Double fromX, @Param("toY") Double toY,
                                      @Param("productId") Long productId);
