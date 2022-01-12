@@ -14,6 +14,7 @@ import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -36,11 +37,19 @@ public class CategoryService implements CrudService<Category, CategoryDto> {
     @Autowired
     private PropertyService propertyService;
 
+
+    /**
+     * use this to create a sub or child category
+     *
+     * @param categoryDto
+     * @return
+     */
+    @Transactional
     @Override
     public CategoryDto save(CategoryDto categoryDto) {
         if (!hasValue(categoryDto.getName())) throw new IllegalArgumentException("category name can not be empty");
         Category category = new Category();
-        Set<Category> categoryList = (Set<Category>)getCategoryRepository().findAllById(categoryDto.getLevelIds());
+        Set<Category> categoryList = (Set<Category>) getCategoryRepository().findAllById(categoryDto.getLevelIds());
         BeanUtils.copyProperties(categoryDto, category);
         category.setSubCategories(categoryList);
         category.setCategoryType(CategoryType.SUB_CATEGORY);
@@ -48,10 +57,19 @@ public class CategoryService implements CrudService<Category, CategoryDto> {
         BeanUtils.copyProperties(savedCategory, categoryDto);
         return categoryDto;
     }
+
+    /**
+     * use this to create a parent or root category
+     *
+     * @param categoryDto
+     * @param categoryType
+     * @return
+     */
+    @Transactional
     public CategoryDto save(CategoryDto categoryDto, CategoryType categoryType) {
-        if (!hasValue(categoryDto.getName())) throw new IllegalArgumentException("category name can not be empty");
         Category category = new Category();
-        Set<Category> categoryList = (Set<Category>)getCategoryRepository().findAllById(categoryDto.getLevelIds());
+        getAttributeService().getAttributeRepository().findAllById(categoryDto.getAttributes());
+        Set<Category> categoryList = (Set<Category>) getCategoryRepository().findAllById(categoryDto.getLevelIds());
         BeanUtils.copyProperties(categoryDto, category);
         category.setSubCategories(categoryList);
         category.setCategoryType(categoryType);
@@ -71,6 +89,7 @@ public class CategoryService implements CrudService<Category, CategoryDto> {
 
     }
 
+    @Transactional
     @Override
     public CategoryDto update(Long id, CategoryDto categoryDto) {
         if (!hasValue(categoryDto.getName())) throw new IllegalArgumentException("category name can not be empty");
@@ -84,6 +103,7 @@ public class CategoryService implements CrudService<Category, CategoryDto> {
         return categoryDto;
     }
 
+    @Transactional
     public CategoryDto addChild(Long parentId, CategoryDto categoryDto) {
         CategoryDto savedChild = save(categoryDto);
         Category child = new Category();
@@ -105,6 +125,7 @@ public class CategoryService implements CrudService<Category, CategoryDto> {
         return categoryDtos;
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         categoryRepository.deleteById(id);
@@ -122,6 +143,7 @@ public class CategoryService implements CrudService<Category, CategoryDto> {
         return categoryDtoList;
     }
 
+    @Transactional
     public CategoryDto assignAttributesToCategory(Long categoryId, List<Long> attributeIds) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new NoSuchElementException("no category found"));
 
@@ -136,6 +158,7 @@ public class CategoryService implements CrudService<Category, CategoryDto> {
 
     }
 
+    @Transactional
     public CategoryDto assignPropertiesToCategory(Long categoryId, List<Long> propertyIds) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new NoSuchElementException("no category found"));
 
@@ -150,7 +173,7 @@ public class CategoryService implements CrudService<Category, CategoryDto> {
 
     }
 
-
+    @Transactional
     public CategoryDto assignAttributesAndPropertiesToCategory(Long categoryId, List<Long> attributeIds, List<Long> propertyIds) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new NoSuchElementException("no category found"));
 
@@ -215,8 +238,8 @@ public class CategoryService implements CrudService<Category, CategoryDto> {
         CategoryDto categoryDto = new CategoryDto();
         BeanUtils.copyProperties(category, categoryDto);
 
-        categoryDto.setAttributes(attributeDtoList);
-        categoryDto.setProperties(propertyDtoList);
+//        categoryDto.setAttributes(attributeDtoList);
+//        categoryDto.setProperties(propertyDtoList);
         return categoryDto;
     }
 

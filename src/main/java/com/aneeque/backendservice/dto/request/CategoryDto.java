@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,12 +27,12 @@ public class CategoryDto {
 
     private String description;
 
-    private List<Long> levelIds;
+    private List<Long> levelIds = new ArrayList<>();
 
-    private Set<Category> subCategories;
+    private List<Long> subCategories = new ArrayList<>();
 
-    private List<PropertyDto> properties;
+    private List<Long> properties = new ArrayList<>();
 
-    private List<AttributeDto> attributes;
+    private List<Long> attributes = new ArrayList<>();
 
 }

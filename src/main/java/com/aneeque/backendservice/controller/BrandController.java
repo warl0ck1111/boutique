@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping("/api/vi/brand")
+@RequestMapping("/api/vi/brands")
 public class BrandController {
 
+    public static final String UPDATE_BRAND = "{brandId}";
+    public static final String GET_BRAND_BY_ID = "{brandId}";
+    public static final String GET_ALL_BRANDS = "";
+    public static final String DELETE_BRAND_BY_ID = "{brandId}";
     @Autowired
     private BrandService brandService;
 
@@ -23,24 +27,24 @@ public class BrandController {
         return ResponseEntity.ok(new ApiResponse(brandService.save(brandRequestDto)));
     }
 
-    @PutMapping("{brandId}")
+    @PutMapping(UPDATE_BRAND)
     public ResponseEntity<?> updateBrand(@PathVariable String brandId, @RequestBody BrandRequestDto brandRequestDto){
         return ResponseEntity.ok(new ApiResponse(brandService.update(Long.valueOf(brandId),brandRequestDto)));
     }
 
-    @GetMapping("{brandId}")
+    @GetMapping(GET_BRAND_BY_ID)
     public ResponseEntity<?> getBrandById(@PathVariable String brandId){
         return ResponseEntity.ok(new ApiResponse(brandService.getById(Long.valueOf(brandId))));
     }
 
-    @GetMapping("all")
+    @GetMapping(GET_ALL_BRANDS)
     public ResponseEntity<?> getAllBrands(){
         return ResponseEntity.ok(new ApiResponse(brandService.getAll()));
     }
 
 
-    @DeleteMapping("{brandId}")
-    public ResponseEntity<?> deleteTagById(@PathVariable String brandId){
+    @DeleteMapping(DELETE_BRAND_BY_ID)
+    public ResponseEntity<?> deleteBrandById(@PathVariable String brandId){
         return ResponseEntity.ok(new ApiResponse(brandService.delete(Long.valueOf(brandId))));
     }
 }

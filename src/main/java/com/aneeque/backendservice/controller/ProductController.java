@@ -1,12 +1,13 @@
 package com.aneeque.backendservice.controller;
 
-import com.aneeque.backendservice.dto.request.ProductDto;
+import com.aneeque.backendservice.dto.request.ProductRequestDto;
 import com.aneeque.backendservice.service.ProductService;
 import com.aneeque.backendservice.dto.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -20,9 +21,9 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping
-    private ResponseEntity<ApiResponse> getAllProducts() {
-        return ResponseEntity.ok(new ApiResponse(productService.getAll()));
+    @GetMapping()
+    private ResponseEntity<ApiResponse> getAllProducts(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(new ApiResponse(productService.getAllProducts(page, size)));
     }
 
     @GetMapping("{productId}")
@@ -32,13 +33,13 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createProduct(@RequestBody ProductDto productDto) {
-        return ResponseEntity.ok(new ApiResponse("Product created successfully", productService.save(productDto)));
+    public ResponseEntity<ApiResponse> createProduct(@Valid @RequestBody ProductRequestDto productRequestDto) {
+        return ResponseEntity.ok(new ApiResponse("Product created successfully", productService.createProduct(productRequestDto)));
     }
 
     @PutMapping("{productId}")
-    public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long productId, @RequestBody ProductDto productDto) {
-        return ResponseEntity.ok(new ApiResponse("Product updated successfully", productService.update(productId, productDto)));
+    public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long productId, @Valid @RequestBody ProductRequestDto productRequestDto) {
+        return ResponseEntity.ok(new ApiResponse("Product updated successfully", productService.updateProduct(productId, productRequestDto)));
     }
 
     @DeleteMapping("{productId}")
@@ -55,5 +56,20 @@ public class ProductController {
     @PutMapping("{productId}/assign-attributes")
     public ResponseEntity<ApiResponse> assignAttributesToProduct(@PathVariable Long productId, @RequestParam List<Long> attributeIds) {
         return ResponseEntity.ok(new ApiResponse("Attributes assigned to Product successfully", productService.assignAttributesToProduct(productId, attributeIds)));
+    }
+
+    @DeleteMapping("{productId}/tag/{tagId}")
+    public ResponseEntity<ApiResponse> deleteProductTag(@PathVariable Long productId, @PathVariable Long tagId) {
+        return ResponseEntity.ok(new ApiResponse(productService.deleteProductTag(productId, tagId)));
+    }
+
+    @DeleteMapping("{productId}/property/{propertyId}")
+    public ResponseEntity<ApiResponse> deleteProductproperty(@PathVariable Long productId, @PathVariable Long propertyId) {
+        return ResponseEntity.ok(new ApiResponse(productService.deleteProductProperty(productId, propertyId)));
+    }
+
+    @GetMapping("{productId}/size-info")
+    private ResponseEntity<ApiResponse> getProductSizeInformationByProductId(@PathVariable String productId) {
+        return ResponseEntity.ok(new ApiResponse(productService.getProductSizeInformationService().getProductSizeInformationByProductId(Long.valueOf(productId))));
     }
 }
