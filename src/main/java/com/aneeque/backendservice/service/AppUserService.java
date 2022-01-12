@@ -3,10 +3,7 @@ package com.aneeque.backendservice.service;
 
 import com.aneeque.backendservice.data.entity.AppUser;
 import com.aneeque.backendservice.data.repository.AppUserRepository;
-import com.aneeque.backendservice.dto.request.AppUserDto;
-import com.aneeque.backendservice.dto.request.LoginRequest;
-import com.aneeque.backendservice.dto.request.RegistrationRequest;
-import com.aneeque.backendservice.dto.request.ResetPasswordRequest;
+import com.aneeque.backendservice.dto.request.*;
 import com.aneeque.backendservice.dto.response.AuthenticationResponse;
 import com.aneeque.backendservice.enums.AppUserRole;
 import com.aneeque.backendservice.exception.ApiRequestException;
@@ -169,6 +166,22 @@ public class AppUserService implements UserDetailsService {
                 appUser.getId().toString(), newUser.getFirstName(), newUser.getLastName(), newUser.getLastLogin());
     }
 
+    @Transactional
+    public AppUser updateUser(Long userId, UpdateUserDto updateUserDto) {
+        log.info("updating user...");
+        AppUser appUser = appUserRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("invalid user id"));
+        BeanUtils.copyProperties(updateUserDto, appUser);
+        AppUser updatedUser = appUserRepository.save(appUser);
+        log.info("user updated");
+        return updatedUser;
+    }
+
+    @Transactional
+    public AuthenticationResponse activateUserAccount(){
+
+        return null;
+    }
+
 
     @Transactional
     public String forgotPassword(String email) {
@@ -297,7 +310,7 @@ public class AppUserService implements UserDetailsService {
     @Transactional
     public AppUserDto assignPrivilegesToUser(Long userId, List<Long> privilegeIds) {
         AppUser appUser = findUserById(userId);
-        if(!privilegeIds.isEmpty()) {
+        if (!privilegeIds.isEmpty()) {
             List<Privilege> privileges = privilegeService.getPrivilegeRepository().findAllById(privilegeIds);
             appUser.setUserAssignedPrivileges(privileges);
             appUserRepository.save(appUser);
@@ -305,8 +318,7 @@ public class AppUserService implements UserDetailsService {
             AppUserDto appUserDto = new AppUserDto();
             BeanUtils.copyProperties(appUser, appUserDto);
             return appUserDto;
-        }
-        else return null;
+        } else return null;
     }
 
     public Collection<Privilege> getPrivilegesAssignedToUser(Long userId) {

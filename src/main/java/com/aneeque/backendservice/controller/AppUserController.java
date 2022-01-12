@@ -1,12 +1,10 @@
 package com.aneeque.backendservice.controller;
 
-import com.aneeque.backendservice.dto.request.ResetPasswordRequest;
+import com.aneeque.backendservice.data.entity.AppUser;
+import com.aneeque.backendservice.dto.request.*;
 import com.aneeque.backendservice.service.AppUserService;
 import com.aneeque.backendservice.dto.response.AuthenticationResponse;
-import com.aneeque.backendservice.dto.request.LoginRequest;
-import com.aneeque.backendservice.dto.request.RegistrationRequest;
 import com.aneeque.backendservice.dto.response.ApiResponse;
-import com.aneeque.backendservice.dto.request.PrivilegeListRequest;
 import com.aneeque.backendservice.service.PrivilegeService;
 import com.aneeque.backendservice.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +26,15 @@ import javax.validation.Valid;
 public class AppUserController {
 
     public static final String REGISTER_USER = "auth/create";
+    public static final String EDIT_USER_PROFILE = "auth/edit/{userId}";
     public static final String LOGIN_USER = "auth/login";
 
     public static final String ENABLE_USER_ACCOUNT = "{userId}/enable-account";
     public static final String DISABLE_USER_ACCOUNT = "{userId}/disable-account";
     public static final String LOCK_USER_ACCOUNT = "{userId}/lock-account";
     public static final String UNLOCK_USER_ACCOUNT = "{userId}/unlock-account";
+
+    public static final String CONFIRM_OTP_TOKEN = "confirm-otp/{token}";
 
     public static final String GET_ALL_USERS = "";
     public static final String GET_USERS_BY_ID = "{userId}";
@@ -61,6 +62,12 @@ public class AppUserController {
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody RegistrationRequest registrationRequest) {
         AuthenticationResponse response = appUserService.signUp(registrationRequest);
         return ResponseEntity.ok(new ApiResponse("user registration successful", response));
+    }
+
+    @PutMapping(path = EDIT_USER_PROFILE)
+    public ResponseEntity<ApiResponse> editUser(@PathVariable String userId, @Valid @RequestBody UpdateUserDto updateUserDto) {
+        AppUser appUser = appUserService.updateUser(Long.valueOf(userId), updateUserDto);
+        return ResponseEntity.ok(new ApiResponse("user update profile successful", appUser));
     }
 
     @PutMapping(path = ACTIVATE_ACCOUNT)
@@ -155,5 +162,10 @@ public class AppUserController {
         return ResponseEntity.ok(new ApiResponse(privilegeService.getAllPrivileges()));
     }
 
+    @PostMapping(path = CONFIRM_OTP_TOKEN)
+    public ResponseEntity<?> confirmUserOtpToken(@PathVariable String token) {
+        AuthenticationResponse authenticationResponse = tokenService.confirmToken(token);
+        return ResponseEntity.ok(new ApiResponse(authenticationResponse));
+    }
 
 }

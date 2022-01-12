@@ -59,10 +59,9 @@ public class TokenService {
 
     @Transactional
     public AuthenticationResponse confirmToken(String token) {
+        log.info("confirming token");
         if (token.length() != 6) throw new ApiRequestException("invalid token", HttpStatus.BAD_REQUEST);
-        Token tokenValidation = getToken(token).orElseThrow(() -> {
-            return new ApiRequestException("invalid token", HttpStatus.NOT_FOUND);
-        });
+        Token tokenValidation = getToken(token).orElseThrow(() -> new ApiRequestException("invalid token", HttpStatus.NOT_FOUND));
 
         if (tokenValidation.getConfirmedAt() != null)
             throw new ApiRequestException("token already used", HttpStatus.BAD_REQUEST);
@@ -78,11 +77,10 @@ public class TokenService {
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(confirmedToken.getEmailAddress());
         AppUser appUser = appUserRepository.findByEmailAddress(confirmedToken.getEmailAddress()).get();
-//
+
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
         return new AuthenticationResponse(jwt, appUser.getRole().getName(), appUser.getAllUserPrivileges(), appUser.getId().toString(), appUser.getFirstName(), appUser.getLastName(), appUser.getLastLogin());
-//        return "Token confirmed successfully";
     }
 
     public String generateToken(int tokenLength) {
