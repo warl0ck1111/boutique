@@ -33,5 +33,9 @@ public class DepartmentController {
         return ResponseEntity.ok(new ApiResponse("Department updated successfully",departmentService.update( Long.valueOf(departmentId), departmentDto)));
     }
 
+    @DeleteMapping("{departmentId}")
+    public ResponseEntity<ApiResponse> deleteDepartment(@PathVariable String departmentId) {
+        return ResponseEntity.ok(new ApiResponse("Department updated successfully",departmentService.deleteDepartment( Long.valueOf(departmentId))));
+    }
 
 }
