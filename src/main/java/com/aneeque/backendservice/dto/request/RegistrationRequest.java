@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  * @author B.O Okala III
@@ -40,6 +41,25 @@ public class RegistrationRequest {
     private String confirmPassword;
 
     private Long roleId;
+
+    private List<Long> permissions;
+
+    private String address;
+
+    private String city;
+
+    private String country;
+
+    private String dateOfBirth;
+
+    private String gender;
+
+    private String jobDescription;
+
+    private String jobTitle;
+
+    private String maritalStatus;
+
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress.toLowerCase();
