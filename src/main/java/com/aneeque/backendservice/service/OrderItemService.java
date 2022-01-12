@@ -7,6 +7,7 @@ import com.aneeque.backendservice.dto.response.OrderItemResponseDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class OrderItemService{
     @Autowired
     private OrderItemRepository orderItemRepository;
 
-    
+    @Transactional
     public OrderItemDto save(OrderItemDto orderItemDto) {
         OrderItem orderItem = new OrderItem();
         BeanUtils.copyProperties(orderItemDto,orderItem);
@@ -37,7 +38,7 @@ public class OrderItemService{
         return orderItems;
     }
 
-    
+    @Transactional
     public OrderItemDto updateStatus(Long orderItemId, String status) {
         OrderItem orderItem = orderItemRepository.findById(orderItemId).orElseThrow(() -> new NoSuchElementException("no order item found"));
         orderItem.setStatus(status);
@@ -46,7 +47,7 @@ public class OrderItemService{
         BeanUtils.copyProperties(updatedOrderItem, orderItemDto);
         return orderItemDto;    }
 
-    
+    @Transactional
     public void delete(Long orderItemId) {
         orderItemRepository.deleteById(orderItemId);
     }

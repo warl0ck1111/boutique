@@ -42,6 +42,7 @@ public class TokenService {
     private AppUserRepository appUserRepository;
 
 
+    @Transactional
     public void saveToken(Token token) {
         tokenRepository.save(token);
     }

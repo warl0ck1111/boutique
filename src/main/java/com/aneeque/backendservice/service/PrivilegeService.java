@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class PrivilegeService {
     @Autowired
     private PrivilegeRepository privilegeRepository;
 
-
+@Transactional
     public Privilege create(PrivilegeRequest request) {
         boolean privilegeExists = privilegeRepository.existsByName((request.getName()));
         if (privilegeExists) {
@@ -36,6 +37,7 @@ public class PrivilegeService {
 
     }
 
+    @Transactional
     public Privilege update(Long id, PrivilegeRequest request) {
 
         Privilege privilege = findPrivilegeById(id);
@@ -54,6 +56,7 @@ public class PrivilegeService {
         return privilegeRepository.findAll();
     }
 
+    @Transactional
     public void delete(long id){
         privilegeRepository.deleteById(id);
     }
