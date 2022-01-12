@@ -32,7 +32,6 @@ public class Privilege implements GrantedAuthority {
 
     private String module;
 
-    @JsonIgnore
     @Column(updatable = false, nullable = false)
     @CreationTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")

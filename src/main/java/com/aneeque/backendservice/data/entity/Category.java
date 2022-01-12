@@ -25,7 +25,7 @@ import java.util.Set;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -46,7 +46,6 @@ public class Category {
     @OneToMany
     private List<Attribute> attributes = new ArrayList<>();
 
-    @JsonIgnore
     @Column(updatable = false, nullable = false)
     @CreationTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")

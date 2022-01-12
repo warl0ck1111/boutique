@@ -18,7 +18,7 @@ import javax.persistence.Id;
 public class AttributePropertyCategory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private long attributePropertyId;

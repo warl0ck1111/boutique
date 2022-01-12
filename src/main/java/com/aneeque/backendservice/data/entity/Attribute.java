@@ -21,8 +21,7 @@ import java.util.Collection;
 @NoArgsConstructor
 public class Attribute {
     @Id
-    @SequenceGenerator(name="attribute_sequence", sequenceName = "attribute_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attribute_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("attributeId")
     private Long id;
 

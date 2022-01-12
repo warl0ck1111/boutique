@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Double totalAmount;
@@ -32,7 +32,6 @@ public class Order {
     private String transactionRef;
     private String status;
 
-    @JsonIgnore
     @Column(updatable = false, nullable = false)
     @CreationTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
