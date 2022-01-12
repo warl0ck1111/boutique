@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +24,21 @@ public class ProductSizeInformationService {
     @Autowired
     private ProductSizeInformationRepository productSizeInformationRepository;
 
+    @Transactional
     public String create(ProductSizeInformationRequestDto dto) {
         productSizeInformationRepository.createProductSizeInformation(dto.getCategory(),dto.getName(), dto.getUnit(), dto.getFromX(), dto.getToY(), dto.getProductId());
 
         return "Product Size Information created successfully";
     }
 
-    
+
+    @Transactional
     public String update(Long id, ProductSizeInformationRequestDto dto) {
         productSizeInformationRepository.updateProductSizeInformation(id, dto.getCategory(),dto.getName(), dto.getUnit(), dto.getFromX(), dto.getToY(), dto.getProductId());
         return "Product Size Information updated successfully";
     }
-    
+
+    @Transactional
     public String delete(Long id) {
         productSizeInformationRepository.deleteProductSizeInformation(id);
         return "product size information deleted successfully";

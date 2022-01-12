@@ -1,7 +1,7 @@
 package com.aneeque.backendservice.service;
 
 import com.aneeque.backendservice.data.entity.Role;
-import com.aneeque.backendservice.dto.response.NoOfUser;
+import com.aneeque.backendservice.dto.response.RoleNoOfUsers;
 import com.aneeque.backendservice.data.repository.RoleRepository;
 import com.aneeque.backendservice.dto.request.RoleRequest;
 import com.aneeque.backendservice.exception.ApiRequestException;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,9 +57,9 @@ public class RoleService {
     }
 
     public List<Role> findAllRoles() {
-        List<NoOfUser> noOfUsers = countNoOfUsersAllRolesHave();
+        List<RoleNoOfUsers> roleNoOfUsers = countNoOfUsersAllRolesHave();
         List<Role> roles = roleRepository.findAll().stream().map(x -> {
-            noOfUsers.forEach(y -> {
+            roleNoOfUsers.forEach(y -> {
                 if (y.getRoleId() == x.getId()) {
                     x.setNoOfUsers(y.getNoOfUsers());
                 }
@@ -82,17 +81,17 @@ public class RoleService {
 
     public Role findRoleById(Long roleId) {
         if (roleId < 1) throw new IllegalArgumentException("invalid role id");
-        NoOfUser noOfUser = countNoOfUsersARoleHas(roleId);
+        RoleNoOfUsers roleNoOfUsers = countNoOfUsersARoleHas(roleId);
         Role role = roleRepository.findById(roleId).orElseThrow(() -> new RoleNotFoundException("no role found"));
-        role.setNoOfUsers(noOfUser.getNoOfUsers());
+        role.setNoOfUsers(roleNoOfUsers.getNoOfUsers());
         return role;
     }
 
-    private NoOfUser countNoOfUsersARoleHas(Long roleId) {
+    private RoleNoOfUsers countNoOfUsersARoleHas(Long roleId) {
         return roleRepository.countNoOfUsersRoleHas(roleId).orElseThrow(() -> new IllegalArgumentException("invalid role id"));
     }
 
-    private List<NoOfUser> countNoOfUsersAllRolesHave() {
+    private List<RoleNoOfUsers> countNoOfUsersAllRolesHave() {
         return roleRepository.countNoOfUsersAllRoleHave();
     }
 

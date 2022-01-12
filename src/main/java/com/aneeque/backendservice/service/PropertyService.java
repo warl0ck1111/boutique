@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class PropertyService implements CrudService<Property, PropertyDto> {
     private PropertyRepository propertyRepository;
 
 
+    @Transactional
     @Override
     public PropertyDto save(PropertyDto propertyDto) {
         if (!hasValue(propertyDto.getData())) throw new IllegalArgumentException("data field cannot be empty");
@@ -51,6 +53,7 @@ public class PropertyService implements CrudService<Property, PropertyDto> {
         return propertyDto;
     }
 
+    @Transactional
     @Override
     public PropertyDto update(Long id, PropertyDto propertyDto) {
         if (!hasValue(propertyDto.getData())) throw new IllegalArgumentException("data field cannot be empty");
@@ -66,6 +69,7 @@ public class PropertyService implements CrudService<Property, PropertyDto> {
         return propertyDto;
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         propertyRepository.deleteById(id);

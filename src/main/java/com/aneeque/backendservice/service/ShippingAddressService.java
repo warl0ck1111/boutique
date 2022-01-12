@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class ShippingAddressService implements CrudService<ShippingAddress, Ship
     private ShippingAddressRepository shippingAddressRepository;
 
 
+    @Transactional
     @Override
     public ShippingAddressDto save(ShippingAddressDto shippingAddressDto) {
         ShippingAddress shippingAddress = new ShippingAddress();
@@ -39,6 +41,7 @@ public class ShippingAddressService implements CrudService<ShippingAddress, Ship
         return null;
     }
 
+    @Transactional
     @Override
     public ShippingAddressDto update(Long id, ShippingAddressDto shippingAddressDto) {
         ShippingAddress shippingAddress = shippingAddressRepository.findById(id).orElseThrow(() -> new NoSuchElementException("no Shipping address found"));
@@ -48,6 +51,7 @@ public class ShippingAddressService implements CrudService<ShippingAddress, Ship
         return shippingAddressDto;
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         shippingAddressRepository.deleteById(id);

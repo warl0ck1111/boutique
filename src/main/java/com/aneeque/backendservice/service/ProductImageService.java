@@ -4,11 +4,13 @@ import com.aneeque.backendservice.data.entity.Product;
 import com.aneeque.backendservice.data.entity.ProductImage;
 import com.aneeque.backendservice.data.repository.ProductImageRepository;
 import com.aneeque.backendservice.dto.request.ProductImageDto;
+import com.aneeque.backendservice.dto.response.ProductResponseDto;
 import com.aneeque.backendservice.util.CrudService;
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,6 +30,7 @@ public class ProductImageService implements CrudService<ProductImage, ProductIma
     @Autowired
     private ProductService productService;
 
+    @Transactional
     @Override
     public ProductImageDto save(ProductImageDto dto) {
         ProductImage productImage = new ProductImage();
@@ -39,6 +42,7 @@ public class ProductImageService implements CrudService<ProductImage, ProductIma
 
     }
 
+    @Transactional
     @Override
     public ProductImageDto getById(Long id) {
         if (id < 0) throw new IllegalArgumentException("invalid product Image id");
@@ -47,6 +51,7 @@ public class ProductImageService implements CrudService<ProductImage, ProductIma
         return null;
     }
 
+    @Transactional
     @Override
     public ProductImageDto update(Long id, ProductImageDto productImageDto) {
 
@@ -57,6 +62,7 @@ public class ProductImageService implements CrudService<ProductImage, ProductIma
         return productImageDto;
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         productImageRepository.deleteById(id);
@@ -70,9 +76,8 @@ public class ProductImageService implements CrudService<ProductImage, ProductIma
     }
 
 
-    public List<ProductImage> getAllByProductId(Long productId) {
-        Optional<Product> product = productService.getProductRepository().findById(productId);
-        return productImageRepository.findAllByProduct(product.get());
+    public List<ProductResponseDto> getAllByProductId(Long productId) {
+        return productImageRepository.findAllByProductId(productId);
     }
 
 }

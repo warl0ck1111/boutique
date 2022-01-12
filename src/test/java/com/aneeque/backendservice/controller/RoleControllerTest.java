@@ -1,4 +1,4 @@
-package com.aneeque.backendservice.role;
+package com.aneeque.backendservice.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -10,7 +10,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.aneeque.backendservice.controller.RoleController;
 import com.aneeque.backendservice.data.entity.Privilege;
 import com.aneeque.backendservice.data.entity.Role;
 import com.aneeque.backendservice.data.repository.RoleRepository;
