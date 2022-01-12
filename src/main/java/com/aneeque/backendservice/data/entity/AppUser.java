@@ -67,6 +67,9 @@ public class AppUser implements UserDetails {
 
     private String maritalStatus;
 
+    private String title;
+
+    private String postCode;
 
     @OneToOne
     private Role role;
