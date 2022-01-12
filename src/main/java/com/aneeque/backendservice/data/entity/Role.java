@@ -33,6 +33,8 @@ public class Role {
 
     private String entity = "ANEEQUE";
 
+    private Long noOfUsers;
+
     @JsonIgnore
     @Basic(optional = true)
     @Column(name = "IS_DELETED")
