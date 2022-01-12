@@ -1,7 +1,7 @@
 package com.aneeque.backendservice.data.repository;
 
 import com.aneeque.backendservice.data.entity.Role;
-import com.aneeque.backendservice.dto.response.NoOfUser;
+import com.aneeque.backendservice.dto.response.RoleNoOfUsers;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -27,10 +27,10 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 
 
     @Query(value = "SELECT a.role_id as roleId, count(*) as noOfUsers FROM app_user a WHERE a.role_id = :roleId GROUP BY a.role_id", nativeQuery = true)
-    Optional<NoOfUser> countNoOfUsersRoleHas(@Param("roleId") Long roleId);
+    Optional<RoleNoOfUsers> countNoOfUsersRoleHas(@Param("roleId") Long roleId);
 
     @Query(value = "SELECT a.role_id as roleId, count(*) as noOfUsers FROM app_user a GROUP BY a.role_id", nativeQuery = true)
-    List<NoOfUser> countNoOfUsersAllRoleHave();
+    List<RoleNoOfUsers> countNoOfUsersAllRoleHave();
 
     @Modifying
     @Query(value = "DELETE FROM role_privileges WHERE role_id = :roleId AND privileges_id = :privilegeId", nativeQuery = true)

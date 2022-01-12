@@ -17,7 +17,7 @@ import com.aneeque.backendservice.data.repository.RoleRepository;
 import com.aneeque.backendservice.dto.request.PrivilegeListRequest;
 import com.aneeque.backendservice.dto.request.RoleRequest;
 import com.aneeque.backendservice.dto.response.ApiResponse;
-import com.aneeque.backendservice.dto.response.NoOfUser;
+import com.aneeque.backendservice.dto.response.RoleNoOfUsers;
 import com.aneeque.backendservice.service.RoleService;
 
 import java.time.LocalDateTime;
@@ -48,9 +48,9 @@ class RoleControllerTest {
 
     @Test
     void testGetPrivilegesAssignedToRoleById() {
-        NoOfUser noOfUser = mock(NoOfUser.class);
-        when(noOfUser.getNoOfUsers()).thenReturn(1L);
-        Optional<NoOfUser> ofResult = Optional.<NoOfUser>of(noOfUser);
+        RoleNoOfUsers roleNoOfUsers = mock(RoleNoOfUsers.class);
+        when(roleNoOfUsers.getNoOfUsers()).thenReturn(1L);
+        Optional<RoleNoOfUsers> ofResult = Optional.<RoleNoOfUsers>of(roleNoOfUsers);
 
         Role role = new Role();
         role.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -80,14 +80,14 @@ class RoleControllerTest {
         assertEquals(1L, ((Role) data).getNoOfUsers().longValue());
         verify(roleRepository).countNoOfUsersRoleHas((Long) any());
         verify(roleRepository).findById((Long) any());
-        verify(noOfUser).getNoOfUsers();
+        verify(roleNoOfUsers).getNoOfUsers();
     }
 
     @Test
     void testGetPrivilegesAssignedToRoleById2() {
-        NoOfUser noOfUser = mock(NoOfUser.class);
-        when(noOfUser.getNoOfUsers()).thenReturn(1L);
-        Optional.<NoOfUser>of(noOfUser);
+        RoleNoOfUsers roleNoOfUsers = mock(RoleNoOfUsers.class);
+        when(roleNoOfUsers.getNoOfUsers()).thenReturn(1L);
+        Optional.<RoleNoOfUsers>of(roleNoOfUsers);
 
         Role role = new Role();
         role.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
@@ -117,9 +117,9 @@ class RoleControllerTest {
 
     @Test
     void testAssignPermissionsToRole() {
-        NoOfUser noOfUser = mock(NoOfUser.class);
-        when(noOfUser.getNoOfUsers()).thenReturn(1L);
-        Optional.<NoOfUser>of(noOfUser);
+        RoleNoOfUsers roleNoOfUsers = mock(RoleNoOfUsers.class);
+        when(roleNoOfUsers.getNoOfUsers()).thenReturn(1L);
+        Optional.<RoleNoOfUsers>of(roleNoOfUsers);
 
         Role role = new Role();
         role.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
