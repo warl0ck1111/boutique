@@ -3,6 +3,8 @@ package com.aneeque.backendservice.service;
 import com.aneeque.backendservice.data.entity.Privilege;
 import com.aneeque.backendservice.data.repository.PrivilegeRepository;
 import com.aneeque.backendservice.dto.request.PrivilegeRequest;
+import com.aneeque.backendservice.dto.response.PrivilegeNoOfRoles;
+import com.aneeque.backendservice.dto.response.RoleNoOfUsers;
 import com.aneeque.backendservice.exception.PrivilegeNotFoundException;
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author B.O Okala III
@@ -25,7 +28,7 @@ public class PrivilegeService {
     @Autowired
     private PrivilegeRepository privilegeRepository;
 
-@Transactional
+    @Transactional
     public Privilege create(PrivilegeRequest request) {
         boolean privilegeExists = privilegeRepository.existsByName((request.getName()));
         if (privilegeExists) {
@@ -52,12 +55,29 @@ public class PrivilegeService {
 
     }
 
-    public List<Privilege> getAllPrivileges(){
-        return privilegeRepository.findAll();
+    public List<Privilege> getAllPrivileges() {
+        List<PrivilegeNoOfRoles> privilegeNoOfRoles = countNoOfRolesAllPrivilegesHave();
+        List<Privilege> privilegeList = privilegeRepository.findAll().stream().map(x ->{
+            privilegeNoOfRoles.forEach(y->{
+                if (y.getPrivilegeId() == x.getId()){
+                    x.setNoOfRoles(y.getNoOfRoles());
+                }
+            });
+            return x;
+        }).collect(Collectors.toList());
+        return privilegeList;
+    }
+
+    private PrivilegeNoOfRoles countNoOfRolesAPrivilegeHas(Long privilegeId) {
+        return privilegeRepository.countNoOfRolesAPrivilegeHas(privilegeId).orElseThrow(() -> new IllegalArgumentException("invalid role id"));
+    }
+
+    private List<PrivilegeNoOfRoles> countNoOfRolesAllPrivilegesHave() {
+        return privilegeRepository.countNoOfRolesAllPrivilegeHas();
     }
 
     @Transactional
-    public void delete(long id){
+    public void delete(long id) {
         privilegeRepository.deleteById(id);
     }
 
@@ -66,8 +86,11 @@ public class PrivilegeService {
         return privilegeRepository.findByName((name)).orElseThrow(() -> new PrivilegeNotFoundException("no privilege found"));
     }
 
-    public Privilege findPrivilegeById(Long id) {
-        return privilegeRepository.findById((id)).orElseThrow(() -> new PrivilegeNotFoundException("no privilege found"));
+    public Privilege findPrivilegeById(Long privilegeId) {
+        Privilege privilege = privilegeRepository.findById((privilegeId)).orElseThrow(() -> new PrivilegeNotFoundException("no privilege found"));
+        PrivilegeNoOfRoles privilegeNoOfRoles = countNoOfRolesAPrivilegeHas(privilegeId);
+        privilege.setNoOfRoles(privilegeNoOfRoles.getNoOfRoles());
+        return privilege;
     }
 
 
