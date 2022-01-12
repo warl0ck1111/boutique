@@ -1,12 +1,12 @@
 package com.aneeque.backendservice.service;
 
 import com.aneeque.backendservice.data.entity.Role;
+import com.aneeque.backendservice.dto.response.NoOfUser;
 import com.aneeque.backendservice.data.repository.RoleRepository;
 import com.aneeque.backendservice.dto.request.RoleRequest;
 import com.aneeque.backendservice.exception.ApiRequestException;
 import com.aneeque.backendservice.data.entity.Privilege;
 import com.aneeque.backendservice.exception.RoleNotFoundException;
-import com.aneeque.backendservice.service.PrivilegeService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,9 +33,6 @@ public class RoleService {
 
     @Autowired
     private PrivilegeService privilegeService;
-
-
-
 
 
     public RoleService(RoleRepository roleRepository) {
@@ -62,9 +58,17 @@ public class RoleService {
     }
 
     public List<Role> findAllRoles() {
-        List<Role> roles = roleRepository.findAll();
-        return roles;
+        List<NoOfUser> noOfUsers = countNoOfUsersAllRolesHave();
+        List<Role> roles = roleRepository.findAll().stream().map(x -> {
+            noOfUsers.forEach(y -> {
+                if (y.getRoleId() == x.getId()) {
+                    x.setNoOfUsers(y.getNoOfUsers());
+                }
+            });
+            return x;
+        }).collect(Collectors.toList());
 
+        return roles;
     }
 
 
@@ -76,18 +80,29 @@ public class RoleService {
         return role;
     }
 
-    public Role findRoleById(Long id) {
-        if (id < 1) throw new IllegalArgumentException("invalid role id");
-
-        return roleRepository.findById(id).orElseThrow(() -> new RoleNotFoundException("no role found"));
+    public Role findRoleById(Long roleId) {
+        if (roleId < 1) throw new IllegalArgumentException("invalid role id");
+        NoOfUser noOfUser = countNoOfUsersARoleHas(roleId);
+        Role role = roleRepository.findById(roleId).orElseThrow(() -> new RoleNotFoundException("no role found"));
+        role.setNoOfUsers(noOfUser.getNoOfUsers());
+        return role;
     }
 
-    public Collection<Privilege> getPrivilegesAssignedToRole(Long roleId){
+    private NoOfUser countNoOfUsersARoleHas(Long roleId) {
+        return roleRepository.countNoOfUsersRoleHas(roleId).orElseThrow(() -> new IllegalArgumentException("invalid role id"));
+    }
+
+    private List<NoOfUser> countNoOfUsersAllRolesHave() {
+        return roleRepository.countNoOfUsersAllRoleHave();
+    }
+
+    public Role getPrivilegesAssignedToRole(Long roleId) {
         Role role = findRoleById(roleId);
-        return role.getPrivileges();
+        return role;
     }
 
-    public Role assignPermissionsToRole(Long roleId, List<Long> privilegeIds){
+    @Transactional
+    public Role assignPermissionsToRole(Long roleId, List<Long> privilegeIds) {
         Role role = findRoleById(roleId);
         List<Privilege> privileges = privilegeService.getPrivilegeRepository().findAllById(privilegeIds);
         role.setPrivileges(privileges);
@@ -96,4 +111,16 @@ public class RoleService {
         return role;
     }
 
+    @Transactional
+    public String assignPermissionsFromRole(Long roleId, List<Long> privileges) {
+        privileges.forEach(privilege ->{
+            unAssignPermissionsFromRole(roleId,privilege);
+        });
+
+        return  "privileges unassigned successfully";
+    }
+
+    private void unAssignPermissionsFromRole(Long roleId, Long privilegeId) {
+        roleRepository.unAssignPermissionsFromRole(roleId, privilegeId);
+    }
 }

@@ -16,16 +16,16 @@ import java.time.LocalDateTime;
 @Entity
 public class ProductImage {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("productImageId")
     private Long id;
 
     private String fileName;
 
-    @OneToOne
-    private Product product;
+    
+    private Long productId;
 
-    private String imageUrl;
+    private String url;
 
     @Column(updatable = false, nullable = false)
     @CreationTimestamp

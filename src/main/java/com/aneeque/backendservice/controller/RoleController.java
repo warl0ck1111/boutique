@@ -28,15 +28,21 @@ public class RoleController {
     }
 
     @GetMapping(path = "")
-    public ResponseEntity<?> getRoles() {
+    public ResponseEntity<?> getAllRoles() {
         List<Role> roles = roleService.findAllRoles();
         return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 
-    @GetMapping(path = "{roleId}/get-all/privileges")
-    public ResponseEntity<?> getPrivilegesAssignedToRole(@PathVariable Long roleId) {
-        Collection<Privilege> privileges = roleService.getPrivilegesAssignedToRole(roleId);
-        return ResponseEntity.ok(new ApiResponse(privileges));
+    @GetMapping(path = "{roleId}")
+    public ResponseEntity<?> getRoleById(@PathVariable Long roleId) {
+        Role role = roleService.findRoleById(roleId);
+        return new ResponseEntity<>(role, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "{roleId}/privileges")
+    public ResponseEntity<?> getPrivilegesAssignedToRoleById(@PathVariable Long roleId) {
+        Role role = roleService.getPrivilegesAssignedToRole(roleId);
+        return ResponseEntity.ok(new ApiResponse(role));
     }
 
     @PostMapping("{roleId}/assign-permission")
@@ -45,14 +51,20 @@ public class RoleController {
         return ResponseEntity.ok(new ApiResponse(role));
     }
 
+    @PutMapping("{roleId}/unassign-permission")
+    public ResponseEntity<?> unassignPermissionsFromRole(@PathVariable Long roleId, @RequestBody PrivilegeListRequest privilegeListRequest) {
+        return ResponseEntity.ok(new ApiResponse(roleService.assignPermissionsFromRole(roleId, privilegeListRequest.getPrivileges())));
+    }
+
     @PostMapping("")
     public ResponseEntity<ApiResponse> createRole(@RequestBody RoleRequest roleRequest) {
         Role role = roleService.createRole(roleRequest);
         return ResponseEntity.ok(new ApiResponse(role));
     }
- @PutMapping("{roleId}")
-    public ResponseEntity<ApiResponse> updateRole(@PathVariable String roleId ,@RequestBody RoleRequest roleRequest) {
-        return ResponseEntity.ok(new ApiResponse(roleService.updateRole( Long.valueOf(roleId),roleRequest)));
+
+    @PutMapping("{roleId}")
+    public ResponseEntity<ApiResponse> updateRole(@PathVariable String roleId, @RequestBody RoleRequest roleRequest) {
+        return ResponseEntity.ok(new ApiResponse(roleService.updateRole(Long.valueOf(roleId), roleRequest)));
     }
 
 }

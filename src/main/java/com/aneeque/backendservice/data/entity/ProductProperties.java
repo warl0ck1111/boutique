@@ -15,16 +15,16 @@ import javax.persistence.Id;
 @Entity
 @Data
 @NoArgsConstructor
-public class ProductTag {
+public class ProductProperties {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
-    private Long ProductId;
-    private Long tagId;
 
-    public ProductTag(Long productId, Long tagId) {
-        ProductId = productId;
-        this.tagId = tagId;
-    }
+    private Long productId;
+
+    private Long propertyId;
+
+    private Double price;
+
 }

@@ -19,8 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Department {
     @Id
-    @SequenceGenerator(name="department_sequence", sequenceName = "department_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "department_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("departmentId")
     private Long id;
 

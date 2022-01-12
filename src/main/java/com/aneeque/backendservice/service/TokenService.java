@@ -60,7 +60,7 @@ public class TokenService {
     public AuthenticationResponse confirmToken(String token) {
         if (token.length() != 6) throw new ApiRequestException("invalid token", HttpStatus.BAD_REQUEST);
         Token tokenValidation = getToken(token).orElseThrow(() -> {
-            return new ApiRequestException("opt not found", HttpStatus.NOT_FOUND);
+            return new ApiRequestException("invalid token", HttpStatus.NOT_FOUND);
         });
 
         if (tokenValidation.getConfirmedAt() != null)
