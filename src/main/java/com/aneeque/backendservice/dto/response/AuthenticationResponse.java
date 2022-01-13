@@ -1,10 +1,11 @@
 package com.aneeque.backendservice.dto.response;
 
+import com.aneeque.backendservice.data.entity.Privilege;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author Okala III
@@ -15,7 +16,7 @@ import java.util.List;
 public class AuthenticationResponse {
     private String jwtToken;
     private String role;
-    private List<String> privileges;
+    private Set<Privilege> privileges;
     private String userId;
     private String firstName;
     private String lastName;

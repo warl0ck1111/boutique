@@ -74,7 +74,8 @@ public class AppUser implements UserDetails {
     @OneToOne
     private Role role;
 
-    @OneToMany
+
+    @ManyToMany(fetch = FetchType.LAZY)
     private Collection<Privilege> userAssignedPrivileges = new ArrayList<>();
 
     private Boolean locked = false;
@@ -134,15 +135,10 @@ public class AppUser implements UserDetails {
         return enabled;
     }
 
-    public List<String> getAllUserPrivileges(){
-        Collection<Privilege> privilegeCollection = new ArrayList<>();
-        privilegeCollection.addAll(getRole().getPrivileges());
-        privilegeCollection.addAll(getUserAssignedPrivileges());
-
-        List<String> allPrivileges = new ArrayList<>();
-        privilegeCollection.forEach(privilege -> {
-            allPrivileges.add(privilege.getName());
-        });
+    public Set<Privilege> getAllUserPrivileges(){
+        Set<Privilege> allPrivileges = new HashSet<>();
+        allPrivileges.addAll(getRole().getPrivileges());
+        allPrivileges.addAll(getUserAssignedPrivileges());
         return allPrivileges;
 
     }
