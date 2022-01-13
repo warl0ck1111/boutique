@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -156,8 +157,10 @@ public class AppUserService implements UserDetailsService {
         appUser.setLastLogin(LocalDateTime.now());
 
         appUser.setEnabled(false);
+        List<Privilege> privileges = privilegeService.getPrivilegeRepository().findAllById(userAssignedPrivileges);
+        appUser.setUserAssignedPrivileges(privileges);
         AppUser newUser = appUserRepository.save(appUser);
-        assignPrivilegesToUser(newUser.getId(), userAssignedPrivileges);
+//        assignPrivilegesToUser(newUser.getId(), userAssignedPrivileges);
         log.info("user created");
 //        sendActivateAccountEmail(newUser.getEmailAddress());
 
@@ -169,8 +172,12 @@ public class AppUserService implements UserDetailsService {
     @Transactional
     public AppUser updateUser(Long userId, UpdateUserDto updateUserDto) {
         log.info("updating user...");
+        Role role = roleService.findRoleById(updateUserDto.getRoleId());
         AppUser appUser = appUserRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("invalid user id"));
         BeanUtils.copyProperties(updateUserDto, appUser);
+        List<Privilege> privileges = privilegeService.getPrivilegeRepository().findAllById(updateUserDto.getPermissions());
+        appUser.setUserAssignedPrivileges(privileges);
+        appUser.setRole(role);
         AppUser updatedUser = appUserRepository.save(appUser);
         log.info("user updated");
         return updatedUser;
@@ -274,12 +281,12 @@ public class AppUserService implements UserDetailsService {
     }
 
     public Page<AppUser> getAllUsers(int page, int size) {
-        return appUserRepository.findAll(PageRequest.of(page, size));
+        return appUserRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt")));
     }
 
     public Page<AppUser> getAllUsersByRole(long roleId, int page, int size) {
         Role role = roleService.findRoleById(roleId);
-        return appUserRepository.findAllByRole(role, PageRequest.of(page, size));
+        return appUserRepository.findAllByRole(role, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC)));
     }
 
     @Transactional
