@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @ConfirmPassword(passwordField="password", confirmPasswordField = "confirmPassword", message = "the password mismatch")
 @AllArgsConstructor
-public class RegistrationRequest {
+public class UpdateUserDto {
 
     @NotBlank(message = "first name field can not be empty")
     private String firstName;
@@ -32,18 +31,9 @@ public class RegistrationRequest {
     @NotBlank(message = "email address field can not be empty")
     private String emailAddress;
 
+
     @NotBlank(message = "mobile number field can not be empty")
     private String mobileNumber;
-
-    @NotBlank(message = "password field can not be empty")
-    private String password;
-
-    @NotBlank(message = "confirm password field can not be empty")
-    private String confirmPassword;
-
-    private Long roleId;
-
-    private List<Long> permissions = new ArrayList<>();
 
     private String address;
 
@@ -64,7 +54,6 @@ public class RegistrationRequest {
     private String title;
 
     private String postCode;
-
 
 
     public void setEmailAddress(String emailAddress) {

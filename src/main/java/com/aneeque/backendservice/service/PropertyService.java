@@ -46,7 +46,7 @@ public class PropertyService implements CrudService<Property, PropertyDto> {
     public PropertyDto getById(Long id) {
         if (id < 0) throw new IllegalArgumentException("invalid property id");
         Property property = propertyRepository.findById(id).orElseThrow(() -> new NoSuchElementException("no property found"));
-        
+
         PropertyDto propertyDto = new PropertyDto();
         BeanUtils.copyProperties(property,propertyDto);
 

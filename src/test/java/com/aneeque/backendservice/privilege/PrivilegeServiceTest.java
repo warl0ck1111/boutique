@@ -16,6 +16,7 @@ import java.util.Optional;
 import com.aneeque.backendservice.data.entity.Privilege;
 import com.aneeque.backendservice.data.repository.PrivilegeRepository;
 import com.aneeque.backendservice.dto.request.PrivilegeRequest;
+import com.aneeque.backendservice.dto.response.PrivilegeNoOfRoles;
 import com.aneeque.backendservice.exception.PrivilegeNotFoundException;
 import com.aneeque.backendservice.service.PrivilegeService;
 import org.junit.jupiter.api.Test;
@@ -73,29 +74,6 @@ class PrivilegeServiceTest {
         verify(this.privilegeRepository).save((Privilege) any());
     }
 
-    @Test
-    void testUpdateShouldWhenPrivilegeNameAlreadyExits() {
-        Privilege privilege = new Privilege();
-        privilege.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        privilege.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        privilege.setId(123L);
-        privilege.setName("Name");
-        privilege.setModule("Module");
-        privilege.setDescription("The characteristics of someone or something");
-        Optional<Privilege> ofResult = Optional.<Privilege>of(privilege);
-        when(this.privilegeRepository.findById((Long) any())).thenReturn(ofResult);
-
-        PrivilegeRequest privilegeRequest = new PrivilegeRequest();
-        privilegeRequest.setName("Name");
-        privilegeRequest.setModule("Module");
-        privilegeRequest.setDescription("The characteristics of someone or something");
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> this.privilegeService.update(123L, privilegeRequest));
-        String expectedMessage = "privilege Name already exists";
-        System.out.println(illegalArgumentException.getMessage());
-        String actualMessage = illegalArgumentException.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-        verify(this.privilegeRepository).findById((Long) any());
-    }
 
     @Test
     void testUpdateShouldFailIfPrivilegeIdDoesNotExist() {
@@ -115,14 +93,12 @@ class PrivilegeServiceTest {
 
     @Test
     void testGetAllPrivileges() {
-        List<Privilege> privileges = new ArrayList<Privilege>();
-        when(this.privilegeRepository.findAll()).thenReturn(privileges);
-        List<Privilege> actualAllPrivileges = this.privilegeService.getAllPrivileges();
-        assertSame(privileges, actualAllPrivileges);
-        assertTrue(actualAllPrivileges.isEmpty());
+        when(this.privilegeRepository.findAll()).thenReturn(new ArrayList<Privilege>());
+        when(this.privilegeRepository.countNoOfRolesAllPrivilegeHas()).thenReturn(new ArrayList<PrivilegeNoOfRoles>());
+        assertTrue(this.privilegeService.getAllPrivileges().isEmpty());
+        verify(this.privilegeRepository).countNoOfRolesAllPrivilegeHas();
         verify(this.privilegeRepository).findAll();
     }
-
     @Test
     void testDelete() {
         doNothing().when(this.privilegeRepository).deleteById((Long) any());
@@ -156,20 +132,6 @@ class PrivilegeServiceTest {
         verify(this.privilegeRepository).findByName((String) any());
     }
 
-    @Test
-    void testFindPrivilegeById() {
-        Privilege privilege = new Privilege();
-        privilege.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        privilege.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        privilege.setId(123L);
-        privilege.setName("Name");
-        privilege.setModule("Module");
-        privilege.setDescription("The characteristics of someone or something");
-        Optional<Privilege> ofResult = Optional.<Privilege>of(privilege);
-        when(this.privilegeRepository.findById((Long) any())).thenReturn(ofResult);
-        assertSame(privilege, this.privilegeService.findPrivilegeById(123L));
-        verify(this.privilegeRepository).findById((Long) any());
-    }
 
     @Test
     void testFindPrivilegeByIdShouldFailWhenPrivilegeIdDoesNotExist() {

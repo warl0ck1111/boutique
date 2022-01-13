@@ -20,7 +20,7 @@ public interface ProductImageRepository extends JpaRepository<ProductImage,Long>
     @Query(value = "SELECT p.created_at AS createdAt, p.description, p.modified_at AS modifiedAt, " +
             "p.name, p.price, p.category_id AS categoryId, p.brand_name AS brandName, " +
             "p.product_code AS productCode, p.vendor_id AS vendorId, p.modified_by AS modifiedBy, " +
-            "p.category, p.created_by AS createdBy, pi.file_name AS fileName, pi.url " +
+            "p.category_id as categoryId, p.created_by AS createdBy, pi.file_name AS fileName, pi.url " +
             "FROM product_image pi LEFT JOIN product p on pi.product_id = p.id where pi.product_id = :productId", nativeQuery = true)
     List<ProductResponseDto> findAllByProductId(@Param("productId") Long productId);
 }

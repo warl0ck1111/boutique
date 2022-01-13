@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,8 +42,9 @@ public class ProductRequestDto {
 
     private List<Long> tagIds;
 
-    List<ProductSizeInformationRequestDto> productSizeInformation;
-    List<ProductPropertiesRequestDto> productProperties;
+    List<ProductSizeInformationRequestDto> productSizeInformation = new ArrayList<>();
+
+    List<ProductPropertiesRequestDto> productProperties = new ArrayList<>();
 
     private Long createdBy;
 

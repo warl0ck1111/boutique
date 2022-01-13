@@ -9,6 +9,7 @@ import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
 
 
+    @Transactional
     @Override
     public DepartmentDto save(DepartmentDto departmentDto) {
         if (!hasValue(departmentDto.getName())) throw new IllegalArgumentException("invalid department name");
@@ -38,6 +40,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentDto;
     }
 
+    @Transactional
     @Override
     public DepartmentResponseDto update(Long id, DepartmentDto departmentDto) {
         if (!hasValue(departmentDto.getName())) throw new IllegalArgumentException("invalid department name");
@@ -62,5 +65,12 @@ public class DepartmentServiceImpl implements DepartmentService {
             departmentDtoList.add(departmentDto);
         });
         return departmentDtoList;
+    }
+
+    @Transactional
+    @Override
+    public String deleteDepartment(Long departmentId) {
+        departmentRepository.deleteById(departmentId);
+        return "department deleted successfully";
     }
 }

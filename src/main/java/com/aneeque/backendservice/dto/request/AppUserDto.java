@@ -57,4 +57,9 @@ public class AppUserDto {
 
     private String maritalStatus;
 
+    private String title;
+
+    private String postCode;
+
+
 }

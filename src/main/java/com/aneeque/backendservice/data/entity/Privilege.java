@@ -32,6 +32,8 @@ public class Privilege implements GrantedAuthority {
 
     private String module;
 
+    private Long noOfRoles = 0l;
+
     @Column(updatable = false, nullable = false)
     @CreationTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
