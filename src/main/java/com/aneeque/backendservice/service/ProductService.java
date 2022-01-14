@@ -62,9 +62,9 @@ public class ProductService {
     public String createProduct(ProductRequestDto dto) {
         log.info("creating product");
         Integer createdProductId = productRepository.createProduct(dto.getBrandName(), dto.getCategoryId(),
-                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getName(),
-                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getQuantity(),
-                dto.getReorderPoint(), dto.getStockValue(), null, null);
+                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getProductName(),
+                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getTotalQuantity(),
+                dto.getReorderPoint(), dto.getTotalStockValue(), null, null);
 
         System.out.println("this is the created product Id: " + createdProductId);
         createProductTags(Long.valueOf(createdProductId), dto);
@@ -123,9 +123,9 @@ public class ProductService {
     public String updateProduct(Long productId, ProductRequestDto dto) {
         log.info("updating product");
         productRepository.updateProduct(productId, dto.getBrandName(), dto.getCategoryId(),
-                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getName(),
-                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getQuantity(),
-                dto.getReorderPoint(), dto.getStockValue(), dto.getModifiedBy(), LocalDateTime.now().toString());
+                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getProductName(),
+                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getTotalQuantity(),
+                dto.getReorderPoint(), dto.getTotalStockValue(), dto.getModifiedBy(), LocalDateTime.now().toString());
 
         updateProductSizeInformation(productId, dto.getProductSizeInformation());
 
