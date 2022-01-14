@@ -17,7 +17,6 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@ConfirmPassword(passwordField="password", confirmPasswordField = "confirmPassword", message = "the password mismatch")
 @AllArgsConstructor
 public class UpdateUserDto {
 
@@ -54,6 +53,10 @@ public class UpdateUserDto {
     private String title;
 
     private String postCode;
+
+    private Long roleId;
+
+    private List<Long> permissions = new ArrayList<>();
 
 
     public void setEmailAddress(String emailAddress) {
