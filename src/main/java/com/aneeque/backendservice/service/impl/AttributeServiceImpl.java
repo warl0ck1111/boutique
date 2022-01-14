@@ -6,6 +6,7 @@ import com.aneeque.backendservice.dto.request.AttributeRequestDto;
 import com.aneeque.backendservice.data.entity.Property;
 import com.aneeque.backendservice.dto.request.PropertyRequestDto;
 import com.aneeque.backendservice.dto.response.AttributeResponseDto;
+import com.aneeque.backendservice.dto.response.PropertyResponseDto;
 import com.aneeque.backendservice.service.PropertyService;
 import com.aneeque.backendservice.service.AttributeService;
 import lombok.Getter;
@@ -40,15 +41,17 @@ public class AttributeServiceImpl implements AttributeService {
     @Override
     public AttributeResponseDto save(AttributeRequestDto attributeRequestDto) {
 
-        Attribute attribute = new Attribute();
         List<Property> properties = propertyService.getPropertyRepository().findAllById(attributeRequestDto.getPropertyIds());
+        Attribute attribute = new Attribute();
+
         BeanUtils.copyProperties(attributeRequestDto, attribute);
         attribute.setProperties(properties);
-        Attribute savedAttribute = attributeRepository.save(new Attribute(attributeRequestDto.getName()));
 
+
+        Attribute savedAttribute = attributeRepository.save(attribute);
         AttributeResponseDto attributeResponseDto = new AttributeResponseDto();
-        BeanUtils.copyProperties(savedAttribute, attributeResponseDto);
 
+        BeanUtils.copyProperties(savedAttribute, attributeResponseDto);
         return attributeResponseDto;
     }
 
@@ -107,12 +110,12 @@ public class AttributeServiceImpl implements AttributeService {
 
 
 
-        public List<PropertyRequestDto> getAssignedPropertiesToAttribute(Long attributeId){
-        List<PropertyRequestDto> propertyDtoList = new ArrayList<>();
+        public List<PropertyResponseDto> getAssignedPropertiesToAttribute(Long attributeId){
+        List<PropertyResponseDto> propertyDtoList = new ArrayList<>();
 
         Attribute attribute = attributeRepository.findById(attributeId).orElseThrow(() -> new NoSuchElementException("no attribute found"));
         attribute.getProperties().forEach(property -> {
-            PropertyRequestDto propertyDto = new PropertyRequestDto();
+            PropertyResponseDto propertyDto = new PropertyResponseDto();
             BeanUtils.copyProperties(property, propertyDto);
             propertyDtoList.add(propertyDto);
         });
