@@ -1,8 +1,8 @@
 package com.aneeque.backendservice.controller;
 
-import com.aneeque.backendservice.documents.DocumentService;
 import com.aneeque.backendservice.dto.response.DocumentResponseDto;
 import com.aneeque.backendservice.dto.response.ApiResponse;
+import com.aneeque.backendservice.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;

@@ -2,8 +2,8 @@ package com.aneeque.backendservice.service;
 
 import com.aneeque.backendservice.data.entity.Property;
 import com.aneeque.backendservice.data.repository.PropertyRepository;
-import com.aneeque.backendservice.dto.request.PropertyDto;
-import com.aneeque.backendservice.util.CrudService;
+import com.aneeque.backendservice.dto.request.PropertyRequestDto;
+import com.aneeque.backendservice.dto.response.PropertyResponseDto;
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,68 +22,66 @@ import static com.aneeque.backendservice.util.Util.hasValue;
 
 @Getter
 @Service
-public class PropertyService implements CrudService<Property, PropertyDto> {
+public class PropertyService{
 
     @Autowired
     private PropertyRepository propertyRepository;
 
 
     @Transactional
-    @Override
-    public PropertyDto save(PropertyDto propertyDto) {
-        if (!hasValue(propertyDto.getData())) throw new IllegalArgumentException("data field cannot be empty");
-        if (!hasValue(propertyDto.getDescription()))
-            throw new IllegalArgumentException("description field cannot be empty");
+    public PropertyResponseDto save(PropertyRequestDto req) {
 
-        Property property = new Property(propertyDto.getDescription(), propertyDto.getData());
+        Property property = new Property();
+        BeanUtils.copyProperties(req,property);
         Property savedProperty = propertyRepository.save(property);
 
-        BeanUtils.copyProperties(savedProperty, propertyDto);
-        return propertyDto;
+        PropertyResponseDto propertyResponseDto = new PropertyResponseDto();
+        BeanUtils.copyProperties(savedProperty, propertyResponseDto);
+        return propertyResponseDto;
     }
 
-    @Override
-    public PropertyDto getById(Long id) {
+    
+    public PropertyResponseDto getById(Long id) {
         if (id < 0) throw new IllegalArgumentException("invalid property id");
         Property property = propertyRepository.findById(id).orElseThrow(() -> new NoSuchElementException("no property found"));
 
-        PropertyDto propertyDto = new PropertyDto();
-        BeanUtils.copyProperties(property,propertyDto);
+        PropertyRequestDto propertyDto = new PropertyRequestDto();
+        PropertyResponseDto propertyResponseDto = new PropertyResponseDto();
+        BeanUtils.copyProperties(property,propertyResponseDto);
 
-        return propertyDto;
+        return propertyResponseDto;
     }
 
     @Transactional
-    @Override
-    public PropertyDto update(Long id, PropertyDto propertyDto) {
-        if (!hasValue(propertyDto.getData())) throw new IllegalArgumentException("data field cannot be empty");
-        if (!hasValue(propertyDto.getDescription()))
-            throw new IllegalArgumentException("description field cannot be empty");
+    
+    public PropertyResponseDto update(Long id, PropertyRequestDto propertyDto) {
 
         Property savedProperty = propertyRepository.findById(id).orElseThrow(() -> new NoSuchElementException("no property found"));
         BeanUtils.copyProperties(propertyDto, savedProperty);
 
         Property updatedProperty = propertyRepository.save(savedProperty);
-        BeanUtils.copyProperties(updatedProperty, propertyDto);
 
-        return propertyDto;
+        PropertyResponseDto propertyResponseDto = new PropertyResponseDto();
+        BeanUtils.copyProperties(updatedProperty, propertyResponseDto);
+
+        return propertyResponseDto;
     }
 
     @Transactional
-    @Override
+    
     public void delete(Long id) {
         propertyRepository.deleteById(id);
     }
 
-    @Override
-    public List<PropertyDto> getAll() {
-        List<PropertyDto> propertyDtoList = new ArrayList<>();
+    
+    public List<PropertyResponseDto> getAll() {
+        List<PropertyResponseDto> propertyDtoList = new ArrayList<>();
         List<Property> properties = propertyRepository.findAll();
 
         properties.forEach(property -> {
-            PropertyDto propertyDto = new PropertyDto();
-            BeanUtils.copyProperties(property, propertyDto);
-            propertyDtoList.add(propertyDto);
+            PropertyResponseDto propertyResponseDto = new PropertyResponseDto();
+            BeanUtils.copyProperties(property, propertyResponseDto);
+            propertyDtoList.add(propertyResponseDto);
         });
         return propertyDtoList;
     }
