@@ -38,7 +38,7 @@ public class Category {
     @ManyToMany
     private List<Category> subCategories = new ArrayList<>();
 
-    @OneToMany
+    @ManyToMany
     private List<Attribute> attributes = new ArrayList<>();
 
     @Column(updatable = false, nullable = false)
