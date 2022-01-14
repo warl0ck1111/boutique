@@ -32,56 +32,6 @@ public class Property {
 
     private String data;
 
-    private String productName;
-
-    private int categoryId;
-
-    private int totalQuantity;
-
-    private int totalStockValue;
-
-    private int reorderPoint;
-
-    private Double costPrice;
-
-    private Double price;
-
-    private Long vendorId;
-
-    private String brandName;
-
-    private String productCode;
-
-    private String tags;
-
-    private String materialCareInfo;
-
-    private String sizeAndFit;
-
-    private String color;
-
-    private String sellingPrice;
-
-    private String priceType;
-
-    private String saleStatus;
-
-    private String saleDuration;
-
-    private boolean trackInventory;
-
-    private String preferredVendor;
-
-    private boolean sizeMatch;
-
-    private String sizeCategory;
-
-    private String unit;
-
-    private String productImage;
-
-    private String productVideo;
-
     @JsonBackReference
     @ManyToMany(mappedBy = "properties")
     private List<Attribute> attributes;

@@ -2,14 +2,13 @@ package com.aneeque.backendservice.service;
 
 import com.aneeque.backendservice.data.entity.*;
 import com.aneeque.backendservice.data.repository.ProductRepository;
+import com.aneeque.backendservice.dto.request.ProductCreateRequestDto;
 import com.aneeque.backendservice.dto.request.ProductPropertiesRequestDto;
-import com.aneeque.backendservice.dto.request.ProductRequestDto;
 import com.aneeque.backendservice.dto.response.ProductResponseDto;
 import com.aneeque.backendservice.data.entity.ProductTag;
 import com.aneeque.backendservice.data.repository.ProductTagRepository;
 import com.aneeque.backendservice.dto.request.ProductSizeInformationRequestDto;
 import com.aneeque.backendservice.service.impl.AttributeServiceImpl;
-import com.aneeque.backendservice.util.CrudService;
 import com.aneeque.backendservice.util.IAuthenticationFacade;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -59,12 +57,12 @@ public class ProductService {
 
 
     @Transactional
-    public String createProduct(ProductRequestDto dto) {
+    public String createProduct(ProductCreateRequestDto dto) {
         log.info("creating product");
         Integer createdProductId = productRepository.createProduct(dto.getBrandName(), dto.getCategoryId(),
-                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getProductName(),
-                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getTotalQuantity(),
-                dto.getReorderPoint(), dto.getTotalStockValue(), null, null);
+                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getName(),
+                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getQuantity(),
+                dto.getReorderPoint(), dto.getStockValue(), null, null);
 
         System.out.println("this is the created product Id: " + createdProductId);
         createProductTags(Long.valueOf(createdProductId), dto);
@@ -88,7 +86,7 @@ public class ProductService {
         });
     }
 
-    private void createProductTags(Long productId, ProductRequestDto dto) {
+    private void createProductTags(Long productId, ProductCreateRequestDto dto) {
         log.info("creating ProductTags");
         dto.getTagIds().forEach(tagId -> {
             ProductTag productTag = new ProductTag(productId, tagId);
@@ -110,22 +108,22 @@ public class ProductService {
     }
 
 
-    public ProductRequestDto getProductById(Long id) {
+    public ProductCreateRequestDto getProductById(Long id) {
         log.info("getting ProductById");
         if (id < 0) throw new IllegalArgumentException("invalid product id");
         Product product = productRepository.findById(id).orElseThrow(() -> new NoSuchElementException("product not found"));
-        ProductRequestDto productRequestDto = new ProductRequestDto();
+        ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto();
 
-        BeanUtils.copyProperties(product, productRequestDto);
-        return productRequestDto;
+        BeanUtils.copyProperties(product, productCreateRequestDto);
+        return productCreateRequestDto;
     }
 
-    public String updateProduct(Long productId, ProductRequestDto dto) {
+    public String updateProduct(Long productId, ProductCreateRequestDto dto) {
         log.info("updating product");
         productRepository.updateProduct(productId, dto.getBrandName(), dto.getCategoryId(),
-                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getProductName(),
-                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getTotalQuantity(),
-                dto.getReorderPoint(), dto.getTotalStockValue(), dto.getModifiedBy(), LocalDateTime.now().toString());
+                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getName(),
+                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getQuantity(),
+                dto.getReorderPoint(), dto.getStockValue(), dto.getModifiedBy(), LocalDateTime.now().toString());
 
         updateProductSizeInformation(productId, dto.getProductSizeInformation());
 
@@ -159,13 +157,13 @@ public class ProductService {
     }
 
 
-    public List<ProductRequestDto> getAllByProperties(Long propertyId) {
+    public List<ProductCreateRequestDto> getAllByProperties(Long propertyId) {
 //
 //        List<Product> products = productRepository.findAllByPropertiesIn(Arrays.asList(propertyId));
-//        List<ProductRequestDto> productRequestDtoList = new ArrayList<>();
+//        List<ProductCreateRequestDto> productRequestDtoList = new ArrayList<>();
 //
 //        products.forEach(product -> {
-//            ProductRequestDto productRequestDto = new ProductRequestDto();
+//            ProductCreateRequestDto productRequestDto = new ProductCreateRequestDto();
 //            BeanUtils.copyProperties(product, productRequestDto);
 //            productRequestDtoList.add(productRequestDto);
 //
@@ -176,26 +174,26 @@ public class ProductService {
     }
 
 
-    public ProductRequestDto assignAttributesToProduct(Long productId, List<Long> attributeIds) {
+    public ProductCreateRequestDto assignAttributesToProduct(Long productId, List<Long> attributeIds) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("product not found"));
         List<Attribute> attributes = attributeService.getAttributeRepository().findAllById(attributeIds);
 
         Product updatedProduct = productRepository.save(product);
-        ProductRequestDto productRequestDto = new ProductRequestDto();
-        BeanUtils.copyProperties(updatedProduct, productRequestDto);
-        return productRequestDto;
+        ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto();
+        BeanUtils.copyProperties(updatedProduct, productCreateRequestDto);
+        return productCreateRequestDto;
 
     }
 
-    public ProductRequestDto assignPropertiesToProduct(Long productId, List<Long> propertyId) {
+    public ProductCreateRequestDto assignPropertiesToProduct(Long productId, List<Long> propertyId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("product not found"));
         List<Property> properties = propertyService.getPropertyRepository().findAllById(propertyId);
 //        product.setProperties(properties);
 
         Product updatedProduct = productRepository.save(product);
-        ProductRequestDto productRequestDto = new ProductRequestDto();
-        BeanUtils.copyProperties(updatedProduct, productRequestDto);
-        return productRequestDto;
+        ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto();
+        BeanUtils.copyProperties(updatedProduct, productCreateRequestDto);
+        return productCreateRequestDto;
 
 
     }

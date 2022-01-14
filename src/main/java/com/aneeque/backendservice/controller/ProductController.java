@@ -1,6 +1,6 @@
 package com.aneeque.backendservice.controller;
 
-import com.aneeque.backendservice.dto.request.ProductRequestDto;
+import com.aneeque.backendservice.dto.request.ProductCreateRequestDto;
 import com.aneeque.backendservice.service.ProductService;
 import com.aneeque.backendservice.dto.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +33,13 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createProduct(@Valid @RequestBody ProductRequestDto productRequestDto) {
-        return ResponseEntity.ok(new ApiResponse("Product created successfully", productService.createProduct(productRequestDto)));
+    public ResponseEntity<ApiResponse> createProduct(@Valid @RequestBody ProductCreateRequestDto productCreateRequestDto) {
+        return ResponseEntity.ok(new ApiResponse("Product created successfully", productService.createProduct(productCreateRequestDto)));
     }
 
     @PutMapping("{productId}")
-    public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long productId, @Valid @RequestBody ProductRequestDto productRequestDto) {
-        return ResponseEntity.ok(new ApiResponse("Product updated successfully", productService.updateProduct(productId, productRequestDto)));
+    public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long productId, @Valid @RequestBody ProductCreateRequestDto productCreateRequestDto) {
+        return ResponseEntity.ok(new ApiResponse("Product updated successfully", productService.updateProduct(productId, productCreateRequestDto)));
     }
 
     @DeleteMapping("{productId}")

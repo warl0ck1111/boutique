@@ -16,17 +16,17 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductRequestDto {
+public class ProductCreateRequestDto {
 
-    private String productName;
+    private String name;
 
     private String description;
 
     private int categoryId;
 
-    private int totalQuantity;
+    private int quantity;
 
-    private int totalStockValue;
+    private int stockValue;
 
     private int reorderPoint;
 
@@ -54,7 +54,6 @@ public class ProductRequestDto {
 
     private String priceType;
 
-
     private String saleStatus;
 
     private String saleDuration;
@@ -68,8 +67,6 @@ public class ProductRequestDto {
     private String sizeCategory;
 
     private String unit;
-
-    private List<Long> categories;
 
     private String productImage;
 
