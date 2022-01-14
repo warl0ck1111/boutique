@@ -1,6 +1,8 @@
 package com.aneeque.backendservice.data.entity;
 
 import com.aneeque.backendservice.data.entity.Attribute;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +32,57 @@ public class Property {
 
     private String data;
 
+    private String productName;
+
+    private int categoryId;
+
+    private int totalQuantity;
+
+    private int totalStockValue;
+
+    private int reorderPoint;
+
+    private Double costPrice;
+
+    private Double price;
+
+    private Long vendorId;
+
+    private String brandName;
+
+    private String productCode;
+
+    private String tags;
+
+    private String materialCareInfo;
+
+    private String sizeAndFit;
+
+    private String color;
+
+    private String sellingPrice;
+
+    private String priceType;
+
+    private String saleStatus;
+
+    private String saleDuration;
+
+    private boolean trackInventory;
+
+    private String preferredVendor;
+
+    private boolean sizeMatch;
+
+    private String sizeCategory;
+
+    private String unit;
+
+    private String productImage;
+
+    private String productVideo;
+
+    @JsonBackReference
     @ManyToMany(mappedBy = "properties")
     private List<Attribute> attributes;
 
@@ -39,6 +92,7 @@ public class Property {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
     private LocalDateTime createdAt;
 
+    @JsonIgnore
     @UpdateTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
     private LocalDateTime modifiedAt;

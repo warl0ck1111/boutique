@@ -30,7 +30,7 @@ public class Attribute {
 
     @JsonBackReference
     @JoinColumn(name = "DEPARTMENT_ID", referencedColumnName = "ID")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     private Department department;
 
     @ManyToMany(fetch = FetchType.EAGER)

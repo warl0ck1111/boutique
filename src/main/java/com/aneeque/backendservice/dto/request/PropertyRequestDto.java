@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Okala Bashir .O.
@@ -13,12 +14,12 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PropertyDto {
+public class PropertyRequestDto {
 
-    @NotBlank
     private String description;
 
-    @NotBlank
+    @NotBlank(message = "data field cannot be empty ")
+    @NotNull(message = "data field cannot be empty ")
     private String data;
 
 

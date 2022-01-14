@@ -20,7 +20,8 @@ import java.util.Optional;
 
 import com.aneeque.backendservice.data.entity.Property;
 import com.aneeque.backendservice.data.repository.PropertyRepository;
-import com.aneeque.backendservice.dto.request.PropertyDto;
+import com.aneeque.backendservice.dto.request.PropertyRequestDto;
+import com.aneeque.backendservice.dto.response.PropertyResponseDto;
 import com.aneeque.backendservice.service.PropertyService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,48 +51,15 @@ class PropertyServiceTest {
         property.setData("Data");
         property.setDescription("The characteristics of someone or something");
         when(this.propertyRepository.save((Property) any())).thenReturn(property);
-        PropertyDto propertyDto = new PropertyDto("The characteristics of someone or something", "Data");
+        PropertyRequestDto propertyDto = new PropertyRequestDto("The characteristics of someone or something", "Data");
 
-        PropertyDto actualSaveResult = this.propertyService.save(propertyDto);
-        assertSame(propertyDto, actualSaveResult);
+        PropertyResponseDto actualSaveResult = this.propertyService.save(propertyDto);
         assertEquals("Data", actualSaveResult.getData());
         assertEquals("The characteristics of someone or something", actualSaveResult.getDescription());
         verify(this.propertyRepository).save((Property) any());
         assertEquals(attributeList, this.propertyService.getAll());
     }
 
-    @Test
-    void testSaveShouldFailWhenDescriptionFieldIsEmpty() {
-        Property property = new Property();
-        property.setAttributes(new ArrayList<Attribute>());
-        property.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        property.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        property.setId(123L);
-        property.setData("Data");
-        property.setDescription("The characteristics of someone or something");
-        when(this.propertyRepository.save((Property) any())).thenReturn(property);
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> this.propertyService.save(new PropertyDto("", "Data")));
-        String expectedMessage = "description field cannot be empty";
-        String actualMessage = illegalArgumentException.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
-
-    @Test
-    void testSaveShouldFailWhenDataFieldIsEmpty() {
-        Property property = new Property();
-        property.setAttributes(new ArrayList<Attribute>());
-        property.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        property.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        property.setId(123L);
-        property.setData("Data");
-        property.setDescription("The characteristics of someone or something");
-        when(this.propertyRepository.save((Property) any())).thenReturn(property);
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class,
-                () -> this.propertyService.save(new PropertyDto("The characteristics of someone or something", "")));
-        String expectedMessage = "data field cannot be empty";
-        String actualMessage = illegalArgumentException.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
 
     @Test
     void testGetById() {
@@ -105,7 +73,7 @@ class PropertyServiceTest {
         property.setDescription("The characteristics of someone or something");
         Optional<Property> ofResult = Optional.<Property>of(property);
         when(this.propertyRepository.findById((Long) any())).thenReturn(ofResult);
-        PropertyDto actualById = this.propertyService.getById(123L);
+        PropertyResponseDto actualById = this.propertyService.getById(123L);
         assertEquals("Data", actualById.getData());
         assertEquals("The characteristics of someone or something", actualById.getDescription());
         verify(this.propertyRepository).findById((Long) any());
@@ -144,10 +112,9 @@ class PropertyServiceTest {
         property1.setDescription("The characteristics of someone or something");
         when(this.propertyRepository.save((Property) any())).thenReturn(property1);
         when(this.propertyRepository.findById((Long) any())).thenReturn(ofResult);
-        PropertyDto propertyDto = new PropertyDto("The characteristics of someone or something", "Data");
+        PropertyRequestDto propertyDto = new PropertyRequestDto("The characteristics of someone or something", "Data");
 
-        PropertyDto actualUpdateResult = this.propertyService.update(123L, propertyDto);
-        assertSame(propertyDto, actualUpdateResult);
+        PropertyResponseDto actualUpdateResult = this.propertyService.update(123L, propertyDto);
         assertEquals("Data", actualUpdateResult.getData());
         assertEquals("The characteristics of someone or something", actualUpdateResult.getDescription());
         verify(this.propertyRepository).findById((Long) any());
@@ -183,9 +150,9 @@ class PropertyServiceTest {
         ArrayList<Property> propertyList = new ArrayList<Property>();
         propertyList.add(property);
         when(this.propertyRepository.findAll()).thenReturn(propertyList);
-        List<PropertyDto> actualAll = this.propertyService.getAll();
+        List<PropertyResponseDto> actualAll = this.propertyService.getAll();
         assertEquals(1, actualAll.size());
-        PropertyDto getResult = actualAll.get(0);
+        PropertyResponseDto getResult = actualAll.get(0);
         assertEquals("Data", getResult.getData());
         assertEquals("The characteristics of someone or something", getResult.getDescription());
         verify(this.propertyRepository).findAll();

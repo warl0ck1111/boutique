@@ -1,6 +1,7 @@
 package com.aneeque.backendservice.service;
 
-import com.aneeque.backendservice.dto.request.AttributeDto;
+import com.aneeque.backendservice.dto.request.AttributeRequestDto;
+import com.aneeque.backendservice.dto.response.AttributeResponseDto;
 
 import java.util.List;
 
@@ -9,13 +10,12 @@ import java.util.List;
  */
 
 public interface AttributeService {
-    AttributeDto save(AttributeDto attributeDto);
+    AttributeResponseDto save(AttributeRequestDto attributeRequestDto);
 
-    AttributeDto update(Long id, AttributeDto attributeDto);
+    AttributeResponseDto update(Long id, AttributeRequestDto attributeRequestDto);
 
-    List<AttributeDto> getAllAttributes();
+    List<AttributeResponseDto> getAllAttributes();
 
-    List<AttributeDto> getAllAttributesByDepartmentId(Long id);
 
 
 }

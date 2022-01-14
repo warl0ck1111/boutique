@@ -12,5 +12,4 @@ import java.util.List;
 public interface AttributeRepository extends JpaRepository<Attribute, Long> {
 
 
-    List<Attribute> findAllByDepartment(Department department);
 }
