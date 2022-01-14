@@ -2,10 +2,10 @@ package com.aneeque.backendservice.service.impl;
 
 import com.aneeque.backendservice.data.entity.Attribute;
 import com.aneeque.backendservice.data.repository.AttributeRepository;
-import com.aneeque.backendservice.data.entity.Department;
-import com.aneeque.backendservice.dto.request.AttributeDto;
+import com.aneeque.backendservice.dto.request.AttributeRequestDto;
 import com.aneeque.backendservice.data.entity.Property;
-import com.aneeque.backendservice.dto.request.PropertyDto;
+import com.aneeque.backendservice.dto.request.PropertyRequestDto;
+import com.aneeque.backendservice.dto.response.AttributeResponseDto;
 import com.aneeque.backendservice.service.PropertyService;
 import com.aneeque.backendservice.service.AttributeService;
 import lombok.Getter;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static com.aneeque.backendservice.util.Util.hasValue;
 
@@ -37,65 +38,53 @@ public class AttributeServiceImpl implements AttributeService {
     private PropertyService propertyService;
 
     @Override
-    public AttributeDto save(AttributeDto attributeDto) {
+    public AttributeResponseDto save(AttributeRequestDto attributeRequestDto) {
 
-        if (!hasValue(attributeDto.getName()))
-            throw new IllegalArgumentException("attribute name field cannot be empty");
+        Attribute attribute = new Attribute();
+        List<Property> properties = propertyService.getPropertyRepository().findAllById(attributeRequestDto.getPropertyIds());
+        BeanUtils.copyProperties(attributeRequestDto, attribute);
+        attribute.setProperties(properties);
+        Attribute savedAttribute = attributeRepository.save(new Attribute(attributeRequestDto.getName()));
 
-        Attribute savedAttribute = attributeRepository.save(new Attribute(attributeDto.getName()));
+        AttributeResponseDto attributeResponseDto = new AttributeResponseDto();
+        BeanUtils.copyProperties(savedAttribute, attributeResponseDto);
 
-        BeanUtils.copyProperties(savedAttribute, attributeDto);
-
-        return attributeDto;
+        return attributeResponseDto;
     }
 
     @Override
-    public AttributeDto update(Long id, AttributeDto attributeDto) {
-        if (!hasValue(attributeDto.getName()))
-            throw new IllegalArgumentException("attribute name field cannot be empty");
-        if (!hasValue(attributeDto.getDepartment()))
-            throw new IllegalArgumentException("attribute department field cannot be empty");
+    public AttributeResponseDto update(Long id, AttributeRequestDto attributeRequestDto) {
 
-        Attribute savedAttribute = attributeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("no attribute found"));
+        List<Property> properties = propertyService.getPropertyRepository().findAllById(attributeRequestDto.getPropertyIds());
+        Attribute attribute = attributeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("no attribute found"));
 
-        BeanUtils.copyProperties(attributeDto, savedAttribute);
-        Attribute updatedAttribute = attributeRepository.save(savedAttribute);
-
-        BeanUtils.copyProperties(updatedAttribute, attributeDto);
+        BeanUtils.copyProperties(attributeRequestDto, attribute);
+        attribute.setProperties(properties);
 
 
-        return attributeDto;
+        Attribute updatedAttribute = attributeRepository.save(attribute);
+        AttributeResponseDto attributeResponseDto = new AttributeResponseDto();
+
+        BeanUtils.copyProperties(updatedAttribute, attributeResponseDto);
+        return attributeResponseDto;
     }
 
     @Override
-    public List<AttributeDto> getAllAttributes() {
-        List<AttributeDto> attributeDtoList = new ArrayList<>();
+    public List<AttributeResponseDto> getAllAttributes() {
+        List<AttributeResponseDto> attributeResponseDtos = new ArrayList<>();
         List<Attribute> attributes = attributeRepository.findAll();
         attributes.forEach(attribute -> {
-            AttributeDto attributeDto = new AttributeDto();
-            BeanUtils.copyProperties(attribute, attributeDto);
+            AttributeResponseDto attributeResponseDto = new AttributeResponseDto();
+            BeanUtils.copyProperties(attribute, attributeResponseDto);
 
-            attributeDtoList.add(attributeDto);
+            attributeResponseDtos.add(attributeResponseDto);
         });
-        return attributeDtoList;
+        return attributeResponseDtos;
     }
 
-    @Override
-    public List<AttributeDto> getAllAttributesByDepartmentId(Long id) {
-        List<AttributeDto> attributeDtoList = new ArrayList<>();
 
-        Department department = departmentService.getDepartmentRepository().findById(id).orElseThrow(() -> new IllegalArgumentException("invalid department Id"));
-        List<Attribute> attributes = attributeRepository.findAllByDepartment(department);
-        attributes.forEach(attribute -> {
-            AttributeDto attributeDto = new AttributeDto();
-            BeanUtils.copyProperties(attribute, attributeDto);
 
-            attributeDtoList.add(attributeDto);
-        });
-        return attributeDtoList;
-    }
-
-    public AttributeDto assignPropertiesToAttribute(Long attributeId, List<Long> propertyIds) {
+    public AttributeResponseDto assignPropertiesToAttribute(Long attributeId, List<Long> propertyIds) {
 
         Attribute attribute = attributeRepository.findById(attributeId).orElseThrow(() -> new NoSuchElementException("no attribute found"));
 
@@ -103,18 +92,27 @@ public class AttributeServiceImpl implements AttributeService {
         attribute.setProperties(properties);
         Attribute updatedAttribute = attributeRepository.save(attribute);
 
-        AttributeDto attributeDto = new AttributeDto();
-        BeanUtils.copyProperties(updatedAttribute, attributeDto);
+        AttributeResponseDto attributeResponseDto = new AttributeResponseDto();
+        BeanUtils.copyProperties(updatedAttribute, attributeResponseDto);
 
-        return attributeDto;
+        return attributeResponseDto;
     }
 
-    public List<PropertyDto> getAssignedPropertiesToAttribute(Long attributeId){
-        List<PropertyDto> propertyDtoList = new ArrayList<>();
+    public AttributeResponseDto findAttributeById(Long attributeId){
+        Attribute attribute = attributeRepository.findById(attributeId).orElseThrow(() -> new NoSuchElementException("no attribute found"));
+        AttributeResponseDto attributeResponseDto = new AttributeResponseDto();
+        BeanUtils.copyProperties(attribute, attributeResponseDto);
+        return attributeResponseDto;
+    }
+
+
+
+        public List<PropertyRequestDto> getAssignedPropertiesToAttribute(Long attributeId){
+        List<PropertyRequestDto> propertyDtoList = new ArrayList<>();
 
         Attribute attribute = attributeRepository.findById(attributeId).orElseThrow(() -> new NoSuchElementException("no attribute found"));
         attribute.getProperties().forEach(property -> {
-            PropertyDto propertyDto = new PropertyDto();
+            PropertyRequestDto propertyDto = new PropertyRequestDto();
             BeanUtils.copyProperties(property, propertyDto);
             propertyDtoList.add(propertyDto);
         });
