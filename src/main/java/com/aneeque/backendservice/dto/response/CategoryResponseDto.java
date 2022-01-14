@@ -1,14 +1,18 @@
-package com.aneeque.backendservice.data.entity;
+package com.aneeque.backendservice.dto.response;
 
+import com.aneeque.backendservice.data.entity.Attribute;
+import com.aneeque.backendservice.data.entity.Category;
 import com.aneeque.backendservice.enums.CategoryType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,19 +25,21 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@Entity
-public class Category {
+@AllArgsConstructor
+public class CategoryResponseDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "name can not be empty")
     private String name;
 
     private String description;
 
-    @Enumerated(value = EnumType.STRING)
+    @JsonIgnore
     private CategoryType categoryType;
+
+    @JsonProperty("categoryType")
+    private String category;
 
     @ManyToMany
     private List<Category> subCategories = new ArrayList<>();
@@ -41,19 +47,9 @@ public class Category {
     @OneToMany
     private List<Attribute> attributes = new ArrayList<>();
 
-    @Column(updatable = false, nullable = false)
-    @CreationTimestamp
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
     private LocalDateTime createdAt;
 
-    @JsonIgnore
-    @UpdateTimestamp
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
-    private LocalDateTime modifiedAt;
-
-    public Category(String name) {
-        this.name = name;
-
-    }
 
 }

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,21 +20,19 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDto {
+public class CategoryRequestDto {
 
-    private Long id;
 
+    @NotNull(message = "name can not be empty")
     @NotBlank(message = "name can not be empty")
     private String name;
 
     private String description;
 
-    private List<Long> levelIds = new ArrayList<>();
+    private Set<Long> subCategoryIds = new HashSet<>();
 
-    private List<Long> subCategories = new ArrayList<>();
+    private Set<Long> attributesIds = new HashSet<>();
 
-    private List<Long> properties = new ArrayList<>();
 
-    private List<Long> attributes = new ArrayList<>();
 
 }
