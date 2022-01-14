@@ -53,6 +53,33 @@ public class Product {
     private Long modifiedBy;
 
 
+    private String materialCareInfo;
+
+    private String sizeAndFit;
+
+    private String color;
+
+    private String sellingPrice;
+
+    private String priceType;
+
+
+    private String saleStatus;
+
+    private String saleDuration;
+
+    private boolean trackInventory;
+
+    private String preferredVendor;
+
+    private boolean sizeMatch;
+
+    private String sizeCategory;
+
+    private String unit;
+
+
+
     @Column(updatable = false, nullable = false)
     @CreationTimestamp
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
