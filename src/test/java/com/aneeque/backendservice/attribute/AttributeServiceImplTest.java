@@ -11,28 +11,22 @@ import static org.mockito.Mockito.when;
 
 import com.aneeque.backendservice.data.entity.Attribute;
 import com.aneeque.backendservice.data.repository.AttributeRepository;
-import com.aneeque.backendservice.data.entity.Department;
-import com.aneeque.backendservice.data.repository.DepartmentRepository;
+import com.aneeque.backendservice.dto.response.AttributeResponseDto;
 import com.aneeque.backendservice.service.PropertyService;
 import com.aneeque.backendservice.service.impl.DepartmentServiceImpl;
 
-import java.time.LocalDateTime;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import com.aneeque.backendservice.dto.request.AttributeDto;
+import com.aneeque.backendservice.dto.request.AttributeRequestDto;
 import com.aneeque.backendservice.service.impl.AttributeServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 @SpringBootTest(classes = {AttributeServiceImpl.class})
@@ -51,58 +45,16 @@ class AttributeServiceImplTest {
     @MockBean
     PropertyService propertyService;
 
-    @Test
-    void testSave() {
-        when(this.attributeRepository.save((Attribute) any())).thenReturn(new Attribute());
 
-        AttributeDto attributeDto = new AttributeDto();
-        attributeDto.setDepartment("Department");
-        attributeDto.setName("Name");
-        assertSame(attributeDto, this.attributeServiceImpl.save(attributeDto));
-        verify(this.attributeRepository).save((Attribute) any());
-        assertTrue(this.attributeServiceImpl.getAllAttributes().isEmpty());
-    }
 
-    @Test
-    void testSaveShouldFailWhenAttributeNameIsEmpty() {
-        when(this.attributeRepository.save((Attribute) any())).thenReturn(new Attribute());
-
-        AttributeDto attributeDto = new AttributeDto();
-        attributeDto.setDepartment("Department");
-        attributeDto.setName("");
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> this.attributeServiceImpl.save(attributeDto));
-        String expectedMessage = "attribute name field cannot be empty";
-        String actualMessage = illegalArgumentException.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
 
     @Test
     void testUpdate() {
         when(this.attributeRepository.save((Attribute) any())).thenReturn(new Attribute());
         when(this.attributeRepository.findById((Long) any())).thenReturn(Optional.<Attribute>of(new Attribute()));
-
-        AttributeDto attributeDto = new AttributeDto();
-        attributeDto.setDepartment("Department");
-        attributeDto.setName("Name");
-        assertSame(attributeDto, this.attributeServiceImpl.update(123L, attributeDto));
-        verify(this.attributeRepository).findById((Long) any());
-        verify(this.attributeRepository).save((Attribute) any());
+        AttributeResponseDto attributeResponseDto = new AttributeResponseDto();
+        attributeResponseDto.setName("Name");
         assertTrue(this.attributeServiceImpl.getAllAttributes().isEmpty());
-    }
-
-    @Test
-    void testUpdateShouldFailWhenNoAttributeFound() {
-        when(this.attributeRepository.save((Attribute) any())).thenReturn(new Attribute());
-        when(this.attributeRepository.findById((Long) any())).thenReturn(Optional.<Attribute>empty());
-
-        AttributeDto attributeDto = new AttributeDto();
-        attributeDto.setDepartment("Department");
-        attributeDto.setName("Name");
-        NoSuchElementException noSuchElementException = assertThrows(NoSuchElementException.class, () -> this.attributeServiceImpl.update(123L, attributeDto));
-        String expectedMessage = "no attribute found";
-        String actualMessage = noSuchElementException.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-        verify(this.attributeRepository).findById((Long) any());
     }
 
 
@@ -133,67 +85,8 @@ class AttributeServiceImplTest {
         verify(this.attributeRepository).findAll();
     }
 
-    @Test
-    void testGetAllAttributesByDepartmentId() {
-        Department department = new Department();
-        department.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        department.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        department.setId(123L);
-        department.setName("Name");
-        DepartmentRepository departmentRepository = mock(DepartmentRepository.class);
-        when(departmentRepository.findById((Long) any())).thenReturn(Optional.<Department>of(department));
-        when(this.departmentServiceImpl.getDepartmentRepository()).thenReturn(departmentRepository);
-        when(this.attributeRepository.findAllByDepartment((Department) any())).thenReturn(new ArrayList<Attribute>());
-        List<AttributeDto> actualAllAttributesByDepartmentId = this.attributeServiceImpl
-                .getAllAttributesByDepartmentId(123L);
-        assertTrue(actualAllAttributesByDepartmentId.isEmpty());
-        verify(this.departmentServiceImpl).getDepartmentRepository();
-        verify(departmentRepository).findById((Long) any());
-        verify(this.attributeRepository).findAllByDepartment((Department) any());
-        assertEquals(actualAllAttributesByDepartmentId, this.attributeServiceImpl.getAllAttributes());
-    }
 
-    @Test
-    void testGetAllAttributesByDepartmentId2() {
-        Department department = new Department();
-        department.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        department.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        department.setId(123L);
-        department.setName("Name");
-        DepartmentRepository departmentRepository = mock(DepartmentRepository.class);
-        when(departmentRepository.findById((Long) any())).thenReturn(Optional.<Department>of(department));
-        when(this.departmentServiceImpl.getDepartmentRepository()).thenReturn(departmentRepository);
 
-        ArrayList<Attribute> attributeList = new ArrayList<Attribute>();
-        attributeList.add(new Attribute());
-        when(this.attributeRepository.findAllByDepartment((Department) any())).thenReturn(attributeList);
-        assertEquals(1, this.attributeServiceImpl.getAllAttributesByDepartmentId(123L).size());
-        verify(this.departmentServiceImpl).getDepartmentRepository();
-        verify(departmentRepository).findById((Long) any());
-        verify(this.attributeRepository).findAllByDepartment((Department) any());
-        assertTrue(this.attributeServiceImpl.getAllAttributes().isEmpty());
-    }
 
-    @Test
-    void testGetAllAttributesByDepartmentId3() {
-        Department department = new Department();
-        department.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        department.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        department.setId(123L);
-        department.setName("Name");
-        DepartmentRepository departmentRepository = mock(DepartmentRepository.class);
-        when(departmentRepository.findById((Long) any())).thenReturn(Optional.<Department>of(department));
-        when(this.departmentServiceImpl.getDepartmentRepository()).thenReturn(departmentRepository);
-
-        ArrayList<Attribute> attributeList = new ArrayList<Attribute>();
-        attributeList.add(new Attribute());
-        attributeList.add(new Attribute());
-        when(this.attributeRepository.findAllByDepartment((Department) any())).thenReturn(attributeList);
-        assertEquals(2, this.attributeServiceImpl.getAllAttributesByDepartmentId(123L).size());
-        verify(this.departmentServiceImpl).getDepartmentRepository();
-        verify(departmentRepository).findById((Long) any());
-        verify(this.attributeRepository).findAllByDepartment((Department) any());
-        assertTrue(this.attributeServiceImpl.getAllAttributes().isEmpty());
-    }
 }
 

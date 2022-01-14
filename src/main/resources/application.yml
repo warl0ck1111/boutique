@@ -1,10 +1,14 @@
 server:
-  port: 8789
+  port: 8787
   error:
     include-message: always
     include-binding-errors: always
 
+
 spring:
+  http:
+    multipart:
+      max-file-size: 2MB
   datasource:
     password: password12
     url: jdbc:mysql://0.0.0.0:3306/aneeque_dev
@@ -51,4 +55,11 @@ user-mgnt:
       seconds: 60
       milli-seconds: 0
   trusted-origins: "*"
+
+com.aneeque:
+  file:
+    upload:
+      format: pdf,jpg,png,zip,rar
+    directory: "aneeque/uploads/"
+
 
