@@ -18,15 +18,15 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductRequestDto {
 
-    private String name;
+    private String productName;
 
     private String description;
 
     private int categoryId;
 
-    private int quantity;
+    private int totalQuantity;
 
-    private int stockValue;
+    private int totalStockValue;
 
     private int reorderPoint;
 
@@ -42,6 +42,39 @@ public class ProductRequestDto {
 
     private List<Long> tagIds;
 
+    private String tags;
+
+    private String materialCareInfo;
+
+    private String sizeAndFit;
+
+    private String color;
+
+    private String sellingPrice;
+
+    private String priceType;
+
+
+    private String saleStatus;
+
+    private String saleDuration;
+
+    private boolean trackInventory;
+
+    private String preferredVendor;
+
+    private boolean sizeMatch;
+
+    private String sizeCategory;
+
+    private String unit;
+
+    private List<Long> categories;
+
+    private String productImage;
+
+    private String productVideo;
+
     List<ProductSizeInformationRequestDto> productSizeInformation = new ArrayList<>();
 
     List<ProductPropertiesRequestDto> productProperties = new ArrayList<>();
@@ -52,6 +85,6 @@ public class ProductRequestDto {
 
 
 
-    
+
 
 }
