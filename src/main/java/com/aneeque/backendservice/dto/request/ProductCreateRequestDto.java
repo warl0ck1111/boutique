@@ -22,13 +22,13 @@ public class ProductCreateRequestDto {
 
     private String description;
 
-    private int categoryId;
+    private Long categoryId;
 
-    private int quantity;
+    private Integer quantity;
 
-    private int stockValue;
+    private Integer stockValue;
 
-    private int reorderPoint;
+    private Integer reorderPoint;
 
     private Double costPrice;
 
@@ -40,9 +40,8 @@ public class ProductCreateRequestDto {
 
     private String productCode;
 
-    private List<Long> tagIds;
+    private List<String> tags;
 
-    private String tags;
 
     private String materialCareInfo;
 
@@ -50,7 +49,7 @@ public class ProductCreateRequestDto {
 
     private String color;
 
-    private String sellingPrice;
+    private Double sellingPrice;
 
     private String priceType;
 
@@ -58,11 +57,11 @@ public class ProductCreateRequestDto {
 
     private String saleDuration;
 
-    private boolean trackInventory;
+    private Boolean trackInventory;
 
     private String preferredVendor;
 
-    private boolean sizeMatch;
+    private Boolean sizeMatch;
 
     private String sizeCategory;
 
@@ -72,7 +71,7 @@ public class ProductCreateRequestDto {
 
     private String productVideo;
 
-    List<ProductSizeInformationRequestDto> productSizeInformation = new ArrayList<>();
+//    List<ProductSizeInformationRequestDto> productSizeInformation = new ArrayList<>();
 
     List<ProductPropertiesRequestDto> productProperties = new ArrayList<>();
 
