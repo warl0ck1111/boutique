@@ -27,8 +27,8 @@ public class ProductController {
     }
 
     @GetMapping("{productId}")
-    private ResponseEntity<ApiResponse> getAllByProperties(@PathVariable Long productId) {
-        return ResponseEntity.ok(new ApiResponse(productService.getAllByProperties(productId)));
+    private ResponseEntity<ApiResponse> findProductById(@PathVariable Long productId) {
+        return ResponseEntity.ok(new ApiResponse(productService.findProductById(productId)));
     }
 
 
@@ -58,15 +58,15 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse("Attributes assigned to Product successfully", productService.assignAttributesToProduct(productId, attributeIds)));
     }
 
-    @DeleteMapping("{productId}/tag/{tagId}")
-    public ResponseEntity<ApiResponse> deleteProductTag(@PathVariable Long productId, @PathVariable Long tagId) {
-        return ResponseEntity.ok(new ApiResponse(productService.deleteProductTag(productId, tagId)));
+    @DeleteMapping("{productId}/tag/{tagName}")
+    public ResponseEntity<ApiResponse> deleteProductTag(@PathVariable Long productId, @PathVariable String tagName) {
+        return ResponseEntity.ok(new ApiResponse(productService.deleteProductTag(productId, tagName)));
     }
 
-    @DeleteMapping("{productId}/property/{propertyId}")
-    public ResponseEntity<ApiResponse> deleteProductproperty(@PathVariable Long productId, @PathVariable Long propertyId) {
-        return ResponseEntity.ok(new ApiResponse(productService.deleteProductProperty(productId, propertyId)));
-    }
+//    @DeleteMapping("{productId}/property/{propertyId}")
+//    public ResponseEntity<ApiResponse> deleteProductproperty(@PathVariable Long productId, @PathVariable Long propertyId) {
+//        return ResponseEntity.ok(new ApiResponse(productService.deleteProductProperty(productId, propertyId)));
+//    }
 
     @GetMapping("{productId}/size-info")
     private ResponseEntity<ApiResponse> getProductSizeInformationByProductId(@PathVariable String productId) {

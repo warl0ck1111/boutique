@@ -3,17 +3,21 @@ package com.aneeque.backendservice.service;
 import com.aneeque.backendservice.data.entity.*;
 import com.aneeque.backendservice.data.repository.ProductRepository;
 import com.aneeque.backendservice.dto.request.ProductCreateRequestDto;
+import com.aneeque.backendservice.dto.request.ProductImageDto;
 import com.aneeque.backendservice.dto.request.ProductPropertiesRequestDto;
+import com.aneeque.backendservice.dto.response.FindProductResponse;
 import com.aneeque.backendservice.dto.response.ProductResponseDto;
 import com.aneeque.backendservice.data.entity.ProductTag;
 import com.aneeque.backendservice.data.repository.ProductTagRepository;
 import com.aneeque.backendservice.dto.request.ProductSizeInformationRequestDto;
+import com.aneeque.backendservice.dto.response.TagResponseDto;
 import com.aneeque.backendservice.service.impl.AttributeServiceImpl;
 import com.aneeque.backendservice.util.IAuthenticationFacade;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,27 +63,59 @@ public class ProductService {
     @Transactional
     public String createProduct(ProductCreateRequestDto dto) {
         log.info("creating product");
-        Integer createdProductId = productRepository.createProduct(dto.getBrandName(), dto.getCategoryId(),
-                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getName(),
-                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getQuantity(),
-                dto.getReorderPoint(), dto.getStockValue(), null, null);
+        Product product = new Product();
+        BeanUtils.copyProperties(dto, product);
+        Product createdProduct = productRepository.save(product);
+        long createdProductId = createdProduct.getId();
 
-        System.out.println("this is the created product Id: " + createdProductId);
-        createProductTags(Long.valueOf(createdProductId), dto);
-        createProductSizeInformation(dto.getProductSizeInformation());
-        createProductProperties(createdProductId, dto.getProductProperties());
+        System.out.println("this is the created product Id: " + createdProduct.getId());
+        createProductTags(createdProductId, dto);
+
+        ProductImageDto productImageDto = new ProductImageDto(dto.getProductImage(), createdProductId);
+        productImageService.save(productImageDto);
+//        createProductSizeInformation(createdProductId, dto.getProductSizeInformation());
+        createProductProperties(createdProduct.getId(), dto.getProductProperties());
 
         return "product created successfully";
     }
 
-    private void createProductProperties(int productId, List<ProductPropertiesRequestDto> productProperties) {
+    @Transactional
+    public String updateProduct(Long productId, ProductCreateRequestDto dto) {
+        log.info("updating product");
+        productRepository.updateProduct(productId, dto.getBrandName(), dto.getCategoryId(), dto.getCostPrice(),
+                dto.getDescription(), LocalDateTime.now().toString(), dto.getModifiedBy(),
+                dto.getName(), dto.getPrice(), dto.getProductCode(), dto.getQuantity(), dto.getReorderPoint(),
+                dto.getStockValue(), dto.getVendorId(), dto.getColor(), dto.getMaterialCareInfo(), dto.getPreferredVendor(),
+                dto.getPriceType(), dto.getSaleDuration(), dto.getSaleStatus(), dto.getSellingPrice(), dto.getSizeAndFit(),
+                dto.getSizeCategory(), dto.getSizeMatch(), dto.getTrackInventory(), dto.getUnit());
+
+//        updateProductSizeInformation(productId, dto.getProductSizeInformation());
+
+        return "product updated successfully";
+    }
+
+    public ProductResponseDto findProductById(long productId) {
+        ProductResponseDto productResponseDto = new ProductResponseDto();
+        List<FindProductResponse> productResponses = productRepository.findProductById(productId);
+        BeanUtils.copyProperties(productResponses.get(0), productResponseDto);
+        productResponseDto.setId(productResponses.get(0).getProductId());
+        List<String> productTags = new ArrayList<>();
+        productResponses.stream().forEach(product -> {
+            productTags.add(product.getTagName());
+        });
+        productResponseDto.setTags(productTags);
+
+        return productResponseDto;
+    }
+
+    private void createProductProperties(long productId, List<ProductPropertiesRequestDto> productProperties) {
         log.info("creating product property");
         productProperties.forEach(dto -> {
-            productRepository.addProductProperty((long) productId, dto.getPropertyId(), dto.getPrice());
+            productRepository.addProductProperty(productId, dto.getPropertyId(), dto.getPrice());
         });
     }
 
-    private void createProductSizeInformation(List<ProductSizeInformationRequestDto> productSizeInformationRequestDtos) {
+    private void createProductSizeInformation(Long productId, List<ProductSizeInformationRequestDto> productSizeInformationRequestDtos) {
         log.info("creating product size information");
         productSizeInformationRequestDtos.forEach(prodSizeInfo -> {
             productSizeInformationService.create(prodSizeInfo);
@@ -88,16 +124,17 @@ public class ProductService {
 
     private void createProductTags(Long productId, ProductCreateRequestDto dto) {
         log.info("creating ProductTags");
-        dto.getTagIds().forEach(tagId -> {
-            ProductTag productTag = new ProductTag(productId, tagId);
+        dto.getTags().forEach(tag -> {
+            ProductTag productTag = new ProductTag(productId, tag);
             productTagRepository.save(productTag);
         });
     }
 
 
-    public String deleteProductTag(Long productId, Long tagId) {
+    @Transactional
+    public String deleteProductTag(Long productId, String tagName) {
         log.info("deleting product Tag");
-        productTagRepository.deleteProductTag(productId, tagId);
+        productTagRepository.deleteProductTag(productId, tagName);
         return "product tag removed successfully";
     }
 
@@ -118,18 +155,6 @@ public class ProductService {
         return productCreateRequestDto;
     }
 
-    public String updateProduct(Long productId, ProductCreateRequestDto dto) {
-        log.info("updating product");
-        productRepository.updateProduct(productId, dto.getBrandName(), dto.getCategoryId(),
-                LocalDateTime.now().toString(), dto.getCreatedBy(), dto.getDescription(), dto.getName(),
-                dto.getPrice(), dto.getProductCode(), dto.getVendorId(), dto.getCostPrice(), dto.getQuantity(),
-                dto.getReorderPoint(), dto.getStockValue(), dto.getModifiedBy(), LocalDateTime.now().toString());
-
-        updateProductSizeInformation(productId, dto.getProductSizeInformation());
-
-        return "product updated successfully";
-    }
-
     private void updateProductSizeInformation(long productId, List<ProductSizeInformationRequestDto> productSizeInformationRequestDtos) {
         productSizeInformationRequestDtos.forEach(productSizeInformation -> {
             productSizeInformationService.update(productId, productSizeInformation);
@@ -143,7 +168,7 @@ public class ProductService {
 
     public List<ProductResponseDto> getAllProducts(int page, int size) {
 
-        List<Product> products = productRepository.findAllProducts(PageRequest.of(page, size));
+        Page<Product> products = productRepository.findAll(PageRequest.of(page, size));
         List<ProductResponseDto> productDtoList = new ArrayList<>();
 
         products.forEach(product -> {
@@ -154,23 +179,6 @@ public class ProductService {
         });
 
         return productDtoList;
-    }
-
-
-    public List<ProductCreateRequestDto> getAllByProperties(Long propertyId) {
-//
-//        List<Product> products = productRepository.findAllByPropertiesIn(Arrays.asList(propertyId));
-//        List<ProductCreateRequestDto> productRequestDtoList = new ArrayList<>();
-//
-//        products.forEach(product -> {
-//            ProductCreateRequestDto productRequestDto = new ProductCreateRequestDto();
-//            BeanUtils.copyProperties(product, productRequestDto);
-//            productRequestDtoList.add(productRequestDto);
-//
-//        });
-
-//        return productRequestDtoList;
-        return null;
     }
 
 

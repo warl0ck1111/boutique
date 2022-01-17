@@ -17,32 +17,37 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/tag")
 public class TagController {
 
+    public static final String GET_ALL_TAGS = "";
+    public static final String DELETE_TAG_BY_ID = "{tagId}";
+    public static final String GET_TAG_BY_ID = "{tagId}";
+    public static final String UPDATE_TAG = "{tagId}";
+    public static final String CREATE_TAG = "";
     @Autowired
     private TagService tagService;
 
-    @PostMapping
+    @PostMapping(CREATE_TAG)
     public ResponseEntity<?> createTag(@RequestBody TagRequestDto tagRequestDto){
         return new ResponseEntity(new ApiResponse("Tag created successfully",tagService.save(tagRequestDto)), HttpStatus.OK);
 
     }
 
-    @PutMapping("{tagId}")
+    @PutMapping(UPDATE_TAG)
     public ResponseEntity<TagResponseDto> updateTag(@PathVariable String tagId, @RequestBody TagRequestDto tagRequestDto){
         return new ResponseEntity(new ApiResponse(tagService.update(Long.valueOf(tagId),tagRequestDto)), HttpStatus.OK);
     }
 
-    @GetMapping("{tagId}")
+    @GetMapping(GET_TAG_BY_ID)
     public ResponseEntity<?> getTagById(@PathVariable String tagId){
         return ResponseEntity.ok(new ApiResponse(tagService.getById(Long.valueOf(tagId))));
     }
 
-    @GetMapping("all")
+    @GetMapping(GET_ALL_TAGS)
     public ResponseEntity<?> getAllTags(){
         return ResponseEntity.ok(new ApiResponse(tagService.getAll()));
     }
 
 
-    @DeleteMapping("{tagId}")
+    @DeleteMapping(DELETE_TAG_BY_ID)
     public ResponseEntity<?> deleteTagById(@PathVariable String tagId){
         return ResponseEntity.ok(new ApiResponse(tagService.delete(Long.valueOf(tagId))));
     }
