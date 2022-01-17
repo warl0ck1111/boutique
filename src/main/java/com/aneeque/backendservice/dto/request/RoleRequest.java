@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author Okala Bashir .O.
@@ -15,6 +16,7 @@ import javax.persistence.Column;
 @AllArgsConstructor
 public class RoleRequest {
 
+    @NotBlank(message = "name field must not be empty")
     private String name;
 
     private String description;

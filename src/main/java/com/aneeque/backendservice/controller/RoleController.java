@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 
@@ -57,13 +58,13 @@ public class RoleController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ApiResponse> createRole(@RequestBody RoleRequest roleRequest) {
+    public ResponseEntity<ApiResponse> createRole(@Valid @RequestBody RoleRequest roleRequest) {
         Role role = roleService.createRole(roleRequest);
         return ResponseEntity.ok(new ApiResponse(role));
     }
 
     @PutMapping("{roleId}")
-    public ResponseEntity<ApiResponse> updateRole(@PathVariable String roleId, @RequestBody RoleRequest roleRequest) {
+    public ResponseEntity<ApiResponse> updateRole(@PathVariable String roleId, @Valid @RequestBody RoleRequest roleRequest) {
         return ResponseEntity.ok(new ApiResponse(roleService.updateRole(Long.valueOf(roleId), roleRequest)));
     }
 
