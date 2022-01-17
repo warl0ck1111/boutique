@@ -7,6 +7,7 @@ import com.aneeque.backendservice.dto.request.ProductImageDto;
 import com.aneeque.backendservice.dto.response.ProductResponseDto;
 import com.aneeque.backendservice.util.CrudService;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.Optional;
  * @author Okala Bashir .O.
  */
 
+@Slf4j
 @Getter
 @Service
 public class ProductImageService implements CrudService<ProductImage, ProductImageDto> {
@@ -33,8 +35,9 @@ public class ProductImageService implements CrudService<ProductImage, ProductIma
     @Transactional
     @Override
     public ProductImageDto save(ProductImageDto dto) {
+        log.info("creating product image");
         ProductImage productImage = new ProductImage();
-        BeanUtils.copyProperties(dto,productImage);
+        BeanUtils.copyProperties(dto, productImage);
 
         ProductImage savedProductImage = productImageRepository.save(productImage);
         BeanUtils.copyProperties(savedProductImage, dto);
@@ -45,6 +48,7 @@ public class ProductImageService implements CrudService<ProductImage, ProductIma
     @Transactional
     @Override
     public ProductImageDto getById(Long id) {
+        log.info(String.format("getting product with id:%s", id));
         if (id < 0) throw new IllegalArgumentException("invalid product Image id");
 
 
@@ -54,10 +58,11 @@ public class ProductImageService implements CrudService<ProductImage, ProductIma
     @Transactional
     @Override
     public ProductImageDto update(Long id, ProductImageDto productImageDto) {
-
-        ProductImage productImage = productImageRepository.findById(id).orElseThrow(()-> new NoSuchElementException("no product image found"));
+        log.info(String.format("updating product image:%s", id));
+        ProductImage productImage = productImageRepository.findById(id).orElseThrow(() -> new NoSuchElementException("no product image found"));
         BeanUtils.copyProperties(productImageDto, productImage);
         ProductImage updatedProductImage = productImageRepository.save(productImage);
+        log.info(String.format("updated product image with id:%s", id));
         BeanUtils.copyProperties(updatedProductImage, productImageDto);
         return productImageDto;
     }
@@ -65,18 +70,23 @@ public class ProductImageService implements CrudService<ProductImage, ProductIma
     @Transactional
     @Override
     public void delete(Long id) {
+        log.info(String.format("deleting product image with id: %s", id));
         productImageRepository.deleteById(id);
+        log.info(String.format("deleted product image with id: %s", id));
+
 
     }
 
     @Override
     public List<ProductImageDto> getAll() {
-       return null;
+        return null;
 
     }
 
 
     public List<ProductResponseDto> getAllByProductId(Long productId) {
+        log.info(String.format("getting all product images with productId:v%s", productId));
+
         return productImageRepository.findAllByProductId(productId);
     }
 
