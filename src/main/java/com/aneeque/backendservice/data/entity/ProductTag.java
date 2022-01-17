@@ -21,10 +21,10 @@ public class ProductTag {
 
     private Long id;
     private Long ProductId;
-    private Long tagId;
+    private String tagName;
 
-    public ProductTag(Long productId, Long tagId) {
+    public ProductTag(Long productId,String tagName) {
         ProductId = productId;
-        this.tagId = tagId;
+        this.tagName = tagName;
     }
 }
