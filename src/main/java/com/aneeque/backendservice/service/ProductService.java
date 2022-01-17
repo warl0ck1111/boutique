@@ -71,7 +71,7 @@ public class ProductService {
         System.out.println("this is the created product Id: " + createdProduct.getId());
         createProductTags(createdProductId, dto);
 
-        ProductImageDto productImageDto = new ProductImageDto(dto.getProductImage(), null, createdProductId);
+        ProductImageDto productImageDto = new ProductImageDto(dto.getProductImage(), createdProductId);
         productImageService.save(productImageDto);
 //        createProductSizeInformation(createdProductId, dto.getProductSizeInformation());
         createProductProperties(createdProduct.getId(), dto.getProductProperties());
@@ -131,6 +131,7 @@ public class ProductService {
     }
 
 
+    @Transactional
     public String deleteProductTag(Long productId, String tagName) {
         log.info("deleting product Tag");
         productTagRepository.deleteProductTag(productId, tagName);
