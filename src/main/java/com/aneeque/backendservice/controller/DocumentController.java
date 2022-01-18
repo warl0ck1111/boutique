@@ -30,13 +30,12 @@ public class DocumentController extends ResponseEntityExceptionHandler {
 
     @GetMapping(value = "{fileName:.+}", produces = MediaType.ALL_VALUE)
     public ResponseEntity<byte[]> getFile(@PathVariable(name = "fileName") String fileName) throws IOException {
-        byte[] media = this.documentService.getImageWithMediaType(fileName);
+        byte[] media = this.documentService.getFileWithMediaType(fileName);
         HttpHeaders headers = new HttpHeaders();
         headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 
         return new ResponseEntity<>(media, headers, HttpStatus.OK);
     }
-
 
 
     @Transactional

@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-public interface ProductImageRepository extends JpaRepository<ProductMedia,Long> {
+public interface ProductMediaRepository extends JpaRepository<ProductMedia,Long> {
 
     @Query(value = "SELECT p.created_at AS createdAt, p.description, p.modified_at AS modifiedAt, " +
             "p.name, p.price, p.category_id AS categoryId, p.brand_name AS brandName, " +

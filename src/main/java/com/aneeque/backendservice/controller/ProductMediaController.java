@@ -1,8 +1,8 @@
 package com.aneeque.backendservice.controller;
 
 import com.aneeque.backendservice.dto.response.ApiResponse;
-import com.aneeque.backendservice.dto.request.ProductImageDto;
-import com.aneeque.backendservice.service.ProductImageService;
+import com.aneeque.backendservice.dto.request.ProductMediaDto;
+import com.aneeque.backendservice.service.ProductMediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,30 +14,34 @@ import javax.validation.Valid;
  */
 
 @RestController
-@RequestMapping("/api/v1/product-image")
-public class ProductImageController {
+@RequestMapping("/api/v1/product-media")
+public class ProductMediaController {
+    public static final String DELETE_PRODUCT_MEDIA = "{productMediaId}";
+    public static final String UPDATE_PRODUCT_MEDIA = "{productMediaId}";
+    public static final String CREATE_PRODUCT_MEDIA = "";
+    public static final String GET_ALL_PRODUCT_MEDIA = "{productMediaId}";
     @Autowired
-    private ProductImageService productImageService;
+    private ProductMediaService productMediaService;
 
-    @GetMapping("{productImageId}")
-    public ResponseEntity<?> getProductImage(@PathVariable Long productImageId){
-        return ResponseEntity.ok(new ApiResponse(  productImageService.getById(productImageId)));
+    @GetMapping(GET_ALL_PRODUCT_MEDIA)
+    public ResponseEntity<?> getAllProductMedia(@PathVariable Long productMediaId){
+        return ResponseEntity.ok(new ApiResponse(  productMediaService.getById(productMediaId)));
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse> saveProductImage(@Valid @RequestBody ProductImageDto productImageDto){
-        return ResponseEntity.ok(new ApiResponse("product image created successfully",productImageService.save(productImageDto)));
+    @PostMapping(CREATE_PRODUCT_MEDIA)
+    public ResponseEntity<ApiResponse> saveProductMedia(@Valid @RequestBody ProductMediaDto productMediaDto){
+        return ResponseEntity.ok(new ApiResponse("product media created successfully", productMediaService.save(productMediaDto)));
 
     }
 
-    @PutMapping("{productImageId}")
-    public ResponseEntity<ApiResponse> updateProductImage(@PathVariable Long productImageId, @Valid @RequestBody ProductImageDto productImageDto){
-        return ResponseEntity.ok(new ApiResponse("product image updated successfully",productImageService.update(productImageId, productImageDto)));
+    @PutMapping(UPDATE_PRODUCT_MEDIA)
+    public ResponseEntity<ApiResponse> updateProductMedia(@PathVariable Long productMediaId, @Valid @RequestBody ProductMediaDto productMediaDto){
+        return ResponseEntity.ok(new ApiResponse("product media updated successfully", productMediaService.update(productMediaId, productMediaDto)));
     }
 
-    @DeleteMapping("{productImageId}")
-    public ResponseEntity<ApiResponse> deleteProductImage(@PathVariable Long productImageId){
-        productImageService.delete(productImageId);
-        return ResponseEntity.ok(new ApiResponse("product image deleted successfully"));
+    @DeleteMapping(DELETE_PRODUCT_MEDIA)
+    public ResponseEntity<ApiResponse> deleteProductMedia(@PathVariable Long productMediaId){
+        productMediaService.delete(productMediaId);
+        return ResponseEntity.ok(new ApiResponse("product media deleted successfully"));
     }
 }
