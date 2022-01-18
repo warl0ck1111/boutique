@@ -283,12 +283,12 @@ public class AppUserService implements UserDetailsService {
     }
 
     public Page<AppUser> getAllUsers(int page, int size) {
-        return appUserRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt")));
+        return appUserRepository.findAll(PageRequest.of(page -1, size, Sort.by(Sort.Direction.DESC, "createdAt")));
     }
 
     public Page<AppUser> getAllUsersByRole(long roleId, int page, int size) {
         Role role = roleService.findRoleById(roleId);
-        return appUserRepository.findAllByRole(role, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC)));
+        return appUserRepository.findAllByRole(role, PageRequest.of(page-1, size, Sort.by(Sort.Direction.DESC)));
     }
 
     @Transactional

@@ -117,7 +117,7 @@ public class ProductService {
 
     public List<ProductResponseDto> getAllProducts(int page, int size) {
 
-        Page<Product> products = productRepository.findAll(PageRequest.of(page, size));
+        Page<Product> products = productRepository.findAll(PageRequest.of(page-1, size));
         List<ProductResponseDto> productDtoList = new ArrayList<>();
 
         products.forEach(product -> {
@@ -132,7 +132,7 @@ public class ProductService {
 
     public List<ProductResponseDto> searchProducts(String productName, int page, int size) {
 
-        Page<Product> products = productRepository.findByNameContainingIgnoreCase(productName, PageRequest.of(page, size));
+        Page<Product> products = productRepository.findByNameContainingIgnoreCase(productName, PageRequest.of(page -1, size));
         List<ProductResponseDto> productDtoList = new ArrayList<>();
 
         products.forEach(product -> {
