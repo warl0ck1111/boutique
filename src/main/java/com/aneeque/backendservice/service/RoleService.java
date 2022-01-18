@@ -19,8 +19,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.aneeque.backendservice.util.Util.hasValue;
-
 /**
  * @author B.O Okala III
  */
@@ -49,15 +47,21 @@ public class RoleService {
             throw new ApiRequestException("Role already exists", HttpStatus.BAD_REQUEST);
         }
         Role role = new Role(roleRequest.getName());
+        List<Privilege> privileges = privilegeService.getPrivilegeRepository().findAllById(roleRequest.getPermissions());
+        role.setPrivileges(privileges);
         return roleRepository.save(role);
 
     }
 
     @Transactional
     public String updateRole(Long roleId, RoleRequest req) {
-        Role role = roleRepository.findById(roleId).orElseThrow(() -> new IllegalArgumentException("role not found"));
-        BeanUtils.copyProperties(req,role);
-
+        Role role = findRoleById(roleId);
+        role.setDescription(req.getDescription());
+        role.setName(req.getName());
+        if (req.isUpdatePrivileges()) {
+            List<Privilege> privileges = privilegeService.getPrivilegeRepository().findAllById(req.getPermissions());
+            role.setPrivileges(privileges);
+        }
         roleRepository.save(role);
         return "role update successful";
     }
@@ -107,7 +111,7 @@ public class RoleService {
     }
 
     @Transactional
-    public Role assignPermissionsToRole(Long roleId, List<Long> privilegeIds) {
+    public Role updateRolePermissions(Long roleId, List<Long> privilegeIds) {
         Role role = findRoleById(roleId);
         List<Privilege> privileges = privilegeService.getPrivilegeRepository().findAllById(privilegeIds);
         role.setPrivileges(privileges);
@@ -116,16 +120,5 @@ public class RoleService {
         return role;
     }
 
-    @Transactional
-    public String assignPermissionsFromRole(Long roleId, List<Long> privileges) {
-        privileges.forEach(privilege -> {
-            unAssignPermissionsFromRole(roleId, privilege);
-        });
 
-        return "privileges unassigned successfully";
-    }
-
-    private void unAssignPermissionsFromRole(Long roleId, Long privilegeId) {
-        roleRepository.unAssignPermissionsFromRole(roleId, privilegeId);
-    }
 }

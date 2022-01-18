@@ -1,6 +1,5 @@
 package com.aneeque.backendservice.controller;
 
-import com.aneeque.backendservice.data.entity.Privilege;
 import com.aneeque.backendservice.data.entity.Role;
 import com.aneeque.backendservice.dto.request.PrivilegeListRequest;
 import com.aneeque.backendservice.dto.request.RoleRequest;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -48,13 +46,13 @@ public class RoleController {
 
     @PostMapping("{roleId}/assign-permission")
     public ResponseEntity<?> assignPermissionsToRole(@PathVariable Long roleId, @RequestBody PrivilegeListRequest privilegeListRequest) {
-        Role role = roleService.assignPermissionsToRole(roleId, privilegeListRequest.getPrivileges());
+        Role role = roleService.updateRolePermissions(roleId, privilegeListRequest.getPrivileges());
         return ResponseEntity.ok(new ApiResponse(role));
     }
 
-    @PutMapping("{roleId}/unassign-permission")
-    public ResponseEntity<?> unassignPermissionsFromRole(@PathVariable Long roleId, @RequestBody PrivilegeListRequest privilegeListRequest) {
-        return ResponseEntity.ok(new ApiResponse(roleService.assignPermissionsFromRole(roleId, privilegeListRequest.getPrivileges())));
+    @PutMapping("{roleId}/permission")
+    public ResponseEntity<?> updateRolePermissions(@PathVariable Long roleId, @RequestBody PrivilegeListRequest privilegeListRequest) {
+        return ResponseEntity.ok(new ApiResponse(roleService.updateRolePermissions(roleId, privilegeListRequest.getPrivileges())));
     }
 
     @PostMapping("")
