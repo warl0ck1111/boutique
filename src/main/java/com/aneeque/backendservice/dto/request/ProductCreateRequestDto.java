@@ -42,12 +42,7 @@ public class ProductCreateRequestDto {
 
     private List<String> tags;
 
-
     private String materialCareInfo;
-
-    private String sizeAndFit;
-
-    private String color;
 
     private Double sellingPrice;
 
@@ -60,10 +55,6 @@ public class ProductCreateRequestDto {
     private Boolean trackInventory;
 
     private String preferredVendor;
-
-    private Boolean sizeMatch;
-
-    private String sizeCategory;
 
     private String unit;
 

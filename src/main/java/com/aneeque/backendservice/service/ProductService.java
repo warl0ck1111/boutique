@@ -82,12 +82,12 @@ public class ProductService {
     @Transactional
     public String updateProduct(Long productId, ProductCreateRequestDto dto) {
         log.info("updating product");
-        productRepository.updateProduct(productId, dto.getBrandName(), dto.getCategoryId(), dto.getCostPrice(),
+        productRepository.updateProduct(productId, dto.getBrandName(), dto.getCategoryId(),  dto.getCostPrice(),
                 dto.getDescription(), LocalDateTime.now().toString(), dto.getModifiedBy(),
                 dto.getName(), dto.getPrice(), dto.getProductCode(), dto.getQuantity(), dto.getReorderPoint(),
-                dto.getStockValue(), dto.getVendorId(), dto.getColor(), dto.getMaterialCareInfo(), dto.getPreferredVendor(),
-                dto.getPriceType(), dto.getSaleDuration(), dto.getSaleStatus(), dto.getSellingPrice(), dto.getSizeAndFit(),
-                dto.getSizeCategory(), dto.getSizeMatch(), dto.getTrackInventory(), dto.getUnit());
+                dto.getStockValue(), dto.getVendorId(), dto.getMaterialCareInfo(), dto.getPreferredVendor(),
+                dto.getPriceType(), dto.getSaleDuration(), dto.getSaleStatus(), dto.getSellingPrice(),
+                dto.getTrackInventory(), dto.getUnit());
 
 //        updateProductSizeInformation(productId, dto.getProductSizeInformation());
 

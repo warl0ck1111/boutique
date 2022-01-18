@@ -9,30 +9,31 @@ package com.aneeque.backendservice.dto.response;
 public interface FindProductResponse {
 
     Long getProductId();
-    String getbrandName();
-    Double getCostPrice();
-    String getCreatedBy();
-    Long getModifiedBy();
     String getName();
-    String getProductCode();
-    Integer getQuantity();
-    Integer getReorderPoint();
-    Integer getStockValue();
+    String getDescription();
     Long getVendorId();
-    String getColor();
+    Long getCategoryId();
+    String getCategoryName();
+    Integer getQuantity();
+    Integer getStockValue();
+    Integer getReorderPoint();
+    Double getCostPrice();
+    String getbrandName();
+    String getProductCode();
+    Double getPrice();
+    Long getCreatedBy();
+    Long getModifiedBy();
     String getMaterialCareInfo();
-    String getPreferredVendor();
-    String getPriceType();
-    String getSaleDuration();
-    String getSaleStatus();
     String getSellingPrice();
-    String getSizeAndFit();
-    String getSizeCategory();
-    Boolean getSizeAndMatch();
+    String getPriceType();
+    String getSaleStatus();
+    String getSaleDuration();
     Boolean getTrackInventory();
+    String getPreferredVendor();
     String getUnit();
     String getTagDescription();
     String getTagName();
     String getTagId();
+
 
 }

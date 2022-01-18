@@ -52,17 +52,11 @@ public class Product {
 
     private Long modifiedBy;
 
-
     private String materialCareInfo;
-
-    private String sizeAndFit;
-
-    private String color;
 
     private String sellingPrice;
 
     private String priceType;
-
 
     private String saleStatus;
 
@@ -72,12 +66,7 @@ public class Product {
 
     private String preferredVendor;
 
-    private boolean sizeMatch;
-
-    private String sizeCategory;
-
     private String unit;
-
 
 
     @Column(updatable = false, nullable = false)
@@ -90,11 +79,5 @@ public class Product {
     private LocalDateTime modifiedAt;
 
 
-    public Product(String name, String description, Long category, Double price, Long createdBy) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.createdBy = createdBy;
-    }
 
 }

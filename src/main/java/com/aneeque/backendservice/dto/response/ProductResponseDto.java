@@ -31,6 +31,8 @@ public class ProductResponseDto {
 
     private Long categoryId;
 
+    private String categoryName;
+
     private int quantity;
 
     private int stockValue;
@@ -49,12 +51,7 @@ public class ProductResponseDto {
 
     private Long modifiedBy;
 
-
     private String materialCareInfo;
-
-    private String sizeAndFit;
-
-    private String color;
 
     private String sellingPrice;
 
@@ -68,10 +65,6 @@ public class ProductResponseDto {
     private boolean trackInventory;
 
     private String preferredVendor;
-
-    private boolean sizeMatch;
-
-    private String sizeCategory;
 
     private String unit;
 
