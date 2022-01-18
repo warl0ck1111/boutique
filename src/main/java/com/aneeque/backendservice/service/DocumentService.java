@@ -126,7 +126,7 @@ public class DocumentService {
         return new DocumentResponseDto(fileName);
     }
 
-    public  byte[] getImageWithMediaType(String imageName) {
+    public  byte[] getFileWithMediaType(String imageName) {
         Path destination =   Paths.get(fileDirectory+ File.separator + imageName);// retrieve the image by its name
 
         try {

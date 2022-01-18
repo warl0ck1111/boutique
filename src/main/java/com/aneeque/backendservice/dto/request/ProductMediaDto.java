@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductImageDto {
+public class ProductMediaDto {
 
     private String fileName;
+
+    private String fileType;
 
     private Long productId;
     

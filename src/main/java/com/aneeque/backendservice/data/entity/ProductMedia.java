@@ -14,18 +14,17 @@ import java.time.LocalDateTime;
  */
 
 @Entity
-public class ProductImage {
+public class ProductMedia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("productImageId")
+    @JsonProperty("productMediaId")
     private Long id;
 
     private String fileName;
 
-    
-    private Long productId;
+    private String fileType;
 
-    private String url;
+    private Long productId;
 
     @Column(updatable = false, nullable = false)
     @CreationTimestamp
