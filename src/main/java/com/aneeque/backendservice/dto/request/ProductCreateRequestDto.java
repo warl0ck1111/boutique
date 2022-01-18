@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Okala Bashir .O.
@@ -40,7 +41,9 @@ public class ProductCreateRequestDto {
 
     private String productCode;
 
-    private List<String> tags;
+    private Set<String> tags;
+
+    private Set<String> mediaFiles;
 
     private String materialCareInfo;
 
@@ -58,13 +61,10 @@ public class ProductCreateRequestDto {
 
     private String unit;
 
-    private String productImage;
-
-    private String productVideo;
 
 //    List<ProductSizeInformationRequestDto> productSizeInformation = new ArrayList<>();
 
-    List<ProductPropertiesRequestDto> productProperties = new ArrayList<>();
+//    List<ProductPropertiesRequestDto> productProperties = new ArrayList<>();
 
     private Long createdBy;
 
