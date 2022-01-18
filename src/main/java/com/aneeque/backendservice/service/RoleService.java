@@ -9,6 +9,7 @@ import com.aneeque.backendservice.data.entity.Privilege;
 import com.aneeque.backendservice.exception.RoleNotFoundException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.aneeque.backendservice.util.Util.hasValue;
 
 /**
  * @author B.O Okala III
@@ -52,7 +55,10 @@ public class RoleService {
 
     @Transactional
     public String updateRole(Long roleId, RoleRequest req) {
-        roleRepository.updateRole(roleId, req.getName(), req.getEntity(), req.getDescription(), LocalDateTime.now().toString());
+        Role role = roleRepository.findById(roleId).orElseThrow(() -> new IllegalArgumentException("role not found"));
+        BeanUtils.copyProperties(req,role);
+
+        roleRepository.save(role);
         return "role update successful";
     }
 
@@ -112,11 +118,11 @@ public class RoleService {
 
     @Transactional
     public String assignPermissionsFromRole(Long roleId, List<Long> privileges) {
-        privileges.forEach(privilege ->{
-            unAssignPermissionsFromRole(roleId,privilege);
+        privileges.forEach(privilege -> {
+            unAssignPermissionsFromRole(roleId, privilege);
         });
 
-        return  "privileges unassigned successfully";
+        return "privileges unassigned successfully";
     }
 
     private void unAssignPermissionsFromRole(Long roleId, Long privilegeId) {
