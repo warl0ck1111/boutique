@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Okala Bashir .O.
@@ -68,7 +70,9 @@ public class ProductResponseDto {
 
     private String unit;
 
-    private List<String> tags;
+    private Set<String> tags = new HashSet<>();
+    Set<String> mediaFiles = new HashSet<>();
+
 
 
 

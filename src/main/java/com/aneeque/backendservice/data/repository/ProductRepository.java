@@ -2,6 +2,7 @@ package com.aneeque.backendservice.data.repository;
 
 import com.aneeque.backendservice.data.entity.Product;
 import com.aneeque.backendservice.dto.response.FindProductResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -68,21 +69,26 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT p.id as productId, p.brand_name AS brandName, p.category_id AS categoryId, " +
             "p.cost_price AS costPrice, p.created_by AS createdBy, p.modified_by as modifiedBy, " +
-            "p.name as name, p.product_code as productCode, p.quantity as quantity, " +
+            "p.name as name, p.price, p.description, p.product_code as productCode, p.quantity as quantity, " +
             "p.reorder_point as reorderPoint, p.stock_value as stockValue, p.vendor_id as vendorId, " +
             "p.material_care_info as materialCareInfo, p.preferred_vendor as preferredVendor, " +
             "p.price_type as priceType, p.sale_duration as saleDuration, p.sale_status as saleStatus, " +
-            "p.selling_price as sellingPrice, " +
-            " p.track_inventory as trackInventory, p.unit, t.description as tagDescription, " +
-            "t.name as tagName, t.id as tagId  FROM product_tag pt left join product_image pi " +
-            "left join product_properties pp left join product p on p.id = pt.product_id " +
-            "left join tag t on pt.tag_name = t.name where pt.product_id = :productId " +
-            "GROUP BY t.name, p.id;", nativeQuery = true)
+            "p.selling_price as sellingPrice, pi.file_name as fileName, " +
+            " p.track_inventory as trackInventory, p.unit, " +
+            " pt.tag_name AS tagName, c.name as categoryName  FROM product p left join product_tag pt on p.id = pt.product_id left join product_image pi on p.id = pi.product_id " +
+            "left join category c on p.category_id = c.id  where pt.product_id = :productId " +
+            "GROUP BY pt.tag_name, p.id, pi.id;", nativeQuery = true)
     List<FindProductResponse> findProductById(@Param("productId") Long productId);
 
     @Modifying
     @Query(value = "DELETE FROM product where id=:productId", nativeQuery = true)
     Integer deleteProductById(@Param("productId") Long productId);
+
+
+    Page<Product> findByNameContainingIgnoreCase(String productName, Pageable pageable);
+
+
+
 
 
     @Modifying
