@@ -175,8 +175,10 @@ public class AppUserService implements UserDetailsService {
         Role role = roleService.findRoleById(updateUserDto.getRoleId());
         AppUser appUser = appUserRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("invalid user id"));
         BeanUtils.copyProperties(updateUserDto, appUser);
-        List<Privilege> privileges = privilegeService.getPrivilegeRepository().findAllById(updateUserDto.getPermissions());
-        appUser.setUserAssignedPrivileges(privileges);
+        if(updateUserDto.isUpdatePrivileges()){
+            List<Privilege> privileges = privilegeService.getPrivilegeRepository().findAllById(updateUserDto.getPermissions());
+            appUser.setUserAssignedPrivileges(privileges);
+        }
         appUser.setRole(role);
         AppUser updatedUser = appUserRepository.save(appUser);
         log.info("user updated");

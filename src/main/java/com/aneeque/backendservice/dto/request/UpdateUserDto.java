@@ -58,6 +58,7 @@ public class UpdateUserDto {
 
     private List<Long> permissions = new ArrayList<>();
 
+    private boolean updatePrivileges;
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress.toLowerCase();
