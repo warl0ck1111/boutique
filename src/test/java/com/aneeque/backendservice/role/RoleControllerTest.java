@@ -152,60 +152,7 @@ class RoleControllerTest {
     }
 
     @Test
-    void testUnassignPermissionsFromRole() {
-        RoleController roleController = new RoleController(new RoleService(mock(RoleRepository.class)));
-
-        PrivilegeListRequest privilegeListRequest = new PrivilegeListRequest();
-        privilegeListRequest.setPrivileges(new ArrayList<Long>());
-        ResponseEntity<?> actualUnassignPermissionsFromRoleResult = roleController.updateRolePermissions(123L,
-                privilegeListRequest);
-        assertTrue(actualUnassignPermissionsFromRoleResult.hasBody());
-        assertTrue(actualUnassignPermissionsFromRoleResult.getHeaders().isEmpty());
-        assertEquals(HttpStatus.OK, actualUnassignPermissionsFromRoleResult.getStatusCode());
-        assertEquals(200, ((ApiResponse) actualUnassignPermissionsFromRoleResult.getBody()).getStatusCode());
-        assertEquals("privileges unassigned successfully",
-                ((ApiResponse) actualUnassignPermissionsFromRoleResult.getBody()).getMessage());
-        assertEquals(HttpStatus.OK, ((ApiResponse) actualUnassignPermissionsFromRoleResult.getBody()).getHttpStatus());
-        String expectedSuccess = Boolean.TRUE.toString();
-        assertEquals(expectedSuccess, ((ApiResponse) actualUnassignPermissionsFromRoleResult.getBody()).getSuccess());
-    }
-
-
-
-    @Test
     void testCreateRole() {
-        Role role = new Role();
-        role.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        role.setNoOfUsers(1L);
-        role.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        role.setIsDeleted(true);
-        role.setPrivileges(new ArrayList<Privilege>());
-        role.setId(123L);
-        role.setName("Name");
-        role.setEntity("Entity");
-        role.setDescription("The characteristics of someone or something");
-        RoleRepository roleRepository = mock(RoleRepository.class);
-        when(roleRepository.save((Role) any())).thenReturn(role);
-        when(roleRepository.existsByName((String) any())).thenReturn(false);
-        RoleController roleController = new RoleController(new RoleService(roleRepository));
-        ResponseEntity<ApiResponse> actualCreateRoleResult = roleController
-                .createRole(new RoleRequest("Name", "The characteristics of someone or something", "Entity", false, new ArrayList<>()));
-        assertTrue(actualCreateRoleResult.getHeaders().isEmpty());
-        assertTrue(actualCreateRoleResult.hasBody());
-        assertEquals(HttpStatus.OK, actualCreateRoleResult.getStatusCode());
-        ApiResponse body = actualCreateRoleResult.getBody();
-        assertEquals("Success", body.getMessage());
-        assertEquals(HttpStatus.OK, body.getHttpStatus());
-        assertSame(role, body.getData());
-        String expectedSuccess = Boolean.TRUE.toString();
-        assertEquals(expectedSuccess, body.getSuccess());
-        assertEquals(200, body.getStatusCode());
-        verify(roleRepository).existsByName((String) any());
-        verify(roleRepository).save((Role) any());
-    }
-
-    @Test
-    void testCreateRole2() {
         Role role = new Role();
         role.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
         role.setNoOfUsers(1L);
@@ -234,35 +181,15 @@ class RoleControllerTest {
         verify(roleService).createRole((RoleRequest) any());
     }
 
-    @Test
-    void testUpdateRole() {
-        RoleRepository roleRepository = mock(RoleRepository.class);
-        when(roleRepository.updateRole((Long) any(), (String) any(), (String) any(), (String) any(), (String) any()))
-                .thenReturn(1);
-        RoleController roleController = new RoleController(new RoleService(roleRepository));
-        ResponseEntity<ApiResponse> actualUpdateRoleResult = roleController.updateRole("1",
-                new RoleRequest("Name", "The characteristics of someone or something", "Entity", false, new ArrayList<Long>()));
-        assertTrue(actualUpdateRoleResult.getHeaders().isEmpty());
-        assertTrue(actualUpdateRoleResult.hasBody());
-        assertEquals(HttpStatus.OK, actualUpdateRoleResult.getStatusCode());
-        ApiResponse body = actualUpdateRoleResult.getBody();
-        assertEquals("role update successful", body.getMessage());
-        assertEquals(HttpStatus.OK, body.getHttpStatus());
-        assertEquals(200, body.getStatusCode());
-        String expectedSuccess = Boolean.TRUE.toString();
-        assertEquals(expectedSuccess, body.getSuccess());
-        verify(roleRepository).updateRole((Long) any(), (String) any(), (String) any(), (String) any(), (String) any());
-    }
 
     @Test
-    void testUpdateRole2() {
+    void testUpdateRole() {
         RoleService roleService = mock(RoleService.class);
         when(roleService.updateRole((Long) any(), (RoleRequest) any())).thenReturn("2020-03-01");
         RoleController roleController = new RoleController(roleService);
         ResponseEntity<ApiResponse> actualUpdateRoleResult = roleController.updateRole("42",
                 new RoleRequest("Name", "The characteristics of someone or something", "Entity", false, new ArrayList<>()));
         assertTrue(actualUpdateRoleResult.getHeaders().isEmpty());
-        assertTrue(actualUpdateRoleResult.hasBody());
         assertEquals(HttpStatus.OK, actualUpdateRoleResult.getStatusCode());
         ApiResponse body = actualUpdateRoleResult.getBody();
         assertEquals("2020-03-01", body.getMessage());

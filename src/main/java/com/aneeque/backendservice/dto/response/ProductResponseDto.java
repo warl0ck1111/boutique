@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Okala Bashir .O.
@@ -31,6 +33,8 @@ public class ProductResponseDto {
 
     private Long categoryId;
 
+    private String categoryName;
+
     private int quantity;
 
     private int stockValue;
@@ -49,12 +53,7 @@ public class ProductResponseDto {
 
     private Long modifiedBy;
 
-
     private String materialCareInfo;
-
-    private String sizeAndFit;
-
-    private String color;
 
     private String sellingPrice;
 
@@ -69,13 +68,11 @@ public class ProductResponseDto {
 
     private String preferredVendor;
 
-    private boolean sizeMatch;
-
-    private String sizeCategory;
-
     private String unit;
 
-    private List<String> tags;
+    private Set<String> tags = new HashSet<>();
+    Set<String> mediaFiles = new HashSet<>();
+
 
 
 

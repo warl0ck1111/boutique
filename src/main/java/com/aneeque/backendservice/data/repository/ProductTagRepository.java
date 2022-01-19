@@ -15,6 +15,6 @@ import org.springframework.stereotype.Repository;
 public interface ProductTagRepository extends JpaRepository<ProductTag, Long> {
 
     @Modifying
-    @Query(value = "DELETE from product_tag  where product_id = :productId AND tag_name = :tagName ", nativeQuery = true)
-    Integer deleteProductTag(@Param("productId") Long productId, @Param("tagName") String tagName);
+    @Query(value = "DELETE from product_tag  where product_id = :productId", nativeQuery = true)
+    Integer deleteProductTag(@Param("productId") Long productId);
 }

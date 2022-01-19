@@ -1,13 +1,9 @@
 package com.aneeque.backendservice.dto.request;
 
-import com.aneeque.backendservice.data.entity.Product;
-import com.aneeque.backendservice.data.entity.ProductProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,7 +13,11 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductCreateRequestDto {
+public class ProductUpdateRequestDto {
+
+    public boolean updateMediaFiles = false;
+    public boolean updateTags = false;
+
 
     private String name;
 
