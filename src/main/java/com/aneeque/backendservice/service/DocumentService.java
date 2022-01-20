@@ -42,7 +42,7 @@ public class DocumentService {
     @Value("${com.aneeque.file.upload.format}")
     public List<String> fileUploadFormat;
 
-    @Value("${spring.http.multipart.max-file-size}")
+    @Value("${spring.servlet.multipart.max-file-size}")
     private String maxFileSize;
 
     @Autowired

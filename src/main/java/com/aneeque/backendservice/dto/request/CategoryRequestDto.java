@@ -1,6 +1,7 @@
 package com.aneeque.backendservice.dto.request;
 
 import com.aneeque.backendservice.data.entity.Category;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,12 +24,14 @@ import java.util.Set;
 public class CategoryRequestDto {
 
 
+    @JsonProperty("title")
     @NotNull(message = "name can not be empty")
     @NotBlank(message = "name can not be empty")
     private String name;
 
     private String description;
 
+    @JsonProperty("children")
     private Set<Long> subCategoryIds = new HashSet<>();
 
     private Set<Long> attributesIds = new HashSet<>();

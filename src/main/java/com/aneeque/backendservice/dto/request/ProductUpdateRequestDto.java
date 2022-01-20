@@ -17,13 +17,14 @@ public class ProductUpdateRequestDto {
 
     public boolean updateMediaFiles = false;
     public boolean updateTags = false;
+    public boolean updateCategories = false;
 
 
     private String name;
 
     private String description;
 
-    private Long categoryId;
+    private Set<Long> categories;
 
     private Integer quantity;
 

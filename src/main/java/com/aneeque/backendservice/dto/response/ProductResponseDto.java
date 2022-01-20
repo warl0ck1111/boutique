@@ -33,7 +33,6 @@ public class ProductResponseDto {
 
     private Long categoryId;
 
-    private String categoryName;
 
     private int quantity;
 
@@ -71,7 +70,8 @@ public class ProductResponseDto {
     private String unit;
 
     private Set<String> tags = new HashSet<>();
-    Set<String> mediaFiles = new HashSet<>();
+    private Set<String> mediaFiles = new HashSet<>();
+    private Set<Long> categoryKeys = new HashSet<>();
 
 
 
