@@ -20,22 +20,22 @@ import java.util.Set;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query(value = "SELECT id,brand_name, category_id, cost_price, created_at, created_by, description, modified_at," +
+    @Query(value = "SELECT id,brand_name, cost_price, created_at, created_by, description, modified_at," +
             "                                 modified_by, name, price, product_code, quantity, reorder_point, stock_value, vendor_id, " +
             "                                 material_care_info, preferred_vendor, price_type, sale_duration, sale_status, selling_price," +
             "                                 track_inventory, unit from product ", nativeQuery = true)
     List<Product> findAllProducts(Pageable pageable);
 
     @Modifying
-    @Query(value = "insert into product (brand_name, category_id, cost_price, created_at, created_by, description, modified_at," +
+    @Query(value = "insert into product (brand_name, cost_price, created_at, created_by, description, modified_at," +
             "                     modified_by, name, price, product_code, quantity, reorder_point, stock_value, vendor_id," +
             "                     material_care_info, preferred_vendor, price_type, sale_duration, sale_status, selling_price," +
             "                      track_inventory, unit)" +
-            "values (:brandName, :categoryId,  :costPrice, :createdAt, :createdBy, :description,:modifiedAt," +
+            "values (:brandName,  :costPrice, :createdAt, :createdBy, :description,:modifiedAt," +
             ":modifiedBy, :productName, :price, :productCode, :quantity, :reorderPoint, :stockValue, :vendorId," +
             ":materialCareInfo, :preferredVendor, :priceType, :saleDuration, :saleStatus, :sellingPrice," +
             ":trackInventory, :unit); SELECT LAST_INSERT_ID()", nativeQuery = true)
-    Integer createProduct(@Param("brandName") String brandName, @Param("categoryId") Long categoryId,
+    Integer createProduct(@Param("brandName") String brandName,
                           @Param("costPrice") Double costPrice, @Param("description") String description,
                           @Param("modifiedAt") String modifiedAt, @Param("modifiedBy") Long modifiedBy,
                           @Param("productName") String productName, @Param("price") Double price, @Param("productCode") String productCode,
@@ -68,7 +68,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                           @Param("trackInventory") boolean trackInventory,
                           @Param("unit") String unit);
 
-    @Query(value = "SELECT p.id as productId, p.brand_name AS brandName, p.category_id AS categoryId, " +
+    @Query(value = "SELECT DISTINCTROW p.id as productId, p.brand_name AS brandName, " +
             "p.cost_price AS costPrice, p.created_by AS createdBy, p.modified_by as modifiedBy, " +
             "p.name as name, p.price, p.description, p.product_code as productCode, p.quantity as quantity, " +
             "p.reorder_point as reorderPoint, p.stock_value as stockValue, p.vendor_id as vendorId, " +
@@ -76,9 +76,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.price_type as priceType, p.sale_duration as saleDuration, p.sale_status as saleStatus, " +
             "p.selling_price as sellingPrice, pi.file_name as fileName, " +
             " p.track_inventory as trackInventory, p.unit, " +
-            " pt.tag_name AS tagName, c.name as categoryName  FROM product p left join product_tag pt on p.id = pt.product_id left join product_image pi on p.id = pi.product_id " +
-            "left join category c on p.category_id = c.id  where pt.product_id = :productId " +
-            "GROUP BY pt.tag_name, p.id, pi.id;", nativeQuery = true)
+            " pt.tag_name AS tagName, pc.category_id as categoryId  FROM product p left join product_tag pt on p.id = pt.product_id left join product_image pi on p.id = pi.product_id " +
+            "left join product_categories pc on p.id = pc.product_id  where pt.product_id = :productId ", nativeQuery = true)
     List<FindProductResponse> findProductById(@Param("productId") Long productId);
 
     @Modifying

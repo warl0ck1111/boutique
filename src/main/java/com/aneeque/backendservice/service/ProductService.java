@@ -114,12 +114,15 @@ public class ProductService {
         productResponseDto.setId(productResponses.get(0).getProductId());
         Set<String> productTags = new HashSet<>();
         Set<String> mediaFiles = new HashSet<>();
+        Set<Long> categoryKeys = new HashSet<>();
         productResponses.stream().forEach(product -> {
             productTags.add(product.getTagName());
             mediaFiles.add(product.getFileName());
+            categoryKeys.add(product.getCategoryId());
         });
         productResponseDto.setTags(productTags);
         productResponseDto.setMediaFiles(mediaFiles);
+        productResponseDto.setCategoryKeys(categoryKeys);
 
         return productResponseDto;
     }
