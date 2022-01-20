@@ -23,7 +23,7 @@ public class ProductCreateRequestDto {
 
     private String description;
 
-    private Long categoryId;
+    private Set<Long> categories;
 
     private Integer quantity;
 

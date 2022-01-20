@@ -64,6 +64,8 @@ public class ProductService {
         if (!dto.getTags().isEmpty()) addProductTags(createdProductId, dto.getTags());
 
         if (!dto.getMediaFiles().isEmpty()) productMediaService.addProductMedia(createdProductId, dto.getMediaFiles());
+
+        if(!dto.getCategories().isEmpty()) addProductCategories(createdProductId,dto.getCategories());
 //        createProductSizeInformation(createdProductId, dto.getProductSizeInformation());
 //        createProductProperties(createdProduct.getId(), dto.getProductProperties());
 
@@ -73,7 +75,7 @@ public class ProductService {
     @Transactional
     public String updateProduct(Long productId, ProductUpdateRequestDto dto) {
         log.info("updating product");
-        productRepository.updateProduct(productId, dto.getBrandName(), dto.getCategoryId(), dto.getCostPrice(),
+        productRepository.updateProduct(productId, dto.getBrandName(), dto.getCostPrice(),
                 dto.getDescription(), LocalDateTime.now().toString(), dto.getModifiedBy(),
                 dto.getName(), dto.getPrice(), dto.getProductCode(), dto.getQuantity(), dto.getReorderPoint(),
                 dto.getStockValue(), dto.getVendorId(), dto.getMaterialCareInfo(), dto.getPreferredVendor(),
@@ -85,10 +87,24 @@ public class ProductService {
             productMediaService.addProductMedia(productId, dto.getMediaFiles());
         }
         if (dto.updateTags) {
-            deleteProductTag(productId);
+            removeProductTags(productId);
             addProductTags(productId, dto.getTags());
         }
+        if (dto.updateCategories) {
+            removeProductCategories(productId);
+            addProductCategories(productId, dto.getCategories());
+        }
         return "product updated successfully";
+    }
+
+    private void removeAllProductMedia(Long productId) {
+        log.info("removing product media");
+        productMediaService.removeAllProductImagesByProductId(productId);
+    }
+
+    private void deleteProductCategories(Long productId) {
+        log.info("removing product Categories");
+        productRepository.removeProductCategories(productId);
     }
 
     public ProductResponseDto findProductById(long productId) {
@@ -145,20 +161,31 @@ public class ProductService {
         return productDtoList;
     }
 
+
     @Transactional
-    void addProductTags(Long productId, Set<String> tags) {
-        log.info("creating ProductTags");
-        tags.forEach(tag -> {
-            ProductTag productTag = new ProductTag(productId, tag);
-            productTagRepository.save(productTag);
-        });
+    public ProductCreateRequestDto assignAttributesToProduct(Long productId, List<Long> attributeIds) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("product not found"));
+        List<Attribute> attributes = attributeService.getAttributeRepository().findAllById(attributeIds);
+
+        Product updatedProduct = productRepository.save(product);
+        ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto();
+        BeanUtils.copyProperties(updatedProduct, productCreateRequestDto);
+        return productCreateRequestDto;
+
     }
 
     @Transactional
-    public String deleteProductTag(Long productId) {
-        log.info("deleting product Tags");
-        productTagRepository.deleteProductTag(productId);
-        return "product tag removed successfully";
+    public ProductCreateRequestDto assignPropertiesToProduct(Long productId, List<Long> propertyId) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("product not found"));
+        List<Property> properties = propertyService.getPropertyRepository().findAllById(propertyId);
+//        product.setProperties(properties);
+
+        Product updatedProduct = productRepository.save(product);
+        ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto();
+        BeanUtils.copyProperties(updatedProduct, productCreateRequestDto);
+        return productCreateRequestDto;
+
+
     }
 
     @Transactional
@@ -190,29 +217,30 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductCreateRequestDto assignAttributesToProduct(Long productId, List<Long> attributeIds) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("product not found"));
-        List<Attribute> attributes = attributeService.getAttributeRepository().findAllById(attributeIds);
-
-        Product updatedProduct = productRepository.save(product);
-        ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto();
-        BeanUtils.copyProperties(updatedProduct, productCreateRequestDto);
-        return productCreateRequestDto;
-
+    void addProductCategories(long productId, Set<Long> categories) {
+        log.info("adding product categories");
+        categories.forEach(categoryId->productRepository.addProductCategory(productId, categoryId));
     }
 
     @Transactional
-    public ProductCreateRequestDto assignPropertiesToProduct(Long productId, List<Long> propertyId) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("product not found"));
-        List<Property> properties = propertyService.getPropertyRepository().findAllById(propertyId);
-//        product.setProperties(properties);
-
-        Product updatedProduct = productRepository.save(product);
-        ProductCreateRequestDto productCreateRequestDto = new ProductCreateRequestDto();
-        BeanUtils.copyProperties(updatedProduct, productCreateRequestDto);
-        return productCreateRequestDto;
-
-
+    void removeProductCategories(Long productId){
+        productRepository.removeProductCategories(productId);
     }
+
+    @Transactional
+    void addProductTags(Long productId, Set<String> tags) {
+        log.info("creating ProductTags");
+        tags.forEach(tag -> {
+            ProductTag productTag = new ProductTag(productId, tag);
+            productTagRepository.save(productTag);
+        });
+    }
+
+    @Transactional
+    void removeProductTags(Long productId) {
+        log.info("deleting product Tags");
+        productTagRepository.deleteProductTag(productId);
+    }
+
 
 }

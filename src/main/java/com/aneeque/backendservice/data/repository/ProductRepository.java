@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Okala Bashir .O.
@@ -35,27 +36,27 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             ":materialCareInfo, :preferredVendor, :priceType, :saleDuration, :saleStatus, :sellingPrice," +
             ":trackInventory, :unit); SELECT LAST_INSERT_ID()", nativeQuery = true)
     Integer createProduct(@Param("brandName") String brandName, @Param("categoryId") Long categoryId,
-            @Param("costPrice") Double costPrice, @Param("description") String description,
-            @Param("modifiedAt") String modifiedAt, @Param("modifiedBy") Long modifiedBy,
-            @Param("productName") String productName, @Param("price") Double price, @Param("productCode") String productCode,
-            @Param("quantity") Integer quantity, @Param("reorderPoint") Integer reorderPoint,
-            @Param("stockValue") Integer stockValue, @Param("vendorId") Long vendorId,
-            @Param("materialCareInfo") String materialCareInfo, @Param("preferredVendor") String preferredVendor,
-            @Param("priceType") String priceType, @Param("saleDuration") String saleDuration,
-            @Param("saleStatus") String saleStatus, @Param("sellingPrice") Double sellingPrice,
-            @Param("trackInventory") boolean trackInventory,
-            @Param("unit") String unit);
-    
-    
+                          @Param("costPrice") Double costPrice, @Param("description") String description,
+                          @Param("modifiedAt") String modifiedAt, @Param("modifiedBy") Long modifiedBy,
+                          @Param("productName") String productName, @Param("price") Double price, @Param("productCode") String productCode,
+                          @Param("quantity") Integer quantity, @Param("reorderPoint") Integer reorderPoint,
+                          @Param("stockValue") Integer stockValue, @Param("vendorId") Long vendorId,
+                          @Param("materialCareInfo") String materialCareInfo, @Param("preferredVendor") String preferredVendor,
+                          @Param("priceType") String priceType, @Param("saleDuration") String saleDuration,
+                          @Param("saleStatus") String saleStatus, @Param("sellingPrice") Double sellingPrice,
+                          @Param("trackInventory") boolean trackInventory,
+                          @Param("unit") String unit);
+
+
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE product SET brand_name = :brandName, category_id = :categoryId, " +
+    @Query(nativeQuery = true, value = "UPDATE product SET brand_name = :brandName,  " +
             "cost_price = :costPrice,  description = :description, " +
             "modified_at = :modifiedAt, modified_by = :modifiedBy, name = :productName, price = :price, product_code = :productCode, " +
             "quantity = :quantity, reorder_point = :reorderPoint, stock_value = :stockValue, vendor_id = :vendorId, " +
             "material_care_info = :materialCareInfo, preferred_vendor = :preferredVendor, price_type = :priceType, sale_duration = :saleDuration, " +
             "sale_status = :saleStatus, selling_price = :sellingPrice,  " +
             " track_inventory = :trackInventory, unit = :unit WHERE id = :productId")
-    Integer updateProduct(@Param("productId") Long productId,@Param("brandName") String brandName,  @Param("categoryId") Long categoryId,
+    Integer updateProduct(@Param("productId") Long productId, @Param("brandName") String brandName,
                           @Param("costPrice") Double costPrice, @Param("description") String description,
                           @Param("modifiedAt") String modifiedAt, @Param("modifiedBy") Long modifiedBy,
                           @Param("productName") String productName, @Param("price") Double price, @Param("productCode") String productCode,
@@ -88,9 +89,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findByNameContainingIgnoreCase(String productName, Pageable pageable);
 
 
-
-
-
     @Modifying
     @Query(value = "INSERT INTO product_properties (product_id, property_id, price ) value (:productId, :propertyId, :price)", nativeQuery = true)
     Integer addProductProperty(@Param("productId") Long productId, @Param("propertyId") Long propertyId, @Param("price") Double price);
@@ -100,9 +98,21 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Integer removeProductProperty(@Param("productId") Long productId, @Param("propertyId") Long propertyId);
 
     @Modifying
-    @Query(value = "INSERT INTO categrory_product_properties (category_id,product_id, property_id ) value (:categoryId,:productId, :propertyId)", nativeQuery = true)
+    @Query(value = "INSERT INTO category_product_properties (category_id,product_id, property_id ) value (:categoryId,:productId, :propertyId)", nativeQuery = true)
     Integer addCategoryProductProperty(@Param("categoryId") Long categoryId, @Param("productId") Long productId, @Param("propertyId") Long propertyId);
 
+    @Modifying
+    @Query(value = "DELETE FROM category_product_properties WHERE product_id = :productId", nativeQuery = true)
+    Integer removeCategoryProductProperties(@Param("productId") Long productId);
+
+
+    @Modifying
+    @Query(value = "INSERT INTO product_categories(product_id, category_id) VALUES (:productId, :categoryId)", nativeQuery = true)
+    Integer addProductCategory(@Param("productId") Long productId, @Param("categoryId") Long categoryId);
+
+    @Modifying
+    @Query(value = "DELETE FROM product_categories WHERE product_id = :productId", nativeQuery = true)
+    Integer removeProductCategories(@Param("productId") Long productId);
 
 
 }
