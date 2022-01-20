@@ -25,7 +25,7 @@ public class DocumentController extends ResponseEntityExceptionHandler {
     private DocumentService documentService;
 
 
-    @Value("{spring.http.multipart.max-file-size}")
+    @Value("{spring.servlet.multipart.max-file-size}")
     private String maxfileSize;
 
     @GetMapping(value = "{fileName:.+}", produces = MediaType.ALL_VALUE)
