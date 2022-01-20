@@ -28,8 +28,10 @@ import java.util.Set;
 @AllArgsConstructor
 public class CategoryResponseDto {
 
+    @JsonProperty("key")
     private Long id;
 
+    @JsonProperty("title")
     @NotBlank(message = "name can not be empty")
     private String name;
 
@@ -41,6 +43,7 @@ public class CategoryResponseDto {
     @JsonProperty("categoryType")
     private String category;
 
+    @JsonProperty("children")
     @ManyToMany
     private List<Category> subCategories = new ArrayList<>();
 
