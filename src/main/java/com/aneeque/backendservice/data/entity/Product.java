@@ -32,7 +32,6 @@ public class Product {
 
     private Long vendorId;
 
-    private Long categoryId;
 
     private int quantity;
 
