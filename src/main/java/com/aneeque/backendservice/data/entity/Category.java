@@ -2,6 +2,7 @@ package com.aneeque.backendservice.data.entity;
 
 import com.aneeque.backendservice.enums.CategoryType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,10 +25,12 @@ import java.util.Set;
 @Entity
 public class Category {
 
+    @JsonProperty("key")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty("title")
     private String name;
 
     private String description;
@@ -35,6 +38,7 @@ public class Category {
     @Enumerated(value = EnumType.STRING)
     private CategoryType categoryType;
 
+    @JsonProperty("children")
     @ManyToMany
     private List<Category> subCategories = new ArrayList<>();
 
