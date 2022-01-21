@@ -71,7 +71,7 @@ public class ProductResponseDto {
 
     private Set<String> tags = new HashSet<>();
     private Set<String> mediaFiles = new HashSet<>();
-    private Set<Long> categoryKeys = new HashSet<>();
+    private Set<Long> categories = new HashSet<>();
 
 
 

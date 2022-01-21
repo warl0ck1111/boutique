@@ -124,7 +124,7 @@ public class ProductService {
         });
         productResponseDto.setTags(productTags);
         productResponseDto.setMediaFiles(mediaFiles);
-        productResponseDto.setCategoryKeys(categoryKeys);
+        productResponseDto.setCategories(categoryKeys);
 
         return productResponseDto;
     }
