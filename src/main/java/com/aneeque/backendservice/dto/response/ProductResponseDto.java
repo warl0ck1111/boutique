@@ -69,7 +69,7 @@ public class ProductResponseDto {
 
 
     private Set<String> tags = new HashSet<>();
-    private Set<String> mediaFiles = new HashSet<>();
+    private Set<ProductMediaDto> mediaFiles = new HashSet<>();
     private Set<Long> categories = new HashSet<>();
 
 

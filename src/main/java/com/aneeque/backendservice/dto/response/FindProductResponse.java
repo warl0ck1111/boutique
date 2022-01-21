@@ -34,6 +34,7 @@ public interface FindProductResponse {
     Boolean getTrackInventory();
     String getTagName();
     String getFileName();
+    String getFileType();
 
 
 }
