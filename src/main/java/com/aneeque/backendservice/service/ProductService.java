@@ -2,14 +2,11 @@ package com.aneeque.backendservice.service;
 
 import com.aneeque.backendservice.data.entity.*;
 import com.aneeque.backendservice.data.repository.ProductRepository;
-import com.aneeque.backendservice.dto.request.ProductCreateRequestDto;
-import com.aneeque.backendservice.dto.request.ProductPropertiesRequestDto;
-import com.aneeque.backendservice.dto.request.ProductUpdateRequestDto;
+import com.aneeque.backendservice.dto.request.*;
 import com.aneeque.backendservice.dto.response.FindProductResponse;
 import com.aneeque.backendservice.dto.response.ProductResponseDto;
 import com.aneeque.backendservice.data.entity.ProductTag;
 import com.aneeque.backendservice.data.repository.ProductTagRepository;
-import com.aneeque.backendservice.dto.request.ProductSizeInformationRequestDto;
 import com.aneeque.backendservice.service.impl.AttributeServiceImpl;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -80,9 +77,9 @@ public class ProductService {
         productRepository.updateProduct(productId, dto.getBrandName(), dto.getCostPrice(),
                 dto.getDescription(), LocalDateTime.now().toString(), dto.getModifiedBy(),
                 dto.getName(), dto.getPrice(), dto.getProductCode(), dto.getQuantity(), dto.getReorderPoint(),
-                dto.getStockValue(), dto.getVendorId(), dto.getMaterialCareInfo(), dto.getPreferredVendor(),
+                dto.getStockValue(), dto.getVendorId(), dto.getMaterialCareInfo(),
                 dto.getPriceType(), dto.getSaleDuration(), dto.getSaleStatus(), dto.getSellingPrice(),
-                dto.getTrackInventory(), dto.getUnit());
+                dto.getTrackInventory());
 
         if (dto.updateMediaFiles) {
             productMediaService.removeAllProductImagesByProductId(productId);
@@ -115,16 +112,16 @@ public class ProductService {
         BeanUtils.copyProperties(productResponses.get(0), productResponseDto);
         productResponseDto.setId(productResponses.get(0).getProductId());
         Set<String> productTags = new HashSet<>();
-        Set<String> mediaFiles = new HashSet<>();
+        Set<ProductMediaDto> mediaFiles = new HashSet<>();
         Set<Long> categoryKeys = new HashSet<>();
         productResponses.stream().forEach(product -> {
             productTags.add(product.getTagName());
-            mediaFiles.add(product.getFileName());
+            mediaFiles.add(new ProductMediaDto(product.getFileName(), product.getFileType()));
             categoryKeys.add(product.getCategoryId());
         });
         productResponseDto.setTags(productTags);
         productResponseDto.setMediaFiles(mediaFiles);
-        productResponseDto.setCategoryKeys(categoryKeys);
+        productResponseDto.setCategories(categoryKeys);
 
         return productResponseDto;
     }

@@ -56,7 +56,7 @@ public class ProductMediaService implements CrudService<ProductMedia, ProductMed
     }
  @Transactional
     public String removeAllProductImagesByProductId(Long productId) {
-        log.info("adding product media");
+        log.info("removing product media");
         productMediaRepository.removeAllProductImagesByProductId(productId);
         return "product media files removed";
 

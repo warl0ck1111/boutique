@@ -58,10 +58,6 @@ public class ProductUpdateRequestDto {
 
     private Boolean trackInventory;
 
-    private String preferredVendor;
-
-    private String unit;
-
 
 //    List<ProductSizeInformationRequestDto> productSizeInformation = new ArrayList<>();
 

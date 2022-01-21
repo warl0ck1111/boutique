@@ -1,6 +1,7 @@
 package com.aneeque.backendservice.dto.response;
 
 import com.aneeque.backendservice.data.entity.Category;
+import com.aneeque.backendservice.dto.request.ProductMediaDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,8 +33,6 @@ public class ProductResponseDto {
 
     private Long vendorId;
 
-    private Long categoryId;
-
 
     private int quantity;
 
@@ -50,6 +50,8 @@ public class ProductResponseDto {
 
     private Long createdBy;
 
+    private LocalDateTime createdAt;
+
     private Long modifiedBy;
 
     private String materialCareInfo;
@@ -65,13 +67,10 @@ public class ProductResponseDto {
 
     private boolean trackInventory;
 
-    private String preferredVendor;
-
-    private String unit;
 
     private Set<String> tags = new HashSet<>();
-    private Set<String> mediaFiles = new HashSet<>();
-    private Set<Long> categoryKeys = new HashSet<>();
+    private Set<ProductMediaDto> mediaFiles = new HashSet<>();
+    private Set<Long> categories = new HashSet<>();
 
 
 

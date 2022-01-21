@@ -63,9 +63,6 @@ public class Product {
 
     private boolean trackInventory;
 
-    private String preferredVendor;
-
-    private String unit;
 
 
     @Column(updatable = false, nullable = false)
