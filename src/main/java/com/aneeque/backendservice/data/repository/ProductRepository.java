@@ -72,7 +72,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.reorder_point as reorderPoint, p.stock_value as stockValue, p.vendor_id as vendorId, " +
             "p.material_care_info as materialCareInfo," +
             "p.price_type as priceType, p.sale_duration as saleDuration, p.sale_status as saleStatus, " +
-            "p.selling_price as sellingPrice, pi.file_name as fileName, " +
+            "p.selling_price as sellingPrice, p.created_at AS createdAt, pi.file_name as fileName, " +
             " p.track_inventory as trackInventory," +
             " pt.tag_name AS tagName, pc.category_id as categoryId  FROM product p left join product_tag pt on p.id = pt.product_id left join product_image pi on p.id = pi.product_id " +
             "left join product_categories pc on p.id = pc.product_id  where pt.product_id = :productId ", nativeQuery = true)

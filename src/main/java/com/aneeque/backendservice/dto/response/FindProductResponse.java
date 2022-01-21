@@ -1,5 +1,7 @@
 package com.aneeque.backendservice.dto.response;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Okala Bashir .O.
  */
@@ -22,6 +24,7 @@ public interface FindProductResponse {
     String getProductCode();
     Double getPrice();
     Long getCreatedBy();
+    LocalDateTime getCreatedAt();
     Long getModifiedBy();
     String getMaterialCareInfo();
     String getSellingPrice();

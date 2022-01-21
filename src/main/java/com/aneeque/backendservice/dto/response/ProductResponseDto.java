@@ -1,6 +1,7 @@
 package com.aneeque.backendservice.dto.response;
 
 import com.aneeque.backendservice.data.entity.Category;
+import com.aneeque.backendservice.dto.request.ProductMediaDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +49,8 @@ public class ProductResponseDto {
     private Double price;
 
     private Long createdBy;
+
+    private LocalDateTime createdAt;
 
     private Long modifiedBy;
 
