@@ -46,10 +46,10 @@ public class ProductMediaService implements CrudService<ProductMedia, ProductMed
     }
 
     @Transactional
-    public String addProductMedia(Long productId, Set<String> fileNames) {
+    public String addProductMedia(Long productId, Set<ProductMediaDto> fileNames) {
         log.info("adding product media");
-        fileNames.forEach(fileName->{
-            productMediaRepository.addMediaFile(LocalDateTime.now().toString(), fileName, null, productId);
+        fileNames.forEach(media->{
+            productMediaRepository.addMediaFile(LocalDateTime.now().toString(), media.getFileName(), media.getFileType(), null, productId);
         });
         return "product media files added";
 
