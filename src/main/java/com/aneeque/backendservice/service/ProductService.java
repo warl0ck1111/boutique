@@ -80,7 +80,7 @@ public class ProductService {
         productRepository.updateProduct(productId, dto.getBrandName(), dto.getCostPrice(),
                 dto.getDescription(), LocalDateTime.now().toString(), dto.getModifiedBy(),
                 dto.getName(), dto.getPrice(), dto.getProductCode(), dto.getQuantity(), dto.getReorderPoint(),
-                dto.getStockValue(), dto.getVendorId(), dto.getMaterialCareInfo(), dto.getPreferredVendor(),
+                dto.getStockValue(), dto.getVendorId(), dto.getMaterialCareInfo(),
                 dto.getPriceType(), dto.getSaleDuration(), dto.getSaleStatus(), dto.getSellingPrice(),
                 dto.getTrackInventory(), dto.getUnit());
 

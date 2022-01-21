@@ -29,7 +29,6 @@ public interface FindProductResponse {
     String getSaleStatus();
     String getSaleDuration();
     Boolean getTrackInventory();
-    String getPreferredVendor();
     String getUnit();
     String getTagName();
     String getFileName();

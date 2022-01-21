@@ -31,8 +31,6 @@ public class ProductResponseDto {
 
     private Long vendorId;
 
-    private Long categoryId;
-
 
     private int quantity;
 
@@ -64,8 +62,6 @@ public class ProductResponseDto {
     private String saleDuration;
 
     private boolean trackInventory;
-
-    private String preferredVendor;
 
     private String unit;
 
