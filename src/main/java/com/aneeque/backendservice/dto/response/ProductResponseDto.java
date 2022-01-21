@@ -63,7 +63,6 @@ public class ProductResponseDto {
 
     private boolean trackInventory;
 
-    private String unit;
 
     private Set<String> tags = new HashSet<>();
     private Set<String> mediaFiles = new HashSet<>();

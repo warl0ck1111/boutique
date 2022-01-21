@@ -82,7 +82,7 @@ public class ProductService {
                 dto.getName(), dto.getPrice(), dto.getProductCode(), dto.getQuantity(), dto.getReorderPoint(),
                 dto.getStockValue(), dto.getVendorId(), dto.getMaterialCareInfo(),
                 dto.getPriceType(), dto.getSaleDuration(), dto.getSaleStatus(), dto.getSellingPrice(),
-                dto.getTrackInventory(), dto.getUnit());
+                dto.getTrackInventory());
 
         if (dto.updateMediaFiles) {
             productMediaService.removeAllProductImagesByProductId(productId);
