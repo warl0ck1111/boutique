@@ -44,7 +44,7 @@ public class ProductUpdateRequestDto {
 
     private Set<String> tags;
 
-    private Set<String> mediaFiles;
+    private Set<ProductMediaDto> mediaFiles;
 
     private String materialCareInfo;
 

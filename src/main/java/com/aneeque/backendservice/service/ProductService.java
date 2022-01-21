@@ -63,7 +63,9 @@ public class ProductService {
 
         if (!dto.getTags().isEmpty()) addProductTags(createdProductId, dto.getTags());
 
-        if (!dto.getMediaFiles().isEmpty()) productMediaService.addProductMedia(createdProductId, dto.getMediaFiles());
+        if (!dto.getMediaFiles().isEmpty()) {
+            productMediaService.addProductMedia(createdProductId, dto.getMediaFiles());
+        }
 
         if(!dto.getCategories().isEmpty()) addProductCategories(createdProductId,dto.getCategories());
 //        createProductSizeInformation(createdProductId, dto.getProductSizeInformation());

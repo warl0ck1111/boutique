@@ -25,8 +25,8 @@ public interface ProductMediaRepository extends JpaRepository<ProductMedia,Long>
     List<ProductResponseDto> findAllByProductId(@Param("productId") Long productId);
 
     @Modifying
-    @Query(value = "INSERT INTO product_image ( created_at, file_name, modified_at, product_id) VALUE(:createdAt, :fileName, :modifiedAt, :productId)", nativeQuery = true)
-    Integer addMediaFile(  @Param("createdAt") String createdAt, @Param("fileName") String fileName, @Param("modifiedAt") String modifiedAt, @Param("productId") Long productId);
+    @Query(value = "INSERT INTO product_image ( created_at, file_name,file_type, modified_at, product_id) VALUE(:createdAt, :fileName, :fileType, :modifiedAt, :productId)", nativeQuery = true)
+    Integer addMediaFile(  @Param("createdAt") String createdAt, @Param("fileName") String fileName,@Param("fileType") String fileType, @Param("modifiedAt") String modifiedAt, @Param("productId") Long productId);
 
     @Modifying
     @Query(value = "DELETE FROM product_image where product_id = :productId", nativeQuery = true)
