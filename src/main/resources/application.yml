@@ -62,6 +62,6 @@ com.aneeque:
   file:
     upload:
       format: pdf,jpg,png,zip,rar
-    directory: "aneeque/uploads/"
+    directory: "/opt/aneeque/uploads/"
 
 
