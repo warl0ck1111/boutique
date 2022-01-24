@@ -53,7 +53,7 @@ public class Product {
 
     private String materialCareInfo;
 
-    private String sellingPrice;
+    private Double sellingPrice;
 
     private String priceType;
 

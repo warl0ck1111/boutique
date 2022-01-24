@@ -8,6 +8,8 @@ services:
       dockerfile: Dockerfile              #docker file name
     ports:
       - 8789:8789
+    volumes:
+      - /opt/aneeque/uploads:/opt/aneeque/uploads
     restart: always
     network_mode: host
     depends_on:
