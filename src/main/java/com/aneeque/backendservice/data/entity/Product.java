@@ -53,7 +53,7 @@ public class Product {
 
     private String materialCareInfo;
 
-    private String sellingPrice;
+    private Double sellingPrice;
 
     private String priceType;
 
@@ -62,8 +62,6 @@ public class Product {
     private String saleDuration;
 
     private boolean trackInventory;
-
-    private String preferredVendor;
 
     private String unit;
 
