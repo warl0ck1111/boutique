@@ -3,6 +3,8 @@ package com.aneeque.backendservice.service;
 import com.aneeque.backendservice.data.entity.*;
 import com.aneeque.backendservice.data.repository.ProductRepository;
 import com.aneeque.backendservice.dto.request.*;
+import com.aneeque.backendservice.dto.response.FindAllProductResponse;
+import com.aneeque.backendservice.dto.response.FindAllProductResponseDto;
 import com.aneeque.backendservice.dto.response.FindProductResponse;
 import com.aneeque.backendservice.dto.response.ProductResponseDto;
 import com.aneeque.backendservice.data.entity.ProductTag;
@@ -13,7 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -126,7 +130,30 @@ public class ProductService {
         return productResponseDto;
     }
 
-    @Transactional
+    public Set<FindAllProductResponseDto> findAllProducts(int page, int size) {
+
+        List<FindAllProductResponse> allProducts = productRepository.findAllProduct(PageRequest.of(page-1, size));
+        Set<FindAllProductResponseDto> productDtoList = new HashSet<>();
+        allProducts.forEach(product -> {
+            log.info(String.format(""));
+            FindAllProductResponseDto productDto = new FindAllProductResponseDto();
+            BeanUtils.copyProperties(product, productDto);
+            productDtoList.add(productDto);
+        });
+
+        productDtoList.forEach(x->{
+            allProducts.forEach(y->{
+                if(Objects.equals(x.getProductId(), y.getProductId())){
+                    x.getMediaFiles().add(new ProductMediaDto(y.getFileName(), y.getFileType()));
+                    x.getTags().add(y.getTagName());
+                    x.getCategoryNames().add(y.getCategoryName());
+                }
+            });
+        });
+        return productDtoList;
+    }
+
+        @Transactional
     public void deleteProduct(Long productId) {
         productRepository.deleteProductById(productId);
         productMediaService.removeAllProductImagesByProductId(productId);
