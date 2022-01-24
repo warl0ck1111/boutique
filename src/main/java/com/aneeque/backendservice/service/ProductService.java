@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Okala Bashir .O.
@@ -130,7 +131,7 @@ public class ProductService {
         return productResponseDto;
     }
 
-    public Set<FindAllProductResponseDto> findAllProducts(int page, int size) {
+    public List<FindAllProductResponseDto> findAllProducts(int page, int size) {
 
         List<FindAllProductResponse> allProducts = productRepository.findAllProduct();
         Set<FindAllProductResponseDto> productDtoList = new HashSet<>();
@@ -149,7 +150,7 @@ public class ProductService {
                 }
             });
         });
-        return productDtoList;
+       return productDtoList.stream().sorted().collect(Collectors.toList());
     }
 
         @Transactional

@@ -11,6 +11,8 @@ public interface FindAllProductResponse {
     String getDescription();
     Long getCategoryId();
     String getCategoryName();
+    Integer getQuantity();
+    String getProductCode();
 
     Integer getStockValue();
     Double getCostPrice();

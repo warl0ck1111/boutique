@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-public class FindAllProductResponseDto {
+public class FindAllProductResponseDto implements Comparable<FindAllProductResponseDto> {
 
     private Long productId;
 
@@ -27,6 +27,10 @@ public class FindAllProductResponseDto {
 
     private Double costPrice;
 
+    private Integer quantity;
+
+    private String productCode;
+
     private Double price;
 
     private LocalDateTime createdAt;
@@ -37,4 +41,9 @@ public class FindAllProductResponseDto {
 
     private Set<ProductMediaDto> mediaFiles = new HashSet<>();
 
+    @Override
+    public int compareTo(FindAllProductResponseDto o) {
+
+        return o.productId.compareTo(this.getProductId());
+    }
 }

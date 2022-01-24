@@ -114,13 +114,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Integer removeProductCategories(@Param("productId") Long productId);
 
 
-    @Query(value = "SELECT p.id as productId, p.cost_price AS costPrice," +
-            "            p.name as name, p.price, p.description, p.stock_value as stockValue, p.created_at AS createdAt," +
-            "            p.selling_price as sellingPrice, pt.tag_name AS tagName, pc.category_id as categoryId, " +
-            "            c.name as categoryName, pm.file_name as fileName, pm.file_type as fileType " +
-            "            FROM product p left join product_tag pt on p.id = pt.product_id " +
-            "            left join product_categories pc on p.id = pc.product_id " +
-            "             left join category c on pc.category_id = c.id  left join product_media pm on p.id = pm.product_id " +
-            "             ", nativeQuery = true)
+    @Query(value = "SELECT p.id AS productId, p.cost_price AS costPrice," +
+            "            p.name AS name, p.price, p.description, p.stock_value AS stockValue, p.created_at AS createdAt," +
+            "            p.selling_price AS sellingPrice, pt.tag_name AS tagName, pc.category_id AS categoryId, " +
+            "            c.name AS categoryName, pm.file_name AS fileName, " +
+            "            pm.file_type AS fileType , p.quantity, p.product_code AS productCode" +
+            "            FROM product p left join product_tag pt ON p.id = pt.product_id " +
+            "            left join product_categories pc ON p.id = pc.product_id " +
+            "            left join category c ON pc.category_id = c.id  " +
+            "            left join product_media pm ON p.id = pm.product_id order by p.id desc ", nativeQuery = true)
     List<FindAllProductResponse> findAllProduct();
 }
