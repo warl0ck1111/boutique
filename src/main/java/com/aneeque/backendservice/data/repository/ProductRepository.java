@@ -1,8 +1,10 @@
 package com.aneeque.backendservice.data.repository;
 
 import com.aneeque.backendservice.data.entity.Product;
+import com.aneeque.backendservice.dto.response.FindAllProductResponse;
 import com.aneeque.backendservice.dto.response.FindProductResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -112,4 +114,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Integer removeProductCategories(@Param("productId") Long productId);
 
 
+    @Query(value = "SELECT p.id as productId, p.cost_price AS costPrice," +
+            "            p.name as name, p.price, p.description, p.stock_value as stockValue, p.created_at AS createdAt," +
+            "            p.selling_price as sellingPrice, pt.tag_name AS tagName, pc.category_id as categoryId, " +
+            "            c.name as categoryName, pm.file_name as fileName, pm.file_type as fileType " +
+            "            FROM product p left join product_tag pt on p.id = pt.product_id " +
+            "            left join product_categories pc on p.id = pc.product_id " +
+            "             left join category c on pc.category_id = c.id  left join product_media pm on p.id = pm.product_id " +
+            "             ", nativeQuery = true)
+    List<FindAllProductResponse> findAllProduct(Pageable pageable);
 }

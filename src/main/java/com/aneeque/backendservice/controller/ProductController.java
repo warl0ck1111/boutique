@@ -30,7 +30,7 @@ public class ProductController {
 
     @GetMapping(GET_ALL_PRODUCTS)
     private ResponseEntity<ApiResponse> getAllProducts(@RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(new ApiResponse(productService.getAllProducts(page, size)));
+        return ResponseEntity.ok(new ApiResponse(productService.findAllProducts(page, size)));
     }
 
     @GetMapping(SEARCH_PRODUCT_BY_NAME)
