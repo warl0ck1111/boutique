@@ -57,7 +57,6 @@ public class ProductCreateRequestDto {
 
     private Boolean trackInventory;
 
-    private String unit;
 
 
 //    List<ProductSizeInformationRequestDto> productSizeInformation = new ArrayList<>();
