@@ -122,5 +122,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "            left join product_categories pc on p.id = pc.product_id " +
             "             left join category c on pc.category_id = c.id  left join product_media pm on p.id = pm.product_id " +
             "             ", nativeQuery = true)
-    List<FindAllProductResponse> findAllProduct(Pageable pageable);
+    List<FindAllProductResponse> findAllProduct();
 }

@@ -132,10 +132,9 @@ public class ProductService {
 
     public Set<FindAllProductResponseDto> findAllProducts(int page, int size) {
 
-        List<FindAllProductResponse> allProducts = productRepository.findAllProduct(PageRequest.of(page-1, size));
+        List<FindAllProductResponse> allProducts = productRepository.findAllProduct();
         Set<FindAllProductResponseDto> productDtoList = new HashSet<>();
         allProducts.forEach(product -> {
-            log.info(String.format(""));
             FindAllProductResponseDto productDto = new FindAllProductResponseDto();
             BeanUtils.copyProperties(product, productDto);
             productDtoList.add(productDto);
@@ -143,7 +142,7 @@ public class ProductService {
 
         productDtoList.forEach(x->{
             allProducts.forEach(y->{
-                if(Objects.equals(x.getProductId(), y.getProductId())){
+                if(x.getProductId() == y.getProductId()){
                     x.getMediaFiles().add(new ProductMediaDto(y.getFileName(), y.getFileType()));
                     x.getTags().add(y.getTagName());
                     x.getCategoryNames().add(y.getCategoryName());
