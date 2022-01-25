@@ -1,8 +1,10 @@
 package com.aneeque.backendservice.service;
 
+import com.aneeque.backendservice.data.entity.Cart;
 import com.aneeque.backendservice.data.entity.Order;
 import com.aneeque.backendservice.data.repository.OrderRepository;
-import com.aneeque.backendservice.dto.request.OrderDto;
+import com.aneeque.backendservice.dto.request.*;
+import com.aneeque.backendservice.dto.response.CartResponseDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,65 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    CartService cartService;
+
+    @Autowired
+    ShippingAddressService shippingAddressService;
+
+    @Autowired
+    BillingAddressService billingAddressService;
+
+
+    @Transactional
+    public CheckoutDTO checkout(CheckoutDTO checkoutDTO) {
+
+        // get cart items
+        List<CartResponseDto> cartItems = cartService.getByUniqueId(checkoutDTO.getUniqueId());
+        //get total amount
+        Double sumTotalAmount = cartItems.stream().mapToDouble(CartResponseDto::getTotalAmount).sum();
+        // get shippingAddress info
+        ShippingAddressDto shippingAddressDto = null;
+        if(checkoutDTO.getShippingAddressDetail().getId() > 0){
+            shippingAddressDto = shippingAddressService.getById(checkoutDTO.getShippingAddressDetail().getId());
+        }else {
+            shippingAddressDto = shippingAddressService.save(checkoutDTO.getShippingAddressDetail());
+        }
+
+        // get billingAddress info
+        BillingAddressDto billingAddressDto = null;
+        if(checkoutDTO.getBillingAddressDetail().getId() > 0){
+            billingAddressDto = billingAddressService.getById(checkoutDTO.getBillingAddressDetail().getId());
+        }else {
+            billingAddressDto = billingAddressService.createBillingAddress(checkoutDTO.getBillingAddressDetail());
+        }
+        Long billingAddressId = billingAddressDto.getId();
+        Long shippingAddressId = shippingAddressDto.getId();
+
+
+        //Create order record and get the id = orderId
+        Order order = new Order();
+        BeanUtils.copyProperties(checkoutDTO, order);
+        order.setBillingAddressId(billingAddressId);
+        order.setShippingAddressId(shippingAddressId);
+        order.setStatus("PROCESSING");
+        Order savedOrder = orderRepository.save(order);
+        BeanUtils.copyProperties(savedOrder, checkoutDTO);
+
+        Long orderId = savedOrder.getId();
+
+        //Loop through cart items and create the order Items using the orderId
+        for(CartResponseDto item : cartItems){
+            CartCreateRequestDto cartCreateRequestDto = new CartCreateRequestDto();
+            cartCreateRequestDto.setQuantity(item.getQuantity());
+            cartCreateRequestDto.setProductId(item.getProductId());
+            cartCreateRequestDto.setUniqueId(item.getCartUniqueId());
+            cartCreateRequestDto.setOrderId(orderId);
+            cartService.save(cartCreateRequestDto);
+        }
+        return checkoutDTO;
+    }
 
     @Transactional
     public OrderDto save(OrderDto orderDto) {

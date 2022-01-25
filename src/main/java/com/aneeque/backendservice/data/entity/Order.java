@@ -30,6 +30,8 @@ public class Order {
     private String uniqueId;
     private String emailAddress;
     private String transactionRef;
+    private Long shippingAddressId;
+    private Long billingAddressId;
     private String status;
 
     @Column(updatable = false, nullable = false)

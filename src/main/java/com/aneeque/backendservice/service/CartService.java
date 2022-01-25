@@ -3,7 +3,6 @@ package com.aneeque.backendservice.service;
 import com.aneeque.backendservice.data.entity.Cart;
 import com.aneeque.backendservice.data.repository.CartRepository;
 import com.aneeque.backendservice.dto.request.CartCreateRequestDto;
-import com.aneeque.backendservice.dto.response.CartDtoInterface;
 import com.aneeque.backendservice.dto.response.CartResponseDto;
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
@@ -38,9 +37,9 @@ public class CartService {
     }
 
 
-    public CartDtoInterface getById(Long cartId) {
+    public CartResponseDto getById(Long cartId) {
         System.out.println(cartId);
-        CartDtoInterface cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new NoSuchElementException("cart not found"));
+        CartResponseDto cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new NoSuchElementException("cart not found"));
         System.out.println(cart);
         return cart;
     }
@@ -56,15 +55,15 @@ public class CartService {
         return cartResponseDto;
     }
 
-    public List<CartDtoInterface> getByCreatorId(Long creatorId) {
-        List<CartDtoInterface> cart = cartRepository.findByCreatorId(creatorId);
+    public List<CartResponseDto> getByCreatorId(Long creatorId) {
+        List<CartResponseDto> cart = cartRepository.findByCreatorId(creatorId);
         System.out.println(cart);
         return cart;
     }
 
 
-    public List<CartDtoInterface> getByUniqueId(String uniqueId) {
-        List<CartDtoInterface> cart = cartRepository.findByUniqueId(uniqueId);
+    public List<CartResponseDto> getByUniqueId(String uniqueId) {
+        List<CartResponseDto> cart = cartRepository.findByUniqueId(uniqueId);
         System.out.println(cart);
         return cart;
     }

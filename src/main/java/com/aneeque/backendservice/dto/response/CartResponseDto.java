@@ -11,8 +11,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CartResponseDto {
 
+    private Long cartId;
     private Long productId;
     private Long creatorId;
     private Long quantity;
-    private String uniqueId;
+    private String cartUniqueId;
+    private String cartCreatedAt;
+    private int cartQuantity;
+    private String productDescription;
+    private String productName;
+    private Double productPrice;
+
+    public Double getTotalAmount() {
+        return this.cartQuantity * this.productPrice;
+    }
 }
