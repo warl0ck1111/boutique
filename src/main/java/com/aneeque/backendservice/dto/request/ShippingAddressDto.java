@@ -13,13 +13,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ShippingAddressDto {
 
-    @JsonProperty("shippingAddressId")
+//    @JsonProperty("shippingAddressId")
     private Long id;
     private String firstName;
     private String lastName;
     private String emailAddress;
     private String mobileNumber;
+    private String state;
     private String city;
+    private String postCode;
+    private String address;
     private String country;
     private String landMark;
 }

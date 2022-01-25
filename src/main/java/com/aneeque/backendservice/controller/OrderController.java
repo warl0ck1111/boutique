@@ -1,5 +1,6 @@
 package com.aneeque.backendservice.controller;
 
+import com.aneeque.backendservice.dto.request.CheckoutDTO;
 import com.aneeque.backendservice.dto.request.OrderDto;
 import com.aneeque.backendservice.dto.response.ApiResponse;
 import com.aneeque.backendservice.service.OrderService;
@@ -38,6 +39,11 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<ApiResponse> createOrder(@RequestBody OrderDto orderDto) {
         return ResponseEntity.ok(new ApiResponse("order created successfully", orderService.save(orderDto)));
+    }
+
+    @PostMapping("checkout")
+    public ResponseEntity<ApiResponse> createOrder(@RequestBody CheckoutDTO checkoutDTO) {
+        return ResponseEntity.ok(new ApiResponse("order created successfully", orderService.checkout(checkoutDTO)));
     }
 
     @PutMapping("{orderId}")

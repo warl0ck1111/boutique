@@ -28,6 +28,7 @@ public class Cart {
     private Long productId;
     private Long creatorId;
     private Long quantity;
+    private Long orderId;
     private String uniqueId;
 
     @Column(updatable = false, nullable = false)

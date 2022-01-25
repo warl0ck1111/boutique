@@ -14,25 +14,29 @@ import javax.validation.constraints.NotNull;
 @Slf4j
 public class BillingAddressDto {
 
-    @NotBlank(message = "first name can not be blank" )
-    @NotNull(message = "first name can not be empty")
+    private Long id;
+//    @NotBlank(message = "first name can not be blank" )
+//    @NotNull(message = "first name can not be empty")
     private String firstName;
 
-    @NotBlank(message = "last name can not be blank" )
-    @NotNull(message = "last name can not be empty")
+//    @NotBlank(message = "last name can not be blank" )
+//    @NotNull(message = "last name can not be empty")
     private String lastName;
 
-    @NotBlank(message = "email Address can not be blank" )
-    @NotNull(message = "email Address can not be empty")
+//    @NotBlank(message = "email Address can not be blank" )
+//    @NotNull(message = "email Address can not be empty")
     private String emailAddress;
 
-    @NotBlank(message = "mobile Number can not be blank" )
-    @NotNull(message = "mobile Number can not be empty")
+//    @NotBlank(message = "mobile Number can not be blank" )
+//    @NotNull(message = "mobile Number can not be empty")
     private String mobileNumber;
 
-    @NotBlank(message = "city can not be blank" )
-    @NotNull(message = "city name can not be empty")
+//    @NotBlank(message = "city can not be blank" )
+//    @NotNull(message = "city name can not be empty")
     private String city;
+    private String state;
+    private String postCode;
+    private String address;
 
 
     @NotBlank(message = "country can not be blank" )

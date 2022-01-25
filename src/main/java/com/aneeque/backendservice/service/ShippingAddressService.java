@@ -3,16 +3,19 @@ package com.aneeque.backendservice.service;
 import com.aneeque.backendservice.data.entity.ShippingAddress;
 import com.aneeque.backendservice.data.repository.ShippingAddressRepository;
 import com.aneeque.backendservice.dto.request.ShippingAddressDto;
+import com.aneeque.backendservice.exception.ApiRequestException;
 import com.aneeque.backendservice.util.CrudService;
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * @author Okala Bashir .O.
@@ -38,7 +41,14 @@ public class ShippingAddressService implements CrudService<ShippingAddress, Ship
 
     @Override
     public ShippingAddressDto getById(Long id) {
-        return null;
+
+        ShippingAddress shippingAddress = shippingAddressRepository.getById(id);
+        if(Objects.isNull(shippingAddress)){
+            throw new ApiRequestException("Shipping address data does not exist", HttpStatus.BAD_REQUEST);
+        }
+        ShippingAddressDto response = new ShippingAddressDto();
+        BeanUtils.copyProperties(shippingAddress, response);
+        return response;
     }
 
     @Transactional

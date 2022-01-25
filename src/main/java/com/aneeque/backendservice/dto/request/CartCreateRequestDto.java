@@ -14,5 +14,6 @@ public class CartCreateRequestDto {
     private Long productId;
     private Long creatorId;
     private Long quantity;
+    private Long orderId;
     private String uniqueId;
 }
