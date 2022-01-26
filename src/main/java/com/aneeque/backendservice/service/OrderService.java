@@ -5,15 +5,13 @@ import com.aneeque.backendservice.data.entity.Order;
 import com.aneeque.backendservice.data.repository.OrderRepository;
 import com.aneeque.backendservice.dto.request.*;
 import com.aneeque.backendservice.dto.response.CartResponseDto;
+import com.aneeque.backendservice.dto.response.OrderResponseDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Okala Bashir .O.
@@ -44,7 +42,7 @@ public class OrderService {
         //Double sumTotalAmount = cartItems.stream().mapToDouble(CartResponseDto::getTotalAmount).sum();
         // get shippingAddress info
         ShippingAddressDto shippingAddressDto = null;
-        if(checkoutDTO.getShippingAddressDetail().getId() != null && checkoutDTO.getShippingAddressDetail().getId() > 0){
+        if(Objects.nonNull(checkoutDTO.getShippingAddressDetail()) && checkoutDTO.getShippingAddressDetail().getId() != null && checkoutDTO.getShippingAddressDetail().getId() > 0){
             shippingAddressDto = shippingAddressService.getById(checkoutDTO.getShippingAddressDetail().getId());
         }else {
             shippingAddressDto = shippingAddressService.save(checkoutDTO.getShippingAddressDetail());
@@ -52,7 +50,7 @@ public class OrderService {
 
         // get billingAddress info
         BillingAddressDto billingAddressDto = null;
-        if(checkoutDTO.getBillingAddressDetail().getId()!= null && checkoutDTO.getBillingAddressDetail().getId() > 0){
+        if(Objects.nonNull(checkoutDTO.getBillingAddressDetail()) && checkoutDTO.getBillingAddressDetail().getId()!= null && checkoutDTO.getBillingAddressDetail().getId() > 0){
             billingAddressDto = billingAddressService.getById(checkoutDTO.getBillingAddressDetail().getId());
         }else {
             billingAddressDto = billingAddressService.createBillingAddress(checkoutDTO.getBillingAddressDetail());
@@ -67,6 +65,10 @@ public class OrderService {
         order.setBillingAddressId(billingAddressId);
         order.setShippingAddressId(shippingAddressId);
         order.setStatus("PROCESSING");
+        order.setItemCount(cartItems.size());
+        order.setUniqueId(checkoutDTO.getUniqueId());
+        order.setPaymentMethod(checkoutDTO.getPaymentMethod());
+        order.setEmailAddress(checkoutDTO.getEmailAddress());
         Order savedOrder = orderRepository.save(order);
         BeanUtils.copyProperties(savedOrder, checkoutDTO);
 
@@ -129,15 +131,10 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    public List<OrderDto> getAllOrders(){
-        List<Order> orders = orderRepository.findAll();
-        List<OrderDto> orderDtoList = new ArrayList<>();
-        orders.forEach(order -> {
-            OrderDto orderDto = new OrderDto();
-            BeanUtils.copyProperties(order,orderDto);
-            orderDtoList.add(orderDto);
-        });
-        return orderDtoList;
+    public List<OrderResponseDTO> getAllOrders(){
+        List<OrderResponseDTO> orders = orderRepository.getAllOrders();
+
+        return orders;
     }
 
 
