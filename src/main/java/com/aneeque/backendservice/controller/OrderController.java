@@ -42,7 +42,7 @@ public class OrderController {
     }
 
     @PostMapping("checkout")
-    public ResponseEntity<ApiResponse> createOrder(@RequestBody CheckoutDTO checkoutDTO) {
+    public ResponseEntity<ApiResponse> checkout(@RequestBody CheckoutDTO checkoutDTO) {
         return ResponseEntity.ok(new ApiResponse("order created successfully", orderService.checkout(checkoutDTO)));
     }
 

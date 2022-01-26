@@ -33,6 +33,7 @@ public class Order {
     private Long shippingAddressId;
     private Long billingAddressId;
     private String status;
+    private int itemCount;
 
     @Column(updatable = false, nullable = false)
     @CreationTimestamp
