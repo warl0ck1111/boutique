@@ -40,7 +40,7 @@ public class OrderService {
         // get cart items
         List<CartResponseDto> cartItems = cartService.getByUniqueId(checkoutDTO.getUniqueId());
         //get total amount
-        Double sumTotalAmount = cartItems.stream().mapToDouble(CartResponseDto::getTotalAmount).sum();
+        //Double sumTotalAmount = cartItems.stream().mapToDouble(CartResponseDto::getTotalAmount).sum();
         // get shippingAddress info
         ShippingAddressDto shippingAddressDto = null;
         if(checkoutDTO.getShippingAddressDetail().getId() > 0){
