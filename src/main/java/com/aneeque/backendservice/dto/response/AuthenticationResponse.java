@@ -21,6 +21,7 @@ public class AuthenticationResponse {
     private String firstName;
     private String lastName;
     private LocalDateTime lastLogin;
+    private String emailAddress;
 
 
 }

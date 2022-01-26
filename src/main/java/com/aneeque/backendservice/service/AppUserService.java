@@ -106,7 +106,7 @@ public class AppUserService implements UserDetailsService {
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
         return new AuthenticationResponse(jwt, appUser.getRole().getName(), appUser.getAllUserPrivileges(),
-                appUser.getId().toString(), appUser.getFirstName(), appUser.getLastName(), lastLogin);
+                appUser.getId().toString(), appUser.getFirstName(), appUser.getLastName(), lastLogin, appUser.getEmailAddress());
 
     }
 
@@ -136,8 +136,11 @@ public class AppUserService implements UserDetailsService {
 
         if (userPhoneNoExists) throw new ApiRequestException("mobile number already taken", HttpStatus.BAD_REQUEST);
 
-        Role role = roleService.findRoleById(request.getRoleId());
+        Role role = roleService.findRoleByIdOnly(request.getRoleId());
 
+        if(Objects.isNull(role)){
+            throw new ApiRequestException("Role does not exist", HttpStatus.BAD_REQUEST);
+        }
 
         AppUser appUser = new AppUser();
         BeanUtils.copyProperties(request, appUser);
@@ -166,7 +169,7 @@ public class AppUserService implements UserDetailsService {
 
         final String jwt = jwtTokenUtil.generateToken(appUser);
         return new AuthenticationResponse(jwt, newUser.getRole().getName(), newUser.getAllUserPrivileges(),
-                appUser.getId().toString(), newUser.getFirstName(), newUser.getLastName(), newUser.getLastLogin());
+                appUser.getId().toString(), newUser.getFirstName(), newUser.getLastName(), newUser.getLastLogin(), newUser.getEmailAddress());
     }
 
     @Transactional

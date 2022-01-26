@@ -80,7 +80,7 @@ public class TokenService {
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
-        return new AuthenticationResponse(jwt, appUser.getRole().getName(), appUser.getAllUserPrivileges(), appUser.getId().toString(), appUser.getFirstName(), appUser.getLastName(), appUser.getLastLogin());
+        return new AuthenticationResponse(jwt, appUser.getRole().getName(), appUser.getAllUserPrivileges(), appUser.getId().toString(), appUser.getFirstName(), appUser.getLastName(), appUser.getLastLogin(), appUser.getEmailAddress());
     }
 
     public String generateToken(int tokenLength) {
