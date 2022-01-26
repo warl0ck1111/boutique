@@ -6,6 +6,7 @@ import com.aneeque.backendservice.data.repository.OrderRepository;
 import com.aneeque.backendservice.dto.request.*;
 import com.aneeque.backendservice.dto.response.CartResponseDto;
 import com.aneeque.backendservice.dto.response.OrderResponseDTO;
+import com.aneeque.backendservice.dto.response.OrderResponseDtoInterface;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -131,8 +132,8 @@ public class OrderService {
         orderRepository.deleteById(orderId);
     }
 
-    public List<OrderResponseDTO> getAllOrders(){
-        List<OrderResponseDTO> orders = orderRepository.getAllOrders();
+    public List<OrderResponseDtoInterface> getAllOrders(){
+        List<OrderResponseDtoInterface> orders = orderRepository.getAllOrders();
 
         return orders;
     }

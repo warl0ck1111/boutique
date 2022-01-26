@@ -3,6 +3,7 @@ package com.aneeque.backendservice.data.repository;
 import com.aneeque.backendservice.data.entity.Order;
 import com.aneeque.backendservice.dto.response.OrderItemResponseDto;
 import com.aneeque.backendservice.dto.response.OrderResponseDTO;
+import com.aneeque.backendservice.dto.response.OrderResponseDtoInterface;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,9 +24,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findByEmailAddress(String emailAddress);
 
-    @Query(value = "select o.*, concat(au.first_name, ' ', au.last_name) as customerName from order o " +
+    @Query(value = "select o.id, o.unique_id as uniqueId, o.created_at as createdAt, o.email_address as emailAddress, " +
+            "o.delivery_method as deliveryMethod, o.payment_method as paymentMethod, o.status, o.total_amount as totalAmount, " +
+            "o.transaction_ref as transactionRef, concat(au.first_name, ' ', au.last_name) as customerName from orders o " +
             " left join app_user au on au.email_address = o.email_address ", nativeQuery = true)
-    List<OrderResponseDTO> getAllOrders();
+    List<OrderResponseDtoInterface> getAllOrders();
 
 
 }
