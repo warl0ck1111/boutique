@@ -30,6 +30,9 @@ public class ShippingAddress {
     private String city;
     private String country;
     private String landMark;
+    private String state;
+    private String postCode;
+    private String address;
 
     @Column(updatable = false, nullable = false)
     @CreationTimestamp

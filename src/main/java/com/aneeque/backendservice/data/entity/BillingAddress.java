@@ -28,6 +28,9 @@ public class BillingAddress {
     private String mobileNumber;
     private String city;
     private String country;
+    private String state;
+    private String postCode;
+    private String address;
 
     @Column(updatable = false, nullable = false)
     @CreationTimestamp
