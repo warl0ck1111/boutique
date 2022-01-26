@@ -1,6 +1,7 @@
 package com.aneeque.backendservice.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class CartResponseDto {
 
-    @JsonIgnore
+@JsonProperty("cartId")
     private Long id;
     private Long productId;
     private Long creatorId;
