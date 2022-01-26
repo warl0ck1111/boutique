@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 /**
  * @author Okala Bashir .O.
@@ -38,7 +39,7 @@ public class OrderService {
     public CheckoutDTO checkout(CheckoutDTO checkoutDTO) {
 
         // get cart items
-        List<Cart> cartItems = cartService.getByUniqueId(checkoutDTO.getUniqueId());
+        Set<CartResponseDto> cartItems = cartService.getByUniqueId(checkoutDTO.getUniqueId());
         //get total amount
         //Double sumTotalAmount = cartItems.stream().mapToDouble(CartResponseDto::getTotalAmount).sum();
         // get shippingAddress info
@@ -72,7 +73,7 @@ public class OrderService {
         Long orderId = savedOrder.getId();
 
         //Loop through cart items and create the order Items using the orderId
-        for(Cart item : cartItems){
+        for(CartResponseDto item : cartItems){
             CartCreateRequestDto cartCreateRequestDto = new CartCreateRequestDto();
             cartCreateRequestDto.setQuantity(item.getQuantity());
             cartCreateRequestDto.setProductId(item.getProductId());

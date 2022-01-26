@@ -4,14 +4,14 @@ import com.aneeque.backendservice.data.entity.Cart;
 import com.aneeque.backendservice.data.repository.CartRepository;
 import com.aneeque.backendservice.dto.request.CartCreateRequestDto;
 import com.aneeque.backendservice.dto.response.CartResponseDto;
+import com.aneeque.backendservice.dto.response.CartResponseInterfaceDto;
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * @author Okala Bashir .O.
@@ -25,47 +25,70 @@ public class CartService {
     private CartRepository cartRepository;
 
     @Transactional
-    public CartResponseDto save(CartCreateRequestDto createRequestDto) {
+    public String save(CartCreateRequestDto createRequestDto) {
         Cart cart = new Cart();
         BeanUtils.copyProperties(createRequestDto, cart);
-        Cart savedCart = cartRepository.save(cart);
-
-        CartResponseDto cartResponseDto = new CartResponseDto();
-        BeanUtils.copyProperties(savedCart, cartResponseDto);
-
-        return cartResponseDto;
+        cartRepository.save(cart);
+        return "cart created successfully";
     }
 
 
-    public CartResponseDto getById(Long cartId) {
+    public CartResponseInterfaceDto getById(Long cartId) {
         System.out.println(cartId);
-        CartResponseDto cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new NoSuchElementException("cart not found"));
+        CartResponseInterfaceDto cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new NoSuchElementException("cart not found"));
         System.out.println(cart);
         return cart;
     }
 
 
     @Transactional
-    public CartResponseDto updateQuantity(Long id,Long quantity) {
+    public String updateQuantity(Long id,Long quantity) {
         Cart cart = cartRepository.findById(id).orElseThrow(()-> new NoSuchElementException("cart not found"));
         cart.setQuantity(quantity);
-        Cart updatedCart = cartRepository.save(cart);
-        CartResponseDto cartResponseDto = new CartResponseDto();
-        BeanUtils.copyProperties(updatedCart, cartResponseDto);
-        return cartResponseDto;
+        cartRepository.save(cart);
+        return "cart quantity updated successfully";
     }
 
-    public List<CartResponseDto> getByCreatorId(Long creatorId) {
-        List<CartResponseDto> cart = cartRepository.findByCreatorId(creatorId);
-        System.out.println(cart);
-        return cart;
+    public Set<CartResponseDto> getByCreatorId(Long creatorId) {
+        List<CartResponseInterfaceDto> cartResponseInterfaceDtoList = cartRepository.findByCreatorId(creatorId);
+        Set<CartResponseDto> cartResponseDtoList= new HashSet<>();
+        cartResponseInterfaceDtoList.forEach(x->{
+            CartResponseDto cartResponseDto = new CartResponseDto();
+            BeanUtils.copyProperties(x,cartResponseDto);
+            cartResponseDtoList.add(cartResponseDto);
+        });
+
+        //mapping list of file names
+        cartResponseDtoList.forEach(x->{
+            cartResponseInterfaceDtoList.forEach(y->{
+                if(x.getUniqueId() == y.getUniqueId()){
+                    x.getFileNames().add(y.getFileName());
+                }
+            });
+        });
+        return cartResponseDtoList;
     }
 
 
-    public List<Cart> getByUniqueId(String uniqueId) {
-        List<Cart> cart = cartRepository.findByUniqueId(uniqueId);
-        System.out.println(cart);
-        return cart;
+    public Set<CartResponseDto> getByUniqueId(String uniqueId) {
+        List<CartResponseInterfaceDto> cartResponseInterfaceDtoList = cartRepository.findByUniqueId(uniqueId);
+        Set<CartResponseDto> cartResponseDtoList= new HashSet<>();
+
+        cartResponseInterfaceDtoList.forEach(x->{
+            CartResponseDto cartResponseDto = new CartResponseDto();
+            BeanUtils.copyProperties(x,cartResponseDto);
+            cartResponseDtoList.add(cartResponseDto);
+        });
+
+        //mapping list of file names
+        cartResponseDtoList.forEach(x->{
+            cartResponseInterfaceDtoList.forEach(y->{
+                if(x.getUniqueId() == y.getUniqueId()){
+                    x.getFileNames().add(y.getFileName());
+                }
+            });
+        });
+        return cartResponseDtoList;
     }
 
 
