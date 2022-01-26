@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public interface CartResponseInterfaceDto {
 
     Long getId();
+    Long cartId();
     Long getProductId();
     Long getCreatorId();
     Long getQuantity();
