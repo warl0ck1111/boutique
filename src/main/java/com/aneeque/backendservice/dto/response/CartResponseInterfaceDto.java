@@ -1,5 +1,6 @@
 package com.aneeque.backendservice.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
