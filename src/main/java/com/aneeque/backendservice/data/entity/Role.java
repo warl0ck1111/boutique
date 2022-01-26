@@ -22,8 +22,10 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {"name"})})
 @DynamicUpdate
 public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -97,6 +97,12 @@ public class RoleService {
         return role;
     }
 
+    public Role findRoleByIdOnly(Long roleId) {
+        if (roleId < 1) throw new IllegalArgumentException("invalid role id");
+        Role role = roleRepository.findById(roleId).orElseThrow(() -> new RoleNotFoundException("no role found"));
+        return role;
+    }
+
     private RoleNoOfUsers countNoOfUsersARoleHas(Long roleId) {
         return roleRepository.countNoOfUsersRoleHas(roleId).orElseThrow(() -> new IllegalArgumentException("invalid role id"));
     }
