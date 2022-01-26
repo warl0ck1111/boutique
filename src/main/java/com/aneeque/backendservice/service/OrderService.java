@@ -44,7 +44,7 @@ public class OrderService {
         //Double sumTotalAmount = cartItems.stream().mapToDouble(CartResponseDto::getTotalAmount).sum();
         // get shippingAddress info
         ShippingAddressDto shippingAddressDto = null;
-        if(checkoutDTO.getShippingAddressDetail().getId() > 0){
+        if(checkoutDTO.getShippingAddressDetail().getId() != null && checkoutDTO.getShippingAddressDetail().getId() > 0){
             shippingAddressDto = shippingAddressService.getById(checkoutDTO.getShippingAddressDetail().getId());
         }else {
             shippingAddressDto = shippingAddressService.save(checkoutDTO.getShippingAddressDetail());
@@ -52,7 +52,7 @@ public class OrderService {
 
         // get billingAddress info
         BillingAddressDto billingAddressDto = null;
-        if(checkoutDTO.getBillingAddressDetail().getId() > 0){
+        if(checkoutDTO.getBillingAddressDetail().getId()!= null && checkoutDTO.getBillingAddressDetail().getId() > 0){
             billingAddressDto = billingAddressService.getById(checkoutDTO.getBillingAddressDetail().getId());
         }else {
             billingAddressDto = billingAddressService.createBillingAddress(checkoutDTO.getBillingAddressDetail());
