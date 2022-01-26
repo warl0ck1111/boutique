@@ -41,5 +41,11 @@ public class Cart {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME, pattern = "yyyy-MM-dd h:m:s")
     private LocalDateTime modifiedAt;
 
+    @Transient
+    private String productDescription;
+    @Transient
+    private String productName;
+    @Transient
+    private Double productPrice;
 
 }

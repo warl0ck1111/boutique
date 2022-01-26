@@ -27,12 +27,11 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     List<CartResponseDto> findByCreatorId(@Param("creatorId") Long creatorId);
 
 
-    @Query(value = "select c.id as cartId, c.created_at as cartCreatedAt, c.quantity as cartQuantity, " +
-            "c.unique_id as cartUniqueId, p.description as productDescription, p.name as productName, " +
+    @Query(value = "select c.*, p.description as productDescription, p.name as productName, " +
             "p.price as productPrice " +
             "from cart c left join product p on c.product_id = p.id " +
             "where c.unique_id = :uniqueId", nativeQuery = true)
-    List<CartResponseDto> findByUniqueId(@Param("uniqueId") String uniqueId);
+    List<Cart> findByUniqueId(@Param("uniqueId") String uniqueId);
 
     @Query(value = "select c.id as cartId, c.created_at as cartCreatedAt, c.quantity as cartQuantity, " +
             "c.unique_id as cartUniqueId, p.description as productDescription, p.name as productName, " +
