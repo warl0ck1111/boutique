@@ -22,7 +22,7 @@ public class CartResponseDto {
     private String productName;
     private Double productPrice;
 
-    public Double getTotalAmount() {
-        return this.cartQuantity * this.productPrice;
-    }
+//    public Double getTotalAmount() {
+//        return this.cartQuantity * this.productPrice;
+//    }
 }
