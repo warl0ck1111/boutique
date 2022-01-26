@@ -31,6 +31,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             "from cart c  left join product p on c.product_id = p.id left join product_media pm on (p.id = pm.product_id and pm.file_type = 'IMAGE') where c.unique_id = :uniqueId ", nativeQuery = true)
     List<CartResponseInterfaceDto> findByUniqueId(@Param("uniqueId") String uniqueId);
 
+
     @Query(value = "select c.id as id, c.created_at as cartCreatedAt, c.quantity as cartQuantity, " +
             "c.unique_id as cartUniqueId, p.description as productDescription, p.name as productName, " +
             "p.price as productPrice, au.first_name as creatorFirstName,au.last_name as creatorLastName " +
