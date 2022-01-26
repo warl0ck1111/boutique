@@ -22,7 +22,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
     @Query(value = "select p.description as productDescription, p.name as productName, p.price as productPrice, " +
             "c.product_id as productId, c.quantity, c.unique_id as uniqueId, c.creator_id as creatorId, pm.file_name as fileName "+
-            "from cart c  left join product p on c.product_id = p.id left join product_media pm on (p.id = pm.product_id and pm.file_type = 'IMAGE') where c.unique_id = :uniqueId ", nativeQuery = true)
+            "from cart c  left join product p on c.product_id = p.id left join product_media pm on (p.id = pm.product_id and pm.file_type = 'IMAGE') where c.creator_id = :creatorId ", nativeQuery = true)
     List<CartResponseInterfaceDto> findByCreatorId(@Param("creatorId") Long creatorId);
 
 
