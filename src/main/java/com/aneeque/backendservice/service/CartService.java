@@ -77,7 +77,7 @@ public class CartService {
         cartResponseInterfaceDtoList.forEach(x->{
             CartResponseDto cartResponseDto = new CartResponseDto();
             BeanUtils.copyProperties(x,cartResponseDto);
-            cartResponseDto.setId(x.cartId());
+            cartResponseDto.setId(x.getCartId());
             cartResponseDtoList.add(cartResponseDto);
         });
 
