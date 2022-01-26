@@ -15,7 +15,7 @@ import javax.validation.Valid;
  * @author Okala Bashir .O.
  */
 @RestController
-@RequestMapping("/api/v1/cart/")
+@RequestMapping("/api/v1/cart")
 public class CartController {
 
 
@@ -37,7 +37,7 @@ public class CartController {
 
     @PostMapping(CREATE_CART)
     public ResponseEntity<ApiResponse> createCart(@Valid @RequestBody CartCreateRequestDto createRequestDto) {
-        return ResponseEntity.ok(new ApiResponse("cart created successfully", cartService.save(createRequestDto)));
+        return ResponseEntity.ok(new ApiResponse(cartService.save(createRequestDto)));
     }
 
     @PutMapping(UPDATE_CART_QUANTITY)

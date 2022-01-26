@@ -1,7 +1,11 @@
 package com.aneeque.backendservice.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Okala Bashir .O.
@@ -11,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CartResponseDto {
 
+    @JsonIgnore
     private Long id;
     private Long productId;
     private Long creatorId;
@@ -20,6 +25,8 @@ public class CartResponseDto {
     private String productDescription;
     private String productName;
     private Double productPrice;
+    private Set<String> fileNames = new HashSet<>();
+
 
 //    public Double getTotalAmount() {
 //        return this.cartQuantity * this.productPrice;
