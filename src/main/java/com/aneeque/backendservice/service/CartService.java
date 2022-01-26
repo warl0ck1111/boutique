@@ -62,8 +62,8 @@ public class CartService {
     }
 
 
-    public List<CartResponseDto> getByUniqueId(String uniqueId) {
-        List<CartResponseDto> cart = cartRepository.findByUniqueId(uniqueId);
+    public List<Cart> getByUniqueId(String uniqueId) {
+        List<Cart> cart = cartRepository.findByUniqueId(uniqueId);
         System.out.println(cart);
         return cart;
     }

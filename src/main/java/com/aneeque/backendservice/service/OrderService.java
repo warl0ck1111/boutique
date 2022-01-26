@@ -38,7 +38,7 @@ public class OrderService {
     public CheckoutDTO checkout(CheckoutDTO checkoutDTO) {
 
         // get cart items
-        List<CartResponseDto> cartItems = cartService.getByUniqueId(checkoutDTO.getUniqueId());
+        List<Cart> cartItems = cartService.getByUniqueId(checkoutDTO.getUniqueId());
         //get total amount
         //Double sumTotalAmount = cartItems.stream().mapToDouble(CartResponseDto::getTotalAmount).sum();
         // get shippingAddress info
@@ -72,11 +72,11 @@ public class OrderService {
         Long orderId = savedOrder.getId();
 
         //Loop through cart items and create the order Items using the orderId
-        for(CartResponseDto item : cartItems){
+        for(Cart item : cartItems){
             CartCreateRequestDto cartCreateRequestDto = new CartCreateRequestDto();
             cartCreateRequestDto.setQuantity(item.getQuantity());
             cartCreateRequestDto.setProductId(item.getProductId());
-            cartCreateRequestDto.setUniqueId(item.getCartUniqueId());
+            cartCreateRequestDto.setUniqueId(item.getUniqueId());
             cartCreateRequestDto.setOrderId(orderId);
             cartService.save(cartCreateRequestDto);
         }
