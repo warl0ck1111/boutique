@@ -1,15 +1,15 @@
 package com.aneeque.backendservice.config;
 
 
-import com.aneeque.backendservice.appuser.AppUserRole;
-import com.aneeque.backendservice.appuser.AppUserService;
-import com.aneeque.backendservice.privilege.Privilege;
-import com.aneeque.backendservice.privilege.PrivilegeRepository;
-import com.aneeque.backendservice.privilege.PrivilegeService;
-import com.aneeque.backendservice.privilege.UserPrivilege;
-import com.aneeque.backendservice.role.Role;
-import com.aneeque.backendservice.role.RoleRepository;
-import com.aneeque.backendservice.role.RoleService;
+import com.aneeque.backendservice.dto.request.RegistrationRequest;
+import com.aneeque.backendservice.enums.AppUserRole;
+import com.aneeque.backendservice.service.AppUserService;
+import com.aneeque.backendservice.data.entity.Privilege;
+import com.aneeque.backendservice.service.PrivilegeService;
+import com.aneeque.backendservice.enums.UserPrivilege;
+import com.aneeque.backendservice.data.entity.Role;
+import com.aneeque.backendservice.data.repository.RoleRepository;
+import com.aneeque.backendservice.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -19,64 +19,86 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 @Slf4j
-@Component
+//@Component
 public class ApplicationConfig implements ApplicationListener<ContextRefreshedEvent> {
 
-    @Autowired
-    private RoleService roleService;
+//    @Autowired
+//    private RoleService roleService;
+//
+//    @Autowired
+//    private AppUserService appUserService;
+//
+//    @Autowired
+//    private RoleRepository roleRepository;
+//
+//    @Autowired
+//    private PrivilegeService privilegeService;
+//
+//    private boolean databaseAlreadyConfigured = false;
 
-    @Autowired
-    private AppUserService appUserService;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PrivilegeService privilegeService;
-
-    private boolean databaseAlreadyConfigured = false;
-
-
-    @Transactional
-    @Override
+//    @Transactional
+//    @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         log.info("onApplicationEvent");
-        List<Role> roleList = getRoles();
-        for (Role r : roleList) {
-            System.out.println(r.getName());
-        }
-        if (roleList.size() != 0) databaseAlreadyConfigured = true;
-
-        if (!databaseAlreadyConfigured) {
-
-
-            //create new role records
-            log.info("database not configured");
-            log.info("setting up database");
-            List<Role> roles = new ArrayList<>();
-            for (AppUserRole role : AppUserRole.values()) {
-                roles.add(new Role(role.name()));
-            }
-            roleService.getRoleRepository().saveAll(roles);
-
-            List<Privilege> privileges = new ArrayList<>();
-            for (UserPrivilege privilege : UserPrivilege.values()) {
-                privileges.add(new Privilege(privilege.name(), "Description", "USER_MGNT_MODULE"));
-            }
-            privilegeService.getPrivilegeRepository().saveAll(privileges);
-
-        } else
-            log.info("database is configured");
+//        List<Role> roleList = getRoles();
+//
+//        if (roleList.size() >4)
+//            databaseAlreadyConfigured = true;
+//
+//        if (!databaseAlreadyConfigured) {
+//
+//
+//            //create new role records
+//            log.info("database not configured");
+//            log.info("setting up roles and privileges in the database");
+//            privilegeService.getPrivilegeRepository().deleteAll();
+//            roleRepository.deleteAll();
+//            List<Role> roles = new ArrayList<>();
+//            for (AppUserRole role : AppUserRole.values()) {
+//                Role roleInDb = roleService.findRoleByName(role.name());
+//                if(Objects.isNull(roleInDb))
+//                    roles.add(new Role(role.name()));
+//            }
+//            if(roles.size() > 0)
+//                roleService.getRoleRepository().saveAll(roles);
+//
+//            List<Privilege> privileges = new ArrayList<>();
+//            for (UserPrivilege privilege : UserPrivilege.values()) {
+//                if(privilegeService.getPrivilegeRepository().findByName(privilege.toString().toUpperCase().trim()).isEmpty())
+//                    privileges.add(new Privilege(privilege.toString().toUpperCase().trim(), privilege.description, privilege.module));
+//            }
+//            if(privileges.size() > 0) {
+//                privilegeService.getPrivilegeRepository().saveAll(privileges);
+//            }
+//            if(Objects.isNull(appUserService.findUserByEmail("superadmin@aneeque.com"))){
+//                Role roleInDb = roleService.findRoleByName(AppUserRole.SUPER_ADMIN.name());
+//                if(Objects.nonNull(roleInDb)){
+//                    appUserService.signUp(new RegistrationRequest("Super", "Admin", "superadmin@aneeque.com", "07068693731","password", "password", roleInDb.getId()));
+//                }
+//
+//            }
+//                 if(Objects.isNull(appUserService.findUserByEmail("aneequeadmin@aneeque.com"))){
+//                     Role roleInDb = roleService.findRoleByName(AppUserRole.ANEEQUE_ADMIN.name());
+//                     if(Objects.nonNull(roleInDb)){
+//                         appUserService.signUp(new RegistrationRequest("Aneeque", "Admin", "aneequeadmin@aneeque.com", "07068693731","password", "password", roleInDb.getId()));
+//                     }
+//                 }
+//
+//        } else
+//            log.info("database is configured");
 
 
     }
 
-    public List<Role> getRoles() {
-        return roleService.findAllRoles();
 
-    }
+//    public List<Role> getRoles() {
+//        return roleService.findAllRoles();
+//    }
 
 
 }

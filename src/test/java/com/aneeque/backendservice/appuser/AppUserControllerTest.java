@@ -1,7 +1,12 @@
 package com.aneeque.backendservice.appuser;
 
-import com.aneeque.backendservice.role.PrivilegeListRequest;
-import com.aneeque.backendservice.token.TokenService;
+import com.aneeque.backendservice.controller.AppUserController;
+import com.aneeque.backendservice.dto.request.LoginRequest;
+import com.aneeque.backendservice.dto.request.PrivilegeListRequest;
+import com.aneeque.backendservice.dto.request.RegistrationRequest;
+import com.aneeque.backendservice.service.AppUserService;
+import com.aneeque.backendservice.service.PrivilegeService;
+import com.aneeque.backendservice.service.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
@@ -27,6 +32,9 @@ class AppUserControllerTest {
 
     @MockBean
     private AppUserService appUserService;
+
+    @MockBean
+    private PrivilegeService privilegeService;
 
     @MockBean
     private TokenService tokenService;
@@ -57,9 +65,7 @@ class AppUserControllerTest {
 
     @Test
     void testDeleteUserAccount() throws Exception {
-        MockHttpServletRequestBuilder deleteResult = MockMvcRequestBuilders.delete("/{userId}/delete", 123L);
-        MockHttpServletRequestBuilder paramResult = deleteResult.param("page", String.valueOf(1));
-        MockHttpServletRequestBuilder requestBuilder = paramResult.param("size", String.valueOf(1));
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/{userId}", "42");
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.appUserController)
                 .build()
                 .perform(requestBuilder);
@@ -86,7 +92,7 @@ class AppUserControllerTest {
 
     @Test
     void testGetAll() throws Exception {
-        MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/get-all");
+        MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/");
         MockHttpServletRequestBuilder paramResult = getResult.param("page", String.valueOf(1));
         MockHttpServletRequestBuilder requestBuilder = paramResult.param("size", String.valueOf(1));
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.appUserController)
@@ -96,9 +102,18 @@ class AppUserControllerTest {
     }
 
     @Test
+    void testGetAllPrivileges() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/auth/privileges");
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.appUserController)
+                .build()
+                .perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
     void testGetAllUsersByRole() throws Exception {
-        MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/get-all/role/{roleId}", 123L);
-        MockHttpServletRequestBuilder paramResult = getResult.param("page", String.valueOf(1));
+        MockHttpServletRequestBuilder getResult = MockMvcRequestBuilders.get("/");
+        MockHttpServletRequestBuilder paramResult = getResult.param("page", String.valueOf(1)).param("roleId", "foo");
         MockHttpServletRequestBuilder requestBuilder = paramResult.param("size", String.valueOf(1));
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.appUserController)
                 .build()
@@ -128,7 +143,7 @@ class AppUserControllerTest {
     @Test
     void testLoginUser() throws Exception {
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setPassword("password");
+        loginRequest.setPassword("iloveyou");
         loginRequest.setEmailAddress("42 Main St");
         String content = (new ObjectMapper()).writeValueAsString(loginRequest);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/auth/login")
@@ -147,27 +162,9 @@ class AppUserControllerTest {
         registrationRequest.setPassword("password");
         registrationRequest.setMobileNumber("42");
         registrationRequest.setConfirmPassword("password");
-        registrationRequest.setFirstName("John");
+        registrationRequest.setFirstName("Jane");
         registrationRequest.setEmailAddress("42 Main St");
-        String content = (new ObjectMapper()).writeValueAsString(registrationRequest);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content);
-        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.appUserController)
-                .build()
-                .perform(requestBuilder);
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
-    }
-
-    @Test
-    void testRegisterUser2() throws Exception {
-        RegistrationRequest registrationRequest = new RegistrationRequest();
-        registrationRequest.setLastName("Doe");
-        registrationRequest.setPassword("password");
-        registrationRequest.setMobileNumber("42");
-        registrationRequest.setConfirmPassword("password");
-        registrationRequest.setFirstName("John");
-        registrationRequest.setEmailAddress("42 Main St");
+        registrationRequest.setRoleId(123L);
         String content = (new ObjectMapper()).writeValueAsString(registrationRequest);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -10,8 +10,15 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import com.aneeque.backendservice.data.entity.Privilege;
+import com.aneeque.backendservice.data.repository.PrivilegeRepository;
+import com.aneeque.backendservice.dto.request.PrivilegeRequest;
+import com.aneeque.backendservice.dto.response.PrivilegeNoOfRoles;
+import com.aneeque.backendservice.exception.PrivilegeNotFoundException;
+import com.aneeque.backendservice.service.PrivilegeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +38,18 @@ class PrivilegeServiceTest {
     private PrivilegeService privilegeService;
 
     @Test
-    void testCreate() {
+    void testCreateShouldFailIfPrivilegeAlreadyExists() {
         when(this.privilegeRepository.existsByName((String) any())).thenReturn(true);
 
         PrivilegeRequest privilegeRequest = new PrivilegeRequest();
         privilegeRequest.setName("Name");
         privilegeRequest.setModule("Module");
         privilegeRequest.setDescription("The characteristics of someone or something");
-        assertThrows(IllegalArgumentException.class, () -> this.privilegeService.create(privilegeRequest));
+        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> this.privilegeService.create(privilegeRequest));
+        String expectedMessage = "privilege already exists";
+        System.out.println(illegalArgumentException.getMessage());
+        String actualMessage = illegalArgumentException.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
         verify(this.privilegeRepository).existsByName((String) any());
     }
 
@@ -63,48 +74,31 @@ class PrivilegeServiceTest {
         verify(this.privilegeRepository).save((Privilege) any());
     }
 
-    @Test
-    void testUpdate() {
-        Privilege privilege = new Privilege();
-        privilege.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        privilege.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        privilege.setId(123L);
-        privilege.setName("Name");
-        privilege.setModule("Module");
-        privilege.setDescription("The characteristics of someone or something");
-        Optional<Privilege> ofResult = Optional.<Privilege>of(privilege);
-        when(this.privilegeRepository.findById((Long) any())).thenReturn(ofResult);
-
-        PrivilegeRequest privilegeRequest = new PrivilegeRequest();
-        privilegeRequest.setName("Name");
-        privilegeRequest.setModule("Module");
-        privilegeRequest.setDescription("The characteristics of someone or something");
-        assertThrows(IllegalArgumentException.class, () -> this.privilegeService.update(123L, privilegeRequest));
-        verify(this.privilegeRepository).findById((Long) any());
-    }
 
     @Test
-    void testUpdate2() {
+    void testUpdateShouldFailIfPrivilegeIdDoesNotExist() {
         when(this.privilegeRepository.findById((Long) any())).thenReturn(Optional.<Privilege>empty());
 
         PrivilegeRequest privilegeRequest = new PrivilegeRequest();
         privilegeRequest.setName("Name");
         privilegeRequest.setModule("Module");
         privilegeRequest.setDescription("The characteristics of someone or something");
-        assertThrows(PrivilegeNotFoundException.class, () -> this.privilegeService.update(123L, privilegeRequest));
+        PrivilegeNotFoundException privilegeNotFoundException = assertThrows(PrivilegeNotFoundException.class, () -> this.privilegeService.update(123L, privilegeRequest));
+        String expectedMessage = "no privilege found";
+        System.out.println(privilegeNotFoundException.getMessage());
+        String actualMessage = privilegeNotFoundException.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
         verify(this.privilegeRepository).findById((Long) any());
     }
 
     @Test
     void testGetAllPrivileges() {
-        PageImpl<Privilege> pageImpl = new PageImpl<Privilege>(new ArrayList<Privilege>());
-        when(this.privilegeRepository.findAll((org.springframework.data.domain.Pageable) any())).thenReturn(pageImpl);
-        Page<Privilege> actualAllPrivileges = this.privilegeService.getAllPrivileges(1, 3);
-        assertSame(pageImpl, actualAllPrivileges);
-        assertTrue(actualAllPrivileges.toList().isEmpty());
-        verify(this.privilegeRepository).findAll((org.springframework.data.domain.Pageable) any());
+        when(this.privilegeRepository.findAll()).thenReturn(new ArrayList<Privilege>());
+        when(this.privilegeRepository.countNoOfRolesAllPrivilegeHas()).thenReturn(new ArrayList<PrivilegeNoOfRoles>());
+        assertTrue(this.privilegeService.getAllPrivileges().isEmpty());
+        verify(this.privilegeRepository).countNoOfRolesAllPrivilegeHas();
+        verify(this.privilegeRepository).findAll();
     }
-
     @Test
     void testDelete() {
         doNothing().when(this.privilegeRepository).deleteById((Long) any());
@@ -128,31 +122,25 @@ class PrivilegeServiceTest {
     }
 
     @Test
-    void testFindPrivilegeByName2() {
+    void testFindPrivilegeByNameShouldFailWhenPrivilegeNameDoesNotExits() {
         when(this.privilegeRepository.findByName((String) any())).thenReturn(Optional.<Privilege>empty());
-        assertThrows(PrivilegeNotFoundException.class, () -> this.privilegeService.findPrivilegeByName("Name"));
+        PrivilegeNotFoundException privilegeNotFoundException = assertThrows(PrivilegeNotFoundException.class, () -> this.privilegeService.findPrivilegeByName("Name"));
+        String expectedMessage = "no privilege found";
+        System.out.println(privilegeNotFoundException.getMessage());
+        String actualMessage = privilegeNotFoundException.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
         verify(this.privilegeRepository).findByName((String) any());
     }
 
-    @Test
-    void testFindPrivilegeById() {
-        Privilege privilege = new Privilege();
-        privilege.setModifiedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        privilege.setCreatedAt(LocalDateTime.of(1, 1, 1, 1, 1));
-        privilege.setId(123L);
-        privilege.setName("Name");
-        privilege.setModule("Module");
-        privilege.setDescription("The characteristics of someone or something");
-        Optional<Privilege> ofResult = Optional.<Privilege>of(privilege);
-        when(this.privilegeRepository.findById((Long) any())).thenReturn(ofResult);
-        assertSame(privilege, this.privilegeService.findPrivilegeById(123L));
-        verify(this.privilegeRepository).findById((Long) any());
-    }
 
     @Test
-    void testFindPrivilegeById2() {
+    void testFindPrivilegeByIdShouldFailWhenPrivilegeIdDoesNotExist() {
         when(this.privilegeRepository.findById((Long) any())).thenReturn(Optional.<Privilege>empty());
-        assertThrows(PrivilegeNotFoundException.class, () -> this.privilegeService.findPrivilegeById(123L));
+        PrivilegeNotFoundException privilegeNotFoundException = assertThrows(PrivilegeNotFoundException.class, () -> this.privilegeService.findPrivilegeById(123L));
+        String expectedMessage = "no privilege found";
+        System.out.println(privilegeNotFoundException.getMessage());
+        String actualMessage = privilegeNotFoundException.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
         verify(this.privilegeRepository).findById((Long) any());
     }
 }

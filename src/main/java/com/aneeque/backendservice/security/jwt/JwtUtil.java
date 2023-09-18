@@ -1,9 +1,10 @@
 package com.aneeque.backendservice.security.jwt;
 
-import com.aneeque.backendservice.appuser.AppUser;
+import com.aneeque.backendservice.data.entity.AppUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,7 @@ import java.util.function.Function;
  * @author Okala III
  */
 
+@Slf4j
 @Service
 public class JwtUtil {
 
@@ -38,7 +40,12 @@ public class JwtUtil {
 
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        String subject = (Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject());
+        return subject;
     }
 
     public Date extractExpiration(String token) {
@@ -69,26 +76,27 @@ public class JwtUtil {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", appUser.getId());
-        claims.put("role", appUser.getRole().getName());
-        claims.put("privileges", appUser.getAllUserPrivileges());
+//        claims.put("role", appUser.getRole().getName());
+//        claims.put("privileges", appUser.getAllUserPrivileges());
         return createToken(claims, userDetails.getUsername());
     }
 
 
     private String createToken(Map<String, Object> claims, String subject) {
-        final long JWT_LIFETIME_IN_MILLI_SECONDS = H * M * S * MS;
+        final long JWT_LIFETIME_IN_MILLI_SECONDS = ((long) H *60*60*1000) + ((long) M *60*1000) + (S* 1000L) + MS;
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_LIFETIME_IN_MILLI_SECONDS))
+                .setExpiration(new Date((System.currentTimeMillis() +  JWT_LIFETIME_IN_MILLI_SECONDS)))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
+
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }

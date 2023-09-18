@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @ControllerAdvice
@@ -59,6 +60,13 @@ public class ApiExceptionHandler {
 
     }
 
+    @ExceptionHandler(value = {NoSuchElementException.class})
+    public ResponseEntity<Object> NoSuchElementExceptionHandler(Exception ex) {
+        log.error(ex.getMessage());
+        ApiException apiException = new ApiException(ex.getMessage(), ex, HttpStatus.NOT_FOUND, LocalDateTime.now());
+        return new ResponseEntity<>(apiException, HttpStatus.NOT_FOUND);
+
+    }
 
 
     @ExceptionHandler(value = {ExpiredJwtException.class})
@@ -76,13 +84,14 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, HttpStatus.UNAUTHORIZED);
 
     }
-@ExceptionHandler(value = {NoSuchMethodError.class})
-    public ResponseEntity<Object> ANoSuchMethodErrorHandler(Error ex) {
-        log.error(ex.getMessage());
-        ApiException apiException = new ApiException(ex.getMessage(), ex, HttpStatus.BAD_REQUEST, LocalDateTime.now());
-        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
 
-    }
+//    @ExceptionHandler(value = {NoSuchMethodError.class})
+//    public ResponseEntity<Object> ANoSuchMethodErrorHandler(Error ex) {
+//        log.error(ex.getMessage());
+//        ApiException apiException = new ApiException(ex.getMessage(), ex, HttpStatus.BAD_REQUEST, LocalDateTime.now());
+//        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
+//
+//    }
 
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
     public ResponseEntity<Object> DataIntegrityViolationException(Exception ex) {
